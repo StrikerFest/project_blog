@@ -1,0 +1,7 @@
+RewriteEngine On
+# Nếu URL không giống với đường dẫn của một file có sẵn
+RewriteCond %{REQUEST_FILENAME} !-f
+# Nếu URL không là folder
+RewriteCond %{REQUEST_FILENAME} !-d
+# Với mọi đường dẫn URL - Đưa về file index.php để xử lý route
+RewriteRule ^(.*)$ index.php
