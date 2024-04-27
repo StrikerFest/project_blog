@@ -1,5 +1,6 @@
 # Trang blog đơn giản
 Một trang web đơn giản được thiết kế để tạo dựng một hệ thống Blog CRUD đơn giản, sử dụng PHP thuần, HTML, CSS, JS và MySQL cho cơ sở dữ liệu.
+![image](https://github.com/StrikerFest/project_blog/assets/72716233/67e553ac-503a-471d-8a9e-47a46535352a)
 
 ## Chức năng
 Đơn giản và gọn nhẹ
