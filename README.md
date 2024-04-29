@@ -95,6 +95,24 @@ Nếu vào được thì sẽ là thành công, nhưng trước hết phải và
 http://www.projectblog.com/database/install.php
 ```
 
+- Sau đó tạo bảng user và chạy seed để tạo user
+```
+http://www.projectblog.com/database/installUser.php
+http://www.projectblog.com/database/seedUser.php
+```
+
+Đây là tài khoản admin:
+```
+TK: admin
+MK: admin
+```
+
+Đây là tài khoản user:
+```
+TK: user
+MK: user
+```
+
 - Nếu muốn có dữ liệu linh tinh truyền vào cơ sở dữ liệu để có dữ liệu thì vào
 ```
 http://www.projectblog.com/database/seed.php
@@ -109,7 +127,7 @@ http://www.projectblog.com/database/seed.php
 
 # Người đóng góp
 - Trịnh Thế Anh
-- Thành viên 1
+- Phạm Quang Anh
 - Thành viên 2
 - Thành viên 3
 - Thành viên 4

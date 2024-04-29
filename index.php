@@ -12,6 +12,10 @@ use inc\helpers\Config;
 // Dữ liệu này sẽ được truyền vào hàm bên dưới để xử lý
 $routes = [
 
+    //login
+    '/admin/login' => Common::getControllerPath('auth/admin/login.php'),
+    '/admin/logout' => Common::getControllerPath('auth/admin/logout.php'),
+
     // Quản lý blog
     '/admin/post'        => Common::getControllerPath('post/index.php'),
     '/admin/post/create' => Common::getControllerPath('post/edit.php'),
@@ -19,6 +23,8 @@ $routes = [
     '/admin/post/delete' => Common::getControllerPath('post/delete.php'),
     
     // Blog - Người dùng
+    '/login' => Common::getControllerPath('auth/user/login.php'),
+    '/logout' => Common::getControllerPath('auth/user/logout.php'),
     '/post' => Common::getControllerPath('post/index.php'),
 
 ];

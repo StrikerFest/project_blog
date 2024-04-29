@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @var mixed $args
  */
@@ -9,9 +10,19 @@ use inc\helpers\Common;
 Common::requireTemplate('admin/layouts/headers.php', [
     'title' => 'Bờ Lốc'
 ]);
+
+$currentPage = $_SERVER['REQUEST_URI'];
+$logoutButton = '<a href="/logout"><button class="btn-logout">Logout</button></a>';
+
+if (strstr($currentPage, '/admin')) {
+    $logoutButton = '<a href="/admin/logout"><button class="btn-logout">Logout</button></a>';
+}
 ?>
 
 <body>
+    <div class="logout">
+        <?php echo $logoutButton; ?>
+    </div>
     <div class="container">
         <h1>Simple Blog</h1>
         <a href="post/create" class="btn">Create New Post</a>
