@@ -58,6 +58,18 @@ Zend Engine v4.1.12, Copyright (c) Zend Technologies
 </VirtualHost>
 ```
 
+- Nếu bị lỗi forbidden hay quyền thì thêm phần này vào ở dưới file luôn
+```
+<Directory "g:/softwares/xampp/htdocs/Blog">
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride all
+        Order Deny,Allow
+        Allow from all
+        Require all granted
+</Directory>
+
+```
+
 - Xong mở xampp bằng xampp-control.exe trong thư mục xampp đã cài
 + Bấm nút start bên cạnh module Apache và module Mysql
 + Thành công
