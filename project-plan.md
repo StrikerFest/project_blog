@@ -68,6 +68,7 @@ role (e.g., 'admin', 'author', 'editor')
 created_at
 updated_at
 ```
+- phần role ENUM chỉ là string bình thường thôi, nhưng mà nếu điền giá trị không giống trong mảng đấy thì mysql không cho điền
 ```mysql
 CREATE TABLE user (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
