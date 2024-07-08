@@ -16,9 +16,8 @@ class Config{
             // Nếu đường dẫn trang tồn tại sẽ chuyển hướng về trang được yêu cầu
             include $routes[$requestUri];
         } else {
-            // Nếu đường dẫn không tồn tại sẽ chuyển hướng về trang 404
-            http_response_code(404);
-            echo '404 Not Found';
+            
+            header("Location: /post");
         }
     }
 }

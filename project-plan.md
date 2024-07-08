@@ -48,6 +48,13 @@
 + Khi Writer thay đổi nội dung bài viết thì sau khi submit cho Editor thì trường ở trên sẽ được cập nhật và lưu nội dung cũ
 + Hiện chỉ dùng để kiểm tra lịch sử bài viết nhưng có thể được dùng thể khôi phục lại nội dung một bài viết cũ
 
+---
+
+## Các tính năng khác
++ Có một bảng options được tạo ra để lưu giá trị cho một tính năng nhất định
++ Ví dụ như ẩn bài viết cũ hơn (GIÁ TRỊ) ngày, có thể lưu vào trường đó giá trị ngày và bật nó lên để ẩn, không tắt đi để tắt tính năng
++ Cái này chỉ sử dụng khi mình tạo một tính năng mà admin có thể thay đổi giá trị
+
 # Bảng cơ sở dữ liệu
 
 user
@@ -155,12 +162,14 @@ categories
 ```
 category_id (Primary Key)
 name
+status
 description
 ```
 ```mysql
 CREATE TABLE categories (
     category_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
+    status ENUM('enabled', 'disabled') NOT NULL,
     description TEXT
 );
 ```
@@ -186,11 +195,13 @@ tags
 
 ```
 tag_id (Primary Key)
+status
 name
 ```
 ```mysql
 CREATE TABLE tags (
     tag_id INT AUTO_INCREMENT PRIMARY KEY,
+    status ENUM('enabled', 'disabled') NOT NULL,
     name VARCHAR(100) NOT NULL
 );
 ```
@@ -254,5 +265,17 @@ CREATE TABLE post_history (
     current_content TEXT,
     FOREIGN KEY (post_id) REFERENCES post(post_id),
     FOREIGN KEY (changed_by) REFERENCES user(user_id)
+);
+```
+
+option
+
+```mysql
+CREATE TABLE options (
+    option_id INT AUTO_INCREMENT PRIMARY KEY,
+    option_name VARCHAR(255) NOT NULL,
+    option_value TEXT NOT NULL,
+    status ENUM('enabled', 'disabled') NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 ```

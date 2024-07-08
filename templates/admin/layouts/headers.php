@@ -1,7 +1,6 @@
 <?php
 
 use inc\helpers\Common;
-
 /**
  * @var mixed $args
  */
@@ -33,3 +32,6 @@ if (!isset($_SESSION['user_1']) && !isset($_SESSION['user_2'])) {
     <title><?= $args['title'] ?? '' ?></title>
     <link rel="stylesheet" href="<?= Common::getAssetPath('css/style.css') ?>">
 </head>
+
+<?php
+Common::requireTemplate('admin/layouts/menu.php', []);
