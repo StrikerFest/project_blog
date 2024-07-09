@@ -6,7 +6,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 $currentPage = $_SERVER['REQUEST_URI'];
-if (isset($_SESSION['user_1'])) {
+if (isset($_SESSION['user_admin'])) {
     header("Location: /admin/post");
 }
 ?>
@@ -25,7 +25,7 @@ if (isset($_SESSION['user_1'])) {
                     <div class="field">
                         <input placeholder="Password" type="password" name="password" required="required"/>
                     </div>
-                    <?php if (isset($_SESSION['error_login_1'])) {  ?>
+                    <?php if (isset($_SESSION['error_login_admin'])) {  ?>
                         <div class="error">Username or password incorrect</div>
                     <?php } ?>
                     <button class="btn">Sign in</button>

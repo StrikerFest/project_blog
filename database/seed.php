@@ -21,21 +21,71 @@ for ($i = 1; $i <= 10; $i++) {
     }
 }
 
+
 // Generate user
-$sql = "INSERT INTO users (username, password, type) VALUES
-    ('admin', '$2a$12$9msGes.EQ1t3kEvK/HnWi.tb8O2wDtVLYXcvRGE/IhV2DgEoV0A4a', 1),
-    ('user', '$2a$12$89RY.tomk.SecxkYTb4E6uQEAd7yWSTrLU4VFV1wP456XsQhCxVcO', 2)";
-if ($conn->query($sql) === TRUE) {
-    echo "Post inserted successfully.<br>";
-} else {
-    echo "Error inserting post: " . $conn->error . "<br>";
+$sql = "SELECT count(*) as count FROM users";
+$result = $conn->query($sql);
+if ($result) {
+    $row = $result->fetch_assoc();
+    if ($row['count'] == 0) {
+        $sql = "INSERT INTO users (username, email, password, role) VALUES
+        ('admin', 'admin@gmail.com', '$2a$12$9msGes.EQ1t3kEvK/HnWi.tb8O2wDtVLYXcvRGE/IhV2DgEoV0A4a', 'admin'),
+        ('user', 'user@gmail.com', '$2a$12$89RY.tomk.SecxkYTb4E6uQEAd7yWSTrLU4VFV1wP456XsQhCxVcO', 'reader')";
+        if ($conn->query($sql) === TRUE) {
+            echo "User inserted successfully.<br>";
+        } else {
+            echo "Error inserting user: " . $conn->error . "<br>";
+        }
+    }
+}
+
+// Generate category
+$sql = "SELECT count(*) as count FROM categories";
+$result = $conn->query($sql);
+if ($result) {
+    $row = $result->fetch_assoc();
+    if ($row['count'] == 0) {
+        $sql = "INSERT INTO categories (name, status, description) VALUES
+            ('Công nghệ', 'enabled', '".generateRandomString(10)."'),
+            ('Bóng đá', 'enabled', '".generateRandomString(10)."'),
+            ('Du lịch', 'enabled', '".generateRandomString(10)."'),
+            ('Sức khỏe', 'enabled', '".generateRandomString(10)."'),
+            ('Ẩm thực', 'enabled', '".generateRandomString(10)."')";
+        print($sql);
+        if ($conn->query($sql) === TRUE) {
+            echo "Category inserted successfully.<br>";
+        } else {
+            echo "Error inserting category: " . $conn->error . "<br>";
+        }
+    }
+}
+
+// Generate tag
+$sql = "SELECT count(*) as count FROM tags";
+$result = $conn->query($sql);
+if ($result) {
+    $row = $result->fetch_assoc();
+    if ($row['count'] == 0) {
+        $sql = "INSERT INTO tags (name, status) VALUES
+            ('Apple', 'enabled'),
+            ('Nike', 'enabled'),
+            ('Coca-Cola', 'enabled'),
+            ('Samsung', 'enabled'),
+            ('Google', 'enabled')";
+        if ($conn->query($sql) === TRUE) {
+            echo "Tag inserted successfully.<br>";
+        } else {
+            echo "Error inserting tag: " . $conn->error . "<br>";
+        }
+    }
 }
 
 // Close MySQL connection
 $conn->close();
 
 // Function to generate a random string
-function generateRandomString($length = 10) {
+function generateRandomString($length = 10)
+{
     $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     $charactersLength = strlen($characters);
     $randomString = '';
@@ -44,4 +94,3 @@ function generateRandomString($length = 10) {
     }
     return $randomString;
 }
-

@@ -19,8 +19,8 @@ use inc\helpers\Common;
             <i class="fa fa-caret-down"></i>
         </button>
         <div class="menu-dropdown-content">
-            <a href="category">View categories</a>
-            <a href="category/create">Create category</a>
+            <a href="/admin/category">View categories</a>
+            <a href="/admin/category/create">Create category</a>
         </div>
     </div>
     <div class="menu-dropdown">
@@ -28,8 +28,8 @@ use inc\helpers\Common;
             <i class="fa fa-caret-down"></i>
         </button>
         <div class="menu-dropdown-content">
-            <a href="tag">View tags</a>
-            <a href="tag/create">Create tag</a>
+            <a href="/admin/tag">View tags</a>
+            <a href="/admin/tag/create">Create tag</a>
         </div>
     </div>
     <div class="menu-dropdown">
