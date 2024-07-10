@@ -24,9 +24,25 @@ $sql = "
     
     CREATE TABLE IF NOT EXISTS `users` (
         `id` INT AUTO_INCREMENT PRIMARY KEY,
-        `username` VARCHAR(255) NOT NULL UNIQUE,
+        `email` VARCHAR(255) NOT NULL,
+        `username` VARCHAR(50) NOT NULL UNIQUE,
         `password` VARCHAR(60) NOT NULL,
-        `type` SMALLINT
+        `role` ENUM('admin', 'author', 'editor','reader') NOT NULL,
+        `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS `categories` (
+        `id` INT AUTO_INCREMENT PRIMARY KEY,
+        `name` VARCHAR(100) NOT NULL,
+        `status` ENUM('enabled', 'disabled') NOT NULL,
+        `description` TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS `tags` (
+        `id` INT AUTO_INCREMENT PRIMARY KEY,
+        `name` VARCHAR(100) NOT NULL,
+        `status` ENUM('enabled', 'disabled') NOT NULL
     );
 ";
 

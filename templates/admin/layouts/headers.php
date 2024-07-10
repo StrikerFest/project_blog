@@ -8,7 +8,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 $currentPage = $_SERVER['REQUEST_URI'];
-if (!isset($_SESSION['user_1']) && !isset($_SESSION['user_2'])) {
+if (!isset($_SESSION['user_admin']) && !isset($_SESSION['user_reader'])) {
     if (strstr($currentPage, "/admin")) {
         header("Location: /admin/login");
         return;
@@ -16,10 +16,10 @@ if (!isset($_SESSION['user_1']) && !isset($_SESSION['user_2'])) {
     header("Location: /login");
     return;
 } else {
-    if (isset($_SESSION['user_2']) && strstr($currentPage, "/admin")) {
+    if (isset($_SESSION['user_reader']) && strstr($currentPage, "/admin") && !isset($_SESSION['user_admin'])) {
         header("Location: /admin/login");
     }
-    if (isset($_SESSION['user_1']) && !strstr($currentPage, "/admin")) {
+    if (isset($_SESSION['user_admin']) && !strstr($currentPage, "/admin") && !isset($_SESSION['user_reader'])) {
         header("Location: /login");
     }
 }

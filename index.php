@@ -21,6 +21,18 @@ $routes = [
     '/admin/post/create' => Common::getControllerPath('admin/post/edit.php'),
     '/admin/post/edit'   => Common::getControllerPath('admin/post/edit.php'),
     '/admin/post/delete' => Common::getControllerPath('admin/post/delete.php'),
+
+    // Quản lý danh mục
+    '/admin/category'        => Common::getControllerPath('category/index.php'),
+    '/admin/category/create' => Common::getControllerPath('category/edit.php'),
+    '/admin/category/edit'   => Common::getControllerPath('category/edit.php'),
+    '/admin/category/delete' => Common::getControllerPath('category/delete.php'),
+
+    // Quản lý nhãn
+    '/admin/tag'        => Common::getControllerPath('tag/index.php'),
+    '/admin/tag/create' => Common::getControllerPath('tag/edit.php'),
+    '/admin/tag/edit'   => Common::getControllerPath('tag/edit.php'),
+    '/admin/tag/delete' => Common::getControllerPath('tag/delete.php'),
     
     // Blog - Người dùng
     '/login' => Common::getControllerPath('user/auth/login.php'),

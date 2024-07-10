@@ -8,7 +8,11 @@ session_start();
 
 class User
 {
-    public static function login(int $type)
+
+    const ROLE_ADMIN = "admin";
+    const ROLE_USER = "reader";
+
+    public static function login(string $role)
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -16,7 +20,7 @@ class User
             $password = $_POST['password'] ?? '';
             $conn = DB::db_connect();
 
-            $sql = "SELECT * FROM users where username = ? and type = $type";
+            $sql = "SELECT * FROM users where username = ? and `role` = '$role'";
             $statement = $conn->prepare($sql);
             $statement->bind_param("s", $username);
 
@@ -32,19 +36,19 @@ class User
                     $customUser = [
                         'id' => $user['id'],
                         'username' => $user['username'],
-                        'type' => $user['type'],
+                        'role' => $user['role'],
                     ];
-                    unset($_SESSION['error_login_'.$type]);
-                    $_SESSION['user_'.$type] = $customUser;
+                    unset($_SESSION['error_login_'.$role]);
+                    $_SESSION['user_'.$role] = $customUser;
                     header("Location: /admin/post");
                 } else {
-                    $_SESSION['error_login_'.$type] = true;
-                    self::redirectLogin($type);
+                    $_SESSION['error_login_'.$role] = true;
+                    self::redirectLogin($role);
                 }
             } else {
                 // Không tìm thấy tên đăng nhập trong cơ sở dữ liệu
-                $_SESSION['error_login_'.$type] = true;
-                self::redirectLogin($type);
+                $_SESSION['error_login_'.$role] = true;
+                self::redirectLogin($role);
             }
 
             // Đóng kết nối đến cơ sở dữ liệu
@@ -53,14 +57,14 @@ class User
         }
     }
 
-    public static function logout(int $type) {
-        unset($_SESSION['error_login_'.$type]);
-        unset($_SESSION['user_'.$type]);
-        self::redirectLogin($type);
+    public static function logout(string $role) {
+        unset($_SESSION['error_login_'.$role]);
+        unset($_SESSION['user_'.$role]);
+        self::redirectLogin($role);
     }
 
-    public static function redirectLogin($type) {
-        if ($type == 1) {
+    public static function redirectLogin(string $role) {
+        if ($role == User::ROLE_ADMIN) {
             header("Location: /admin/login");
             return;
         }

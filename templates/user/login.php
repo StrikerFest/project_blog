@@ -6,7 +6,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 $currentPage = $_SERVER['REQUEST_URI'];
-if (isset($_SESSION['user_2'])) {
+if (isset($_SESSION['user_reader'])) {
     header("Location: /post");
 }
 ?>
@@ -25,7 +25,7 @@ if (isset($_SESSION['user_2'])) {
                 <input class="sign-up__inp" type="text" name="username" placeholder="Username" required="required" />
                 <input class="sign-up__inp" type="password" name="password" placeholder="Password" required="required" />
             </div>
-            <?php if (isset($_SESSION['error_login_2'])) {  ?>
+            <?php if (isset($_SESSION['error_login_reader'])) {  ?>
                 <div class="error">Username or password incorrect</div>
             <?php } ?>
             <div class="sign-up__buttons">
