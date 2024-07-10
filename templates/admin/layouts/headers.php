@@ -32,6 +32,7 @@ if (!isset($_SESSION['user_admin']) && !isset($_SESSION['user_reader'])) {
     <title><?= $args['title'] ?? '' ?></title>
     <link rel="stylesheet" href="<?= Common::getAssetPath('css/style.css') ?>">
     <link rel="stylesheet" href="<?= Common::getAssetPath('css/listing.css') ?>">
+    <link rel="stylesheet" href="<?= Common::getAssetPath('css/form-table.css') ?>">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 </head>
 
