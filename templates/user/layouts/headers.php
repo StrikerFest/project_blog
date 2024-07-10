@@ -14,3 +14,5 @@ use inc\helpers\Common;
     <title><?= $args['title'] ?? '' ?></title>
     <link rel="stylesheet" href="<?= Common::getAssetPath('css/style.css') ?>">
 </head>
+
+<?php Common::requireTemplate('user/layouts/menu.php', []);

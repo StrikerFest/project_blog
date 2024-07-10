@@ -8,7 +8,8 @@ namespace inc\helpers;
  */
 class Config{
 
-    public static function redirectRouter($routes){
+    public static function redirectRouter($routes): void
+    {
         // Lấy đường dẫn URI
         $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         // Kiểm tra nếu đường dẫn tồn tại trong mảng
@@ -16,9 +17,8 @@ class Config{
             // Nếu đường dẫn trang tồn tại sẽ chuyển hướng về trang được yêu cầu
             include $routes[$requestUri];
         } else {
-            // Nếu đường dẫn không tồn tại sẽ chuyển hướng về trang 404
-            http_response_code(404);
-            echo '404 Not Found';
+            
+            header("Location: /post");
         }
     }
 }

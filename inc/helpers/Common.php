@@ -10,7 +10,7 @@ class Common
 {
     /* Hàm lấy đường dẫn file template
     Template là phần frontend - file hiển thị HTML ra ngoài website */
-    public static function getTemplatePath($path)
+    public static function getTemplatePath($path): string
     {
         return $_ENV['TEMPLATE_DIR'] . '/' . $path;
     }
@@ -18,7 +18,7 @@ class Common
     /* Hàm lấy đường dẫn assets
     Asset là các file hỗ trợ hiển thị frontend
     Như file CSS, JS, các file chứa hình ảnh, fonts,... */
-    public static function getAssetPath($path)
+    public static function getAssetPath($path): string
     {
         return $_ENV['ASSETS_DIR'] . $path;
     }
@@ -26,14 +26,14 @@ class Common
     /* Hàm lấy đường dẫn controller
     Controller là phần backend, xử lý dữ liệu và logic trước khi
     Đưa ra ngoài frontend */
-    public static function getControllerPath($path)
+    public static function getControllerPath($path): string
     {
         return $_ENV['CONTROLLER_DIR'] . $path;
     }
 
     /* Hàm bao gồm template
     Để hiển thị template ra ngoài frontend */
-    public static function requireTemplate($path, $args)
+    public static function requireTemplate($path, $args = []): void
     {
         require self::getTemplatePath($path);
     }

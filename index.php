@@ -12,14 +12,32 @@ use inc\helpers\Config;
 // Dữ liệu này sẽ được truyền vào hàm bên dưới để xử lý
 $routes = [
 
+    //login
+    '/admin/login' => Common::getControllerPath('admin/auth/login.php'),
+    '/admin/logout' => Common::getControllerPath('admin/auth/logout.php'),
+
     // Quản lý blog
-    '/admin/post'        => Common::getControllerPath('post/index.php'),
-    '/admin/post/create' => Common::getControllerPath('post/edit.php'),
-    '/admin/post/edit'   => Common::getControllerPath('post/edit.php'),
-    '/admin/post/delete' => Common::getControllerPath('post/delete.php'),
+    '/admin/post'        => Common::getControllerPath('admin/post/index.php'),
+    '/admin/post/create' => Common::getControllerPath('admin/post/edit.php'),
+    '/admin/post/edit'   => Common::getControllerPath('admin/post/edit.php'),
+    '/admin/post/delete' => Common::getControllerPath('admin/post/delete.php'),
+
+    // Quản lý danh mục
+    '/admin/category'        => Common::getControllerPath('admin/category/index.php'),
+    '/admin/category/create' => Common::getControllerPath('admin/category/edit.php'),
+    '/admin/category/edit'   => Common::getControllerPath('admin/category/edit.php'),
+    '/admin/category/delete' => Common::getControllerPath('admin/category/delete.php'),
+
+    // Quản lý nhãn
+    '/admin/tag'        => Common::getControllerPath('admin/tag/index.php'),
+    '/admin/tag/create' => Common::getControllerPath('admin/tag/edit.php'),
+    '/admin/tag/edit'   => Common::getControllerPath('admin/tag/edit.php'),
+    '/admin/tag/delete' => Common::getControllerPath('admin/tag/delete.php'),
     
     // Blog - Người dùng
-    '/post' => Common::getControllerPath('post/index.php'),
+    '/login' => Common::getControllerPath('user/auth/login.php'),
+    '/logout' => Common::getControllerPath('user/auth/logout.php'),
+    '/post' => Common::getControllerPath('user/post/index.php'),
 
 ];
 
