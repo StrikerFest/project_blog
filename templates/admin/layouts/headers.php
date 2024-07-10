@@ -31,6 +31,8 @@ if (!isset($_SESSION['user_1']) && !isset($_SESSION['user_2'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $args['title'] ?? '' ?></title>
     <link rel="stylesheet" href="<?= Common::getAssetPath('css/style.css') ?>">
+    <link rel="stylesheet" href="<?= Common::getAssetPath('css/listing.css') ?>">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 </head>
 
 <?php Common::requireTemplate('admin/layouts/menu.php', []);

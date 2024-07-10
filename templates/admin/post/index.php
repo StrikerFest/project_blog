@@ -6,28 +6,45 @@
 
 use inc\helpers\Common;
 
+$data = $args['posts'];
 // Import dữ liệu header của Admin
 Common::requireTemplate('admin/layouts/headers.php', [
     'title' => 'Bờ Lốc'
 ]);
 ?>
+<table id="listing-table" class="listing-table">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Title</th>
+        <th>Categories</th>
+        <th>Tags</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($data as $row): ?>
+        <tr>
+            <td><?php echo htmlspecialchars($row['id']); ?></td>
+            <td><?php echo htmlspecialchars($row['title']); ?></td>
+            <td><?php echo htmlspecialchars('categories'); ?></td>
+            <td><?php echo htmlspecialchars('tags'); ?></td>
+            <td><?php echo htmlspecialchars('status'); ?></td>
+            <td><a href="post/edit?id=<?= $row['id']; ?>" class="btn">Edit</a>
+                <a href="post/delete?id=<?= $row['id']; ?>" class="btn">Delete</a></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
 
-<body>
-    <div class="container">
-        <div id="blogPosts"></div>
-    </div>
-    <div class="container">
-        <h1>Blog Posts</h1>
-        <div id="blogPosts">
-            <?php foreach ($args['posts'] as $post) : ?>
-                <div class="post">
-                    <h2><?= $post['title']; ?></h2>
-                    <p><?= $post['content']; ?></p>
-                    <a href="post/edit?id=<?= $post['id']; ?>" class="btn">Edit</a>
-                    <a href="post/delete?id=<?= $post['id']; ?>" class="btn">Delete</a>
-                </div>
-            <?php endforeach; ?>
-        </div>
-    </div>
-    <script src="<?= Common::getAssetPath('js/script.js') ?>"></script>
-</body>
+<?php
+Common::requireTemplate('admin/layouts/footer.php');
+?>
+<script>
+    $(document).ready(function() {
+        $('#listing-table').DataTable({
+            "searching": true
+        });
+    });
+</script>
