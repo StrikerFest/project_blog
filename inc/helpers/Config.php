@@ -8,7 +8,8 @@ namespace inc\helpers;
  */
 class Config{
 
-    public static function redirectRouter($routes){
+    public static function redirectRouter($routes): void
+    {
         // Lấy đường dẫn URI
         $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         // Kiểm tra nếu đường dẫn tồn tại trong mảng

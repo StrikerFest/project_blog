@@ -13,19 +13,19 @@ use inc\helpers\Config;
 $routes = [
 
     //login
-    '/admin/login' => Common::getControllerPath('auth/admin/login.php'),
-    '/admin/logout' => Common::getControllerPath('auth/admin/logout.php'),
+    '/admin/login' => Common::getControllerPath('admin/auth/login.php'),
+    '/admin/logout' => Common::getControllerPath('admin/auth/logout.php'),
 
     // Quản lý blog
-    '/admin/post'        => Common::getControllerPath('post/index.php'),
-    '/admin/post/create' => Common::getControllerPath('post/edit.php'),
-    '/admin/post/edit'   => Common::getControllerPath('post/edit.php'),
-    '/admin/post/delete' => Common::getControllerPath('post/delete.php'),
+    '/admin/post'        => Common::getControllerPath('admin/post/index.php'),
+    '/admin/post/create' => Common::getControllerPath('admin/post/edit.php'),
+    '/admin/post/edit'   => Common::getControllerPath('admin/post/edit.php'),
+    '/admin/post/delete' => Common::getControllerPath('admin/post/delete.php'),
     
     // Blog - Người dùng
-    '/login' => Common::getControllerPath('auth/user/login.php'),
-    '/logout' => Common::getControllerPath('auth/user/logout.php'),
-    '/post' => Common::getControllerPath('post/index.php'),
+    '/login' => Common::getControllerPath('user/auth/login.php'),
+    '/logout' => Common::getControllerPath('user/auth/logout.php'),
+    '/post' => Common::getControllerPath('user/post/index.php'),
 
 ];
 
