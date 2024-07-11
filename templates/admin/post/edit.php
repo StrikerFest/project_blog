@@ -10,7 +10,12 @@ use inc\helpers\Common;
 Common::requireTemplate('admin/layouts/headers.php', ['title' => 'burogu']);
 
 // Test data
-$args['post']['author_id'] = 0;
+$current_user = $_SESSION['user_backend'] ?? null;
+// TODO: LOGOUT
+if ($current_user === null) {
+    exit;
+}
+
 $args['categories'] = [];
 $args['tags'] = [];
 $args['post']['status'] = [];
@@ -25,7 +30,7 @@ $args['post']['status'] = [];
     <?php endif; ?>
     <form id="post-edit-createPostForm" method="POST">
         <input type="hidden" value="<?= $args['post']['id'] ?? '' ?>" name="id" />
-        <input type="hidden" value="<?= $args['post']['author_id'] ?? $args['current_user_id'] ?>" name="author_id" />
+        <input type="hidden" value="<?= $current_user['id'] ?? $args['current_user_id'] ?>" name="author_id" />
         <input type="hidden" value="<?= $args['post']['approved_by'] ?? '' ?>" name="approved_by" />
 
         <div class="post-edit-field">
