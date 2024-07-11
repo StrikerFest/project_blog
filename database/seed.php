@@ -30,6 +30,8 @@ if ($result) {
     if ($row['count'] == 0) {
         $sql = "INSERT INTO users (username, email, password, role) VALUES
         ('admin', 'admin@gmail.com', '$2a$12$9msGes.EQ1t3kEvK/HnWi.tb8O2wDtVLYXcvRGE/IhV2DgEoV0A4a', 'admin'),
+        ('author', 'author@gmail.com', '$2a$12$9msGes.EQ1t3kEvK/HnWi.tb8O2wDtVLYXcvRGE/IhV2DgEoV0A4a', 'author'),
+        ('editor', 'editor@gmail.com', '$2a$12$9msGes.EQ1t3kEvK/HnWi.tb8O2wDtVLYXcvRGE/IhV2DgEoV0A4a', 'editor'),
         ('user', 'user@gmail.com', '$2a$12$89RY.tomk.SecxkYTb4E6uQEAd7yWSTrLU4VFV1wP456XsQhCxVcO', 'reader')";
         if ($conn->query($sql) === TRUE) {
             echo "User inserted successfully.<br>";
