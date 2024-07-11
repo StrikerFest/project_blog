@@ -6,7 +6,7 @@ use database\DB;
 
 class Post
 {
-    public static function save_post()
+    public static function save_post(): void
     {
         // Kiểm tra xem form có đang được gửi hay không
         // Và phải gửi với method POST
@@ -48,7 +48,7 @@ class Post
     }
 
     // Lấy tất cả bài post
-    public static function getPosts()
+    public static function getPosts(): array
     {
         $conn = DB::db_connect();
         $sql = "SELECT * FROM posts ORDER BY id desc";
@@ -64,7 +64,7 @@ class Post
     }
 
     // Lấy bài post theo mã post
-    public static function getPostById($id)
+    public static function getPostById($id): bool|array|null
     {
         if (!isset($id)) {
             return null;
@@ -82,7 +82,7 @@ class Post
     }
 
     // Xóa bài post theo mã post
-    public static function deletePost($id)
+    public static function deletePost($id): void
     {
         $conn = DB::db_connect();
         $sql = "DELETE FROM posts WHERE id=$id";
