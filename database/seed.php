@@ -48,11 +48,11 @@ if ($result) {
     $row = $result->fetch_assoc();
     if ($row['count'] == 0) {
         $sql = "INSERT INTO categories (name, status, description) VALUES
-            ('Công nghệ', 'enabled', '".generateRandomString(10)."'),
-            ('Bóng đá', 'enabled', '".generateRandomString(10)."'),
-            ('Du lịch', 'enabled', '".generateRandomString(10)."'),
-            ('Sức khỏe', 'enabled', '".generateRandomString(10)."'),
-            ('Ẩm thực', 'enabled', '".generateRandomString(10)."')";
+            ('Công nghệ', 'enabled', '" . generateRandomString(10) . "'),
+            ('Bóng đá', 'enabled', '" . generateRandomString(10) . "'),
+            ('Du lịch', 'enabled', '" . generateRandomString(10) . "'),
+            ('Sức khỏe', 'enabled', '" . generateRandomString(10) . "'),
+            ('Ẩm thực', 'enabled', '" . generateRandomString(10) . "')";
         print($sql);
         if ($conn->query($sql) === TRUE) {
             echo "Category inserted successfully.<br>";
@@ -60,6 +60,23 @@ if ($result) {
             echo "Error inserting category: " . $conn->error . "<br>";
         }
     }
+}
+
+// Generate post_categories data
+$sql = "REPLACE INTO post_categories (post_id, category_id) VALUES ";
+
+for ($i = 0; $i < 20; $i++) {
+    $post_id = rand(1, 10);
+    $category_id = rand(1, 5);
+    $sql .= "($post_id, $category_id),";
+}
+
+$sql = rtrim($sql, ",");
+
+if ($conn->query($sql) === TRUE) {
+    echo "Post-Category associations inserted/updated successfully.<br>";
+} else {
+    echo "Error inserting/updating post-category associations: " . $conn->error . "<br>";
 }
 
 // Generate tag
@@ -82,11 +99,33 @@ if ($result) {
     }
 }
 
+// Generate post_tags data using REPLACE INTO
+
+$sql = "REPLACE INTO post_tags (post_id, tag_id) VALUES ";
+
+for ($i = 0; $i < 20; $i++) {
+    $post_id = rand(1, 10);
+    $num_tags = rand(1, 3);
+    
+    for ($j = 0; $j < $num_tags; $j++) {
+        $tag_id = rand(1, 5);
+        $sql .= "($post_id, $tag_id),";
+    }
+}
+
+$sql = rtrim($sql, ",");
+
+if ($conn->query($sql) === TRUE) {
+    echo "Post-Tag associations inserted/updated successfully.<br>";
+} else {
+    echo "Error inserting/updating post-tag associations: " . $conn->error . "<br>";
+}
+
 // Close MySQL connection
 $conn->close();
 
 // Function to generate a random string
-function generateRandomString($length = 10)
+function generateRandomString($length = 10): string
 {
     $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     $charactersLength = strlen($characters);
