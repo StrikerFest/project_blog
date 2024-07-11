@@ -66,6 +66,10 @@ class Post
     // Lấy bài post theo mã post
     public static function getPostById($id)
     {
+        if (!isset($id)) {
+            return null;
+        }
+        
         $conn = DB::db_connect();
         $sql = "SELECT * FROM posts WHERE id=$id";
         $result = $conn->query($sql);
