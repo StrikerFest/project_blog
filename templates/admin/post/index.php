@@ -5,9 +5,13 @@
  */
 
 use inc\helpers\Common;
+use inc\models\Category;
+use inc\models\Tag;
 
-$data = $args['posts'];
-// Import dữ liệu header của Admin
+$posts = $args['posts'];
+$categories = Category::getCategories();
+$tags = Tag::getTags();
+
 Common::requireTemplate('admin/layouts/headers.php', [
     'title' => 'Bờ Lốc'
 ]);
@@ -24,18 +28,40 @@ Common::requireTemplate('admin/layouts/headers.php', [
     </tr>
     </thead>
     <tbody>
-    <?php foreach ($data as $row): ?>
+    <?php foreach ($posts as $post): ?>
         <tr>
-            <td><?php echo htmlspecialchars($row['id']); ?></td>
-            <td><?php echo htmlspecialchars($row['title']); ?></td>
-            <td><?php echo htmlspecialchars('categories'); ?></td>
-            <td><?php echo htmlspecialchars('tags'); ?></td>
-            <td><?php echo htmlspecialchars('status'); ?></td>
-            <td><a href="post/edit?id=<?= $row['id']; ?>" class="btn">Edit</a>
-                <a href="post/delete?id=<?= $row['id']; ?>" class="btn">Delete</a></td>
+            <td><?php echo htmlspecialchars($post['post_id']); ?></td>
+            <td><?php echo htmlspecialchars($post['title']); ?></td>
+
+            <td>
+                <?php
+                // Check if 'categories' key exists in the post data
+                if (isset($post['categories'])) {
+                    echo htmlspecialchars($post['categories']);
+                } else {
+                    echo 'No Categories'; // Display a message if no categories exist
+                }
+                ?>
+            </td>
+
+            <td>
+                <?php
+                // Check if 'tags' key exists in the post data
+                if (isset($post['tags'])) {
+                    echo htmlspecialchars($post['tags']);
+                } else {
+                    echo 'No Tags'; // Display a message if no tags exist
+                }
+                ?>
+            </td>
+
+            <td><?php echo htmlspecialchars($post['status']); ?></td>
+            <td><a href="post/edit?id=<?= $post['post_id']; ?>" class="btn">Edit</a>
+                <a href="post/delete?id=<?= $post['post_id']; ?>" class="btn">Delete</a></td>
         </tr>
     <?php endforeach; ?>
     </tbody>
+
 </table>
 
 <?php

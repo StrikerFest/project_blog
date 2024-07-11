@@ -38,4 +38,16 @@ class Common
         require self::getTemplatePath($path);
     }
     
+    public static function getCurrentBackendUser()
+    {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        $currentUser = $_SESSION['user_backend'];   
+        if ($currentUser === null) {
+            header("Location: /admin/logout");
+        }
+        return $currentUser;
+    }
+    
 }

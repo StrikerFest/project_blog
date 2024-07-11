@@ -6,7 +6,7 @@ use database\DB;
 
 class Tag
 {
-    public static function save_tag()
+    public static function save_tag(): void
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -20,7 +20,7 @@ class Tag
                 $statement = $conn->prepare($sql);
                 $statement->bind_param("ss", $name, $status);
             } else {
-                $sql = "UPDATE tags SET name = ?, status = ? WHERE id = ?";
+                $sql = "UPDATE tags SET name = ?, status = ? WHERE tag_id = ?";
                 $statement = $conn->prepare($sql);
                 $statement->bind_param("sss", $name, $status, $id);
             }
@@ -38,10 +38,10 @@ class Tag
         }
     }
 
-    public static function getTags()
+    public static function getTags(): array
     {
         $conn = DB::db_connect();
-        $sql = "SELECT * FROM tags ORDER BY id asc";
+        $sql = "SELECT * FROM tags ORDER BY tag_id asc";
         $result = $conn->query($sql);
         $tags = [];
         if ($result->num_rows > 0) {
@@ -53,10 +53,10 @@ class Tag
         return $tags;
     }
 
-    public static function getTagById($id)
+    public static function getTagById($id): bool|array|null
     {
         $conn = DB::db_connect();
-        $sql = "SELECT * FROM tags WHERE id=$id";
+        $sql = "SELECT * FROM tags WHERE tag_id=$id";
         $result = $conn->query($sql);
         $tag = null;
         if ($result->num_rows == 1) {
@@ -66,10 +66,10 @@ class Tag
         return $tag;
     }
 
-    public static function deleteTag($id)
+    public static function deleteTag($id): void
     {
         $conn = DB::db_connect();
-        $sql = "DELETE FROM tags WHERE id=$id";
+        $sql = "DELETE FROM tags WHERE tag_id=$id";
         $conn->query($sql);
         $conn->close();
     }

@@ -18,13 +18,6 @@ $sql = "
     -- Use the created database
     USE `project_blog`;
 
-    -- Create posts table
-    CREATE TABLE IF NOT EXISTS `posts` (
-        `post_id` INT AUTO_INCREMENT PRIMARY KEY,
-        `title` VARCHAR(255) NOT NULL,
-        `content` TEXT NOT NULL
-    );
-    
     CREATE TABLE IF NOT EXISTS `users` (
         `user_id` INT AUTO_INCREMENT PRIMARY KEY,
         `email` VARCHAR(255) NOT NULL,
@@ -33,6 +26,21 @@ $sql = "
         `role` ENUM('admin', 'author', 'editor','reader') NOT NULL,
         `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    
+    CREATE TABLE IF NOT EXISTS `posts` (
+        `post_id` INT AUTO_INCREMENT PRIMARY KEY,
+        `author_id` INT,
+        `title` VARCHAR(255) NOT NULL,
+        `content` TEXT NOT NULL,
+        `banner_path` VARCHAR(255) DEFAULT NULL,
+        `thumbnail_path` VARCHAR(255) DEFAULT NULL,
+        `likes` INT DEFAULT 0,
+        `status` ENUM('draft', 'pending_approval', 'approval_retracted', 'approval_denied', 'approved', 'published_retracted', 'published') NOT NULL,
+        `published_at` TIMESTAMP NULL,
+        `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        FOREIGN KEY (author_id) REFERENCES users(user_id)
     );
 
     CREATE TABLE IF NOT EXISTS `categories` (

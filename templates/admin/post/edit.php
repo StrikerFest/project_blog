@@ -6,68 +6,150 @@ use inc\helpers\Common;
  * @var mixed $args
  */
 
-// Import dữ liệu header của Admin
 Common::requireTemplate('admin/layouts/headers.php', ['title' => 'burogu']);
 
-// Test data
-$current_user = $_SESSION['user_backend'] ?? null;
-// TODO: LOGOUT
-if ($current_user === null) {
-    exit;
-}
+$current_user = Common::getCurrentBackendUser();
+$post = $args['post'];
+$post_category_ids = $post['categories'] !== null ? explode(',', $post['categories']) : null;
+$post_tag_ids = $post['tags'] !== null ? explode(',', $post['tags']) : null;
 
-$args['categories'] = [];
-$args['tags'] = [];
-$args['post']['status'] = [];
 ?>
 
 <body>
 <div class="post-edit-container">
-    <?php if(isset($args['post']['id'])): ?>
-        <h1 class="post-edit-title">Update Post ID: <?= $args['post']['id'] ?></h1>
+    <?php if (isset($post['id'])): ?>
+        <h1 class="post-edit-title">Update Post ID: <?= $post['id'] ?></h1>
     <?php else: ?>
         <h1 class="post-edit-title">Create New Post</h1>
     <?php endif; ?>
     <form id="post-edit-createPostForm" method="POST">
-        <input type="hidden" value="<?= $args['post']['id'] ?? '' ?>" name="id" />
-        <input type="hidden" value="<?= $current_user['id'] ?? $args['current_user_id'] ?>" name="author_id" />
-        <input type="hidden" value="<?= $args['post']['approved_by'] ?? '' ?>" name="approved_by" />
+        <input type="hidden" value="<?= $post['post_id'] ?? '' ?>" name="id"/>
+        <input type="hidden" value="<?= $current_user['id'] ?? $args['current_user_id'] ?>" name="author_id"/>
+        <input type="hidden" value="<?= $post['approved_by'] ?? '' ?>" name="approved_by"/>
 
         <div class="post-edit-field">
             <label for="post-edit-title">Title:</label>
-            <input type="text" id="post-edit-title" name="title" value="<?= $args['post']['title'] ?? '' ?>" placeholder="Title" maxlength="255" required>
+            <input type="text" id="post-edit-title" name="title" value="<?= $post['title'] ?? '' ?>" placeholder="Title" maxlength="255" required>
         </div>
 
         <div class="post-edit-field">
             <label for="post-edit-content">Content:</label>
-            <textarea id="post-edit-content" name="content" placeholder="Content" required><?= $args['post']['content'] ?? '' ?></textarea>
+            <textarea id="post-edit-content" name="content" placeholder="Content" required><?= $post['content'] ?? '' ?></textarea>
         </div>
 
         <div class="post-edit-field">
             <label>Categories:</label>
-            <?php foreach($args['categories'] as $category): ?>
-                <input type="checkbox" id="post-edit-category<?= $category['id'] ?>" name="categories[]" value="<?= $category['id'] ?>"
-                    <?php if(in_array($category['id'], $args['post']['categories'] ?? [])) echo 'checked'; ?>>
-                <label for="post-edit-category<?= $category['id'] ?>"><?= $category['name'] ?></label>
-            <?php endforeach; ?>
+            <select name="categories[]" id="post-edit-categories" multiple required>
+                <?php foreach ($args['categories'] as $category): ?>
+                    <option value="<?= $category['category_id'] ?>"
+                        <?= (in_array($category['category_id'], $post_category_ids ?? [])) ? 'selected' : '' ?>>
+                        <?= $category['name'] ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
         </div>
 
         <div class="post-edit-field">
             <label>Tags:</label>
-            <?php foreach($args['tags'] as $tag): ?>
-                <input type="checkbox" id="post-edit-tag<?= $tag['id'] ?>" name="tags[]" value="<?= $tag['id'] ?>"
-                    <?php if(in_array($tag['id'], $args['post']['tags'] ?? [])) echo 'checked'; ?>>
-                <label for="post-edit-tag<?= $tag['id'] ?>"><?= $tag['name'] ?></label>
-            <?php endforeach; ?>
+            <select name="tags[]" id="post-edit-tags" multiple required>
+                <?php
+                $post_tag_ids = $post['tags'] !== null ? explode(',', $post['tags']) : null;
+                foreach ($args['tags'] as $tag): ?>
+                    <option value="<?= $tag['tag_id'] ?>"
+                        <?= (in_array($tag['tag_id'], $post_tag_ids ?? [])) ? 'selected' : '' ?>>
+                        <?= $tag['name'] ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
         </div>
 
         <div class="post-edit-field">
             <label for="post-edit-status">Status:</label>
             <select id="post-edit-status" name="status" required>
-                <option value="draft" <?= isset($args['post']['status']) && $args['post']['status'] == 'draft' ? 'selected' : '' ?>>Draft</option>
-                <option value="pending_approval" <?= isset($args['post']['status']) && $args['post']['status'] == 'pending_approval' ? 'selected' : '' ?>>Pending Approval</option>
-                <option value="approved" <?= isset($args['post']['status']) && $args['post']['status'] == 'approved' ? 'selected' : '' ?>>Approved</option>
-                <option value="published" <?= isset($args['post']['status']) && $args['post']['status'] == 'published' ? 'selected' : '' ?>>Published</option>
+                <?php
+                $currentStatus = $post['status'] ?? null; // Get current status
+
+                // Define available statuses based on current status and user role
+                $availableStatuses = [];
+                switch ($current_user['role']) {
+                    case 'writer':
+                        if (!$currentStatus) { // New post
+                            $availableStatuses = ['draft', 'pending_approval'];
+                        } else {
+                            switch ($currentStatus) {
+                                case 'draft':
+                                case 'approval_retracted':
+                                case 'approval_denied':
+                                    $availableStatuses = ['pending_approval'];
+                                    break;
+                                // No other options for writers
+                            }
+                        }
+                        break;
+                    case 'editor':
+                        if (!$currentStatus) { // New post (shouldn't happen for editors)
+                            $availableStatuses = ['draft']; // Restrict to draft for editors on new posts
+                        } else {
+                            switch ($currentStatus) {
+                                case 'pending_approval':
+                                    $availableStatuses = ['approval_denied', 'approved'];
+                                    break;
+                                case 'draft':
+                                case 'approval_retracted':
+                                    $availableStatuses = ['pending_approval'];
+                                    break;
+                                case 'approved':
+                                case 'published_retracted':
+                                    $availableStatuses = ['published', 'approval_retracted'];
+                                    break;
+                                // No other options for editors
+                            }
+                        }
+                        break;
+                    case 'admin':
+                        // Enforce sequence even for admins
+                        if (!$currentStatus) {
+                            $availableStatuses = ['draft']; // New post starts with draft
+                        } else {
+                            $availableStatuses[] = $currentStatus;
+                            switch ($currentStatus) {
+                                case 'draft':
+                                    $availableStatuses[] = 'pending_approval';
+                                    break;
+                                case 'pending_approval':
+                                    $availableStatuses[] = 'approval_denied';
+                                    $availableStatuses[] = 'approved';
+                                    break;
+                                case 'approval_denied':
+                                case 'approval_retracted':
+                                    // Cannot move from denied or retracted approval
+                                    break;
+                                case 'approved':
+                                    $availableStatuses[] = 'published';
+                                    break;
+                                case 'published_retracted':
+                                    $availableStatuses[] = 'published';
+                                    $availableStatuses[] = 'approval_retracted';
+                                    break;
+                                case 'published':
+                                    $availableStatuses[] = 'published_retracted';
+                                    break;
+                                // No other options for admins
+                            }
+                        }
+                        break;
+                    default:
+                        // Handle invalid role
+                        echo '<option value="">Invalid Role</option>';
+                        break;
+                }
+
+                // Generate options based on available statuses
+                foreach ($availableStatuses as $status) {
+                    $isSelected = ($currentStatus === $status) ? 'selected' : '';
+                    echo "<option value='$status' $isSelected>$status</option>";
+                }
+                ?>
             </select>
         </div>
 

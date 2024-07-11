@@ -7,19 +7,7 @@ use database\DB;
 // Connect to MySQL server
 $conn = DB::db_connect();
 
-// Generate 10 random posts
-for ($i = 1; $i <= 10; $i++) {
-    $title = generateRandomString(10); // Generate a random title
-    $content = generateRandomString(50); // Generate a random content
 
-    // Insert post into the database
-    $sql = "INSERT INTO posts (title, content) VALUES ('$title', '$content')";
-    if ($conn->query($sql) === TRUE) {
-        echo "Post inserted successfully.<br>";
-    } else {
-        echo "Error inserting post: " . $conn->error . "<br>";
-    }
-}
 
 
 // Generate user
@@ -38,6 +26,31 @@ if ($result) {
         } else {
             echo "Error inserting user: " . $conn->error . "<br>";
         }
+    }
+}
+
+$authors = [1];
+$statuses = ['draft', 'pending_approval', 'approval_retracted', 'approval_denied', 'approved', 'published_retracted', 'published'];
+
+for ($i = 0; $i < 11; $i++) {
+    $title = "Post Title " . ($i + 1);
+    $content = generateRandomString(10);
+    $banner_path = null;
+    $thumbnail_path = null;
+    $likes = rand(0, 100);
+    $status = $statuses[array_rand($statuses)];
+    $published_at = null;
+
+    $sql = "INSERT INTO posts (author_id, title, content, banner_path, thumbnail_path, likes, status, published_at) 
+          VALUES ($authors[0], '$title', '$content', '$banner_path', '$thumbnail_path', $likes, '$status', '$published_at')";
+
+    // Execute the insert query
+    $result = mysqli_query($conn, $sql);
+
+    if ($result) {
+        echo "Post " . ($i + 1) . " inserted successfully!<br>";
+    } else {
+        echo "Error inserting post: " . mysqli_error($conn) . "<br>";
     }
 }
 
