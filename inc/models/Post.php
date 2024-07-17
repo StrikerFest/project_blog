@@ -83,26 +83,9 @@ class Post
     // Lấy tất cả bài post
     public static function getPosts($sortOrder = 'asc', $cateAndTagToString = true): array
     {
-        if ($cateAndTagToString){
-            $cateField = 'name';
-            $tagField = 'name';
-        } else {
-            $cateField = 'category_id';
-            $tagField = 'tag_id';
-        }
-        
         $conn = DB::db_connect();
 
-        $sql = "SELECT p.*,
-                       GROUP_CONCAT(DISTINCT c.$cateField SEPARATOR ', ') AS categories,
-                       GROUP_CONCAT(DISTINCT t.$tagField SEPARATOR ', ') AS tags
-                FROM posts p
-                LEFT JOIN post_categories pc ON p.post_id = pc.post_id
-                LEFT JOIN categories c ON pc.category_id = c.category_id
-                LEFT JOIN post_tags pt ON p.post_id = pt.post_id
-                LEFT JOIN tags t ON pt.tag_id = t.tag_id
-                GROUP BY p.post_id
-                ORDER BY p.post_id $sortOrder";
+        $sql = "SELECT * FROM posts ORDER BY post_id $sortOrder";
 
         $result = $conn->query($sql);
         $posts = [];
@@ -123,17 +106,7 @@ class Post
         }
         
         $conn = DB::db_connect();
-        $sql = "SELECT p.*, 
-            GROUP_CONCAT(c.category_id SEPARATOR ', ') AS categories, 
-            GROUP_CONCAT(t.tag_id SEPARATOR ', ') AS tags
-        FROM posts p
-        LEFT JOIN post_categories pc ON p.post_id = pc.post_id
-        LEFT JOIN categories c ON pc.category_id = c.category_id
-        LEFT JOIN post_tags pt ON p.post_id = pt.post_id
-        LEFT JOIN tags t ON pt.tag_id = t.tag_id
-        WHERE p.post_id = $id
-        GROUP BY p.post_id
-        LIMIT 1"; // Limit to retrieve only one post
+        $sql = "SELECT * FROM posts WHERE post_id=$id";
         $result = $conn->query($sql);
         $post = null;
         if ($result->num_rows == 1) {

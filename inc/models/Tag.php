@@ -3,6 +3,7 @@
 namespace inc\models;
 
 use database\DB;
+use inc\helpers\Common;
 
 class Tag
 {
@@ -73,4 +74,20 @@ class Tag
         $conn->query($sql);
         $conn->close();
     }
+
+    public static function getPostTagIds($postId): array
+    {
+        $conn = DB::db_connect();
+        $sql = "SELECT t.tag_id, t.name, t.status
+            FROM tags t
+            INNER JOIN post_tags pt ON t.tag_id = pt.tag_id
+            WHERE pt.post_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $postId);
+        $result = Common::getArrayBySQL($sql,$stmt);
+        $conn->close();
+        
+        return $result;
+    }
+
 }

@@ -1,6 +1,7 @@
 <?php
 
 use inc\helpers\Common;
+use inc\helpers\Post;
 
 /**
  * @var mixed $args
@@ -10,8 +11,12 @@ Common::requireTemplate('admin/layouts/headers.php', ['title' => 'burogu']);
 
 $current_user = Common::getCurrentBackendUser();
 $post = $args['post'];
-$post_category_ids = $post['categories'] !== null ? explode(',', $post['categories']) : null;
-$post_tag_ids = $post['tags'] !== null ? explode(',', $post['tags']) : null;
+
+$post_category_ids = Post::getPostCategories($post['post_id'] ?? null,'id');
+$post_tag_ids = Post::getPostTags($post['post_id'] ?? null, 'id');
+
+$allowed = Post::canChangeStatus($post['status'] ?? null, $current_user['role']);
+$permissionMissing = !$allowed ? "You don't have permission to change post status." : '';
 
 ?>
 
@@ -53,7 +58,6 @@ $post_tag_ids = $post['tags'] !== null ? explode(',', $post['tags']) : null;
             <label>Tags:</label>
             <select name="tags[]" id="post-edit-tags" multiple required>
                 <?php
-                $post_tag_ids = $post['tags'] !== null ? explode(',', $post['tags']) : null;
                 foreach ($args['tags'] as $tag): ?>
                     <option value="<?= $tag['tag_id'] ?>"
                         <?= (in_array($tag['tag_id'], $post_tag_ids ?? [])) ? 'selected' : '' ?>>
@@ -64,16 +68,15 @@ $post_tag_ids = $post['tags'] !== null ? explode(',', $post['tags']) : null;
         </div>
 
         <div class="post-edit-field">
-            <label for="post-edit-status">Status:</label>
-            <select id="post-edit-status" name="status" required>
+            <label for="post-edit-status">Status: <?= $permissionMissing ?></label>
+            <select id="post-edit-status" name="status" required <?= !$allowed ? 'disabled' : '' ?>>
                 <?php
-                $currentStatus = $post['status'] ?? null; // Get current status
+                $currentStatus = $post['status'] ?? null;
 
-                // Define available statuses based on current status and user role
                 $availableStatuses = [];
                 switch ($current_user['role']) {
-                    case 'writer':
-                        if (!$currentStatus) { // New post
+                    case 'author':
+                        if (!$currentStatus) {
                             $availableStatuses = ['draft', 'pending_approval'];
                         } else {
                             switch ($currentStatus) {
@@ -82,13 +85,12 @@ $post_tag_ids = $post['tags'] !== null ? explode(',', $post['tags']) : null;
                                 case 'approval_denied':
                                     $availableStatuses = ['pending_approval'];
                                     break;
-                                // No other options for writers
                             }
                         }
                         break;
                     case 'editor':
-                        if (!$currentStatus) { // New post (shouldn't happen for editors)
-                            $availableStatuses = ['draft']; // Restrict to draft for editors on new posts
+                        if (!$currentStatus) { 
+                            $availableStatuses = ['draft']; // Editor ko tao post dc
                         } else {
                             switch ($currentStatus) {
                                 case 'pending_approval':
@@ -102,14 +104,12 @@ $post_tag_ids = $post['tags'] !== null ? explode(',', $post['tags']) : null;
                                 case 'published_retracted':
                                     $availableStatuses = ['published', 'approval_retracted'];
                                     break;
-                                // No other options for editors
                             }
                         }
                         break;
                     case 'admin':
-                        // Enforce sequence even for admins
                         if (!$currentStatus) {
-                            $availableStatuses = ['draft']; // New post starts with draft
+                            $availableStatuses = ['draft'];
                         } else {
                             $availableStatuses[] = $currentStatus;
                             switch ($currentStatus) {
@@ -122,7 +122,6 @@ $post_tag_ids = $post['tags'] !== null ? explode(',', $post['tags']) : null;
                                     break;
                                 case 'approval_denied':
                                 case 'approval_retracted':
-                                    // Cannot move from denied or retracted approval
                                     break;
                                 case 'approved':
                                     $availableStatuses[] = 'published';
@@ -134,20 +133,22 @@ $post_tag_ids = $post['tags'] !== null ? explode(',', $post['tags']) : null;
                                 case 'published':
                                     $availableStatuses[] = 'published_retracted';
                                     break;
-                                // No other options for admins
                             }
                         }
                         break;
                     default:
-                        // Handle invalid role
                         echo '<option value="">Invalid Role</option>';
                         break;
                 }
 
-                // Generate options based on available statuses
+
+                echo "<option value='$currentStatus' selected>$currentStatus</option>";
+                
                 foreach ($availableStatuses as $status) {
-                    $isSelected = ($currentStatus === $status) ? 'selected' : '';
-                    echo "<option value='$status' $isSelected>$status</option>";
+                    if ($currentStatus === $status){
+                        continue;
+                        }
+                    echo "<option value='$status'>$status</option>";
                 }
                 ?>
             </select>

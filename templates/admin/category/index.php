@@ -28,13 +28,13 @@ Common::requireTemplate('admin/layouts/headers.php', [
 
             <?php foreach ($args['categories'] as $category) : ?>
                 <tr class="table-row">
-                    <td class="text-align-center"><?= $category['id']; ?></td>
+                    <td class="text-align-center"><?= $category['category_id']; ?></td>
                     <td><?= $category['name']; ?></td>
                     <td class="text-align-center"><?= $category['status']; ?></td>
                     <td class="text-align-center"><?= $category['description']; ?></td>
                     <td class="text-align-center">
-                        <a href="category/edit?id=<?= $category['id']; ?>" class="listing-btn_action">Edit</a>
-                        <a href="category/delete?id=<?= $category['id']; ?>" class="listing-btn_action">Delete</a>
+                        <a href="category/edit?id=<?= $category['category_id']; ?>" class="listing-btn_action">Edit</a>
+                        <a href="category/delete?id=<?= $category['category_id']; ?>" class="listing-btn_action">Delete</a>
                     </td>
                 </tr>
             <?php endforeach; ?>

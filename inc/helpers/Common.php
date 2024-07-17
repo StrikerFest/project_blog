@@ -50,4 +50,21 @@ class Common
         return $currentUser;
     }
     
+    public static function getArrayBySQL($sql, $stmt): array
+    {
+        
+        $stmt->execute();
+        $results = [];
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $results[] = $row;
+            }
+        }
+
+        $stmt->close();
+        return $results;
+    }
+    
 }

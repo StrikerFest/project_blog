@@ -19,7 +19,7 @@ class User
             $password = $_POST['password'] ?? '';
             $conn = DB::db_connect();
 
-            $sql = "SELECT * FROM users where username = ? and `role` = '$role'";
+            $sql = "SELECT * FROM users where username = ? and `role` != '" . self::ROLE_USER . "' ";
             $statement = $conn->prepare($sql);
             $statement->bind_param("s", $username);
 
