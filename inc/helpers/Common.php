@@ -38,4 +38,33 @@ class Common
         require self::getTemplatePath($path);
     }
     
+    public static function getCurrentBackendUser()
+    {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        $currentUser = $_SESSION['user_backend'];   
+        if ($currentUser === null) {
+            header("Location: /admin/logout");
+        }
+        return $currentUser;
+    }
+    
+    public static function getArrayBySQL($sql, $stmt): array
+    {
+        
+        $stmt->execute();
+        $results = [];
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $results[] = $row;
+            }
+        }
+
+        $stmt->close();
+        return $results;
+    }
+    
 }

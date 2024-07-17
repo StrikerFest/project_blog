@@ -57,7 +57,7 @@
 
 # Bảng cơ sở dữ liệu
 
-user
+users
 
 ```
 user_id (Primary Key)
@@ -70,7 +70,7 @@ updated_at
 ```
 - phần role ENUM chỉ là string bình thường thôi, nhưng mà nếu điền giá trị không giống trong mảng đấy thì mysql không cho điền
 ```mysql
-CREATE TABLE user (
+CREATE TABLE users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL,
     email VARCHAR(100) NOT NULL,
@@ -81,7 +81,7 @@ CREATE TABLE user (
 );
 ```
 
-post
+posts
 
 ```
 post_id (Primary Key)
@@ -90,25 +90,25 @@ title
 content
 like
 status (e.g., 'draft', 'pending_approval', 'approved', 'published')
-approved_by (Foreign Key to Users, nullable)
 published_at (nullable)
 created_at
 updated_at
 ```
 ```mysql
-CREATE TABLE post (
+CREATE TABLE posts (
     post_id INT AUTO_INCREMENT PRIMARY KEY,
     author_id INT,
     title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
+    banner_path VARCHAR(255) DEFAULT NULL,
+    thumbnail_path VARCHAR(255) DEFAULT NULL,
     likes INT DEFAULT 0,
     status ENUM('draft', 'pending_approval', 'approved', 'published') NOT NULL,
-    approved_by INT NULL,
     published_at TIMESTAMP NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (author_id) REFERENCES user(user_id),
-    FOREIGN KEY (approved_by) REFERENCES user(user_id)
+    FOREIGN KEY (author_id) REFERENCES users(user_id),
+    FOREIGN KEY (approved_by) REFERENCES users(user_id)
 );
 ```
 
@@ -130,8 +130,8 @@ CREATE TABLE approval_logs (
     action ENUM('approved', 'rejected') NOT NULL,
     reason TEXT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (post_id) REFERENCES post(post_id),
-    FOREIGN KEY (user_id) REFERENCES user(user_id)
+    FOREIGN KEY (post_id) REFERENCES posts(post_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 ```
 
@@ -153,8 +153,8 @@ CREATE TABLE comments (
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (post_id) REFERENCES post(post_id),
-    FOREIGN KEY (user_id) REFERENCES user(user_id)
+    FOREIGN KEY (post_id) REFERENCES posts(post_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 ```
 
@@ -187,7 +187,7 @@ CREATE TABLE post_categories (
     post_id INT,
     category_id INT,
     PRIMARY KEY (post_id, category_id),
-    FOREIGN KEY (post_id) REFERENCES post(post_id),
+    FOREIGN KEY (post_id) REFERENCES posts(post_id),
     FOREIGN KEY (category_id) REFERENCES categories(category_id)
 );
 ```
@@ -219,7 +219,7 @@ CREATE TABLE post_tags (
     post_id INT,
     tag_id INT,
     PRIMARY KEY (post_id, tag_id),
-    FOREIGN KEY (post_id) REFERENCES post(post_id),
+    FOREIGN KEY (post_id) REFERENCES posts(post_id),
     FOREIGN KEY (tag_id) REFERENCES tags(tag_id)
 );
 ```
@@ -240,7 +240,7 @@ CREATE TABLE activity_logs (
     action VARCHAR(255) NOT NULL,
     entity VARCHAR(255) NOT NULL,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES user(user_id)
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 ```
 
@@ -264,8 +264,8 @@ CREATE TABLE post_history (
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     previous_content TEXT,
     current_content TEXT,
-    FOREIGN KEY (post_id) REFERENCES post(post_id),
-    FOREIGN KEY (changed_by) REFERENCES user(user_id)
+    FOREIGN KEY (post_id) REFERENCES posts(post_id),
+    FOREIGN KEY (changed_by) REFERENCES users(user_id)
 );
 ```
 

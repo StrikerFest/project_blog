@@ -8,7 +8,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 $currentPage = $_SERVER['REQUEST_URI'];
-if (!isset($_SESSION['user_admin']) && !isset($_SESSION['user_reader'])) {
+if (!isset($_SESSION['user_backend']) && !isset($_SESSION['user_frontend'])) {
     if (strstr($currentPage, "/admin")) {
         header("Location: /admin/login");
         return;
@@ -16,10 +16,10 @@ if (!isset($_SESSION['user_admin']) && !isset($_SESSION['user_reader'])) {
     header("Location: /login");
     return;
 } else {
-    if (isset($_SESSION['user_reader']) && strstr($currentPage, "/admin") && !isset($_SESSION['user_admin'])) {
+    if (isset($_SESSION['user_frontend']) && strstr($currentPage, "/admin") && !isset($_SESSION['user_backend'])) {
         header("Location: /admin/login");
     }
-    if (isset($_SESSION['user_admin']) && !strstr($currentPage, "/admin") && !isset($_SESSION['user_reader'])) {
+    if (isset($_SESSION['user_backend']) && !strstr($currentPage, "/admin") && !isset($_SESSION['user_frontend'])) {
         header("Location: /login");
     }
 }
@@ -32,6 +32,7 @@ if (!isset($_SESSION['user_admin']) && !isset($_SESSION['user_reader'])) {
     <title><?= $args['title'] ?? '' ?></title>
     <link rel="stylesheet" href="<?= Common::getAssetPath('css/style.css') ?>">
     <link rel="stylesheet" href="<?= Common::getAssetPath('css/listing.css') ?>">
+    <link rel="stylesheet" href="<?= Common::getAssetPath('css/form-table.css') ?>">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 </head>
 

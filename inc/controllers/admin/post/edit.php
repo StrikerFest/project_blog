@@ -2,18 +2,14 @@
 require $_ENV['AUTOLOAD'];
 
 use inc\helpers\Common;
+use inc\models\Category;
 use inc\models\Post;
+use inc\models\Tag;
 
 Post::save_post();
 
-$post = null;
-
-// Kiểm tra xem có mã post được truyền vào không
-// Nếu có thì sẽ lấy thông tin của POST
-if(isset($_GET['id'])){
-    $post = Post::getPostById($_GET['id']);
-}
-
 Common::requireTemplate('admin/post/edit.php', [
-    'post' => $post
+    'post' => Post::getPostById($_GET['id'] ?? null),
+    'categories' => Category::getCategories(),
+    'tags' => Tag::getTags()
 ]);

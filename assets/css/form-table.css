@@ -1,0 +1,93 @@
+.listing-container {
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+  border: 1px solid lightcyan;
+}
+
+.listing-styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.listing-styled-table th {
+  background-color: #009879;
+  color: white;
+  padding: 10px;
+}
+
+.listing-styled-table td {
+  padding: 10px;
+  text-align: left;
+}
+
+.listing-styled-table tbody tr:nth-child(odd) {
+  background-color: white;
+}
+
+.listing-styled-table tbody tr:nth-child(even) {
+  background-color: lightgray;
+}
+
+.listing-btn_action {
+  margin: 0 5px;
+  text-decoration: none;
+  color: #007bff;
+}
+
+.listing-btn_action:hover {
+  text-decoration: underline;
+}
+
+.post-edit-container {
+  width: 50%;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.post-edit-title {
+  text-align: center;
+  color: #333;
+}
+
+.post-edit-field {
+  margin-bottom: 15px;
+}
+
+.post-edit-field label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+.post-edit-field input[type="text"],
+.post-edit-field textarea,
+.post-edit-field select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.post-edit-field select[multiple] {
+  height: 100px;
+}
+
+.post-edit-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.post-edit-btn:hover {
+  background-color: #45a049;
+}

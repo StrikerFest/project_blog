@@ -1,6 +1,10 @@
 <?php
 
 use inc\helpers\Common;
+$current_user = $_SESSION['user_backend'] ?? null;
+if ($current_user === null) {
+    exit;
+}
 
 ?>
 <link rel="stylesheet" href="<?= Common::getAssetPath('css/menu.css') ?>">
@@ -52,7 +56,7 @@ use inc\helpers\Common;
     </div>
 
     <div class="menu-dropdown">
-        <button class="menu-dropbtn">Profile
+        <button class="menu-dropbtn">Profile: <?= $current_user['username'] ?>
             <i class="fa fa-caret-down"></i>
         </button>
         <div class="menu-dropdown-content">
