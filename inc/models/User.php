@@ -97,4 +97,20 @@ class User
         }
         header("Location: /admin/login");
     }
+
+    public static function getUserByAuthorId($author_id) {
+        $conn = DB::db_connect();
+        $sql = 'SELECT * FROM users WHERE user_id = ?';
+        $stmt = $conn->prepare($sql);
+        if ($stmt === false) {
+            die('Prepare failed: ' . htmlspecialchars($conn->error));
+        }
+        $stmt->bind_param('i', $author_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+        $stmt->close();
+        $conn->close();
+        return $user;
+    }
 }

@@ -1,7 +1,12 @@
 <?php
 
 use inc\helpers\Common;
-$current_user = $_SESSION['user_backend'] ?? null;
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+$current_user = $_SESSION['user_frontend'] ?? null;
 if ($current_user === null) {
     exit;
 }

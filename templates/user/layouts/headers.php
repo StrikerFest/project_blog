@@ -14,6 +14,7 @@ use inc\helpers\Common;
     <title><?= $args['title'] ?? '' ?></title>
     <link rel="stylesheet" href="<?= Common::getAssetPath('css/style.css') ?>">
     <link rel="stylesheet" href="<?= Common::getAssetPath('css/user/post.css') ?>">
+    <link rel="stylesheet" href="<?= Common::getAssetPath('css/user/post-detail.css') ?>">
 </head>
 
 <?php Common::requireTemplate('user/layouts/menu.php', []);
