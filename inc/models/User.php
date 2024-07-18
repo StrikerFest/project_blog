@@ -4,7 +4,9 @@ namespace inc\models;
 
 use database\DB;
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 class User
 {
@@ -17,16 +19,26 @@ class User
 
             $username = $_POST['username'] ?? '';
             $password = $_POST['password'] ?? '';
-            $conn = DB::db_connect();
 
-            $sql = "SELECT * FROM users where username = ? and `role` != '" . self::ROLE_USER . "' ";
+            if (!isset($role)){
+                die('No role were passed to login logic');
+            }
+            $conn = DB::db_connect();
+            
+            if ($role == self::ROLE_USER) {
+                $sql = "SELECT * FROM users where username = ? and `role` = '" . self::ROLE_USER . "' ";
+            } else {
+                $sql = "SELECT * FROM users where username = ? and `role` != '" . self::ROLE_USER . "' ";
+            }
             $statement = $conn->prepare($sql);
             $statement->bind_param("s", $username);
 
             $statement->execute();
             $result = $statement->get_result();
+            
             // Kiểm tra xem có bản ghi nào được trả về không
             if ($result->num_rows > 0) {
+                
                 // Lấy thông tin người dùng từ kết quả truy vấn
                 $user = $result->fetch_assoc();
 
@@ -42,11 +54,12 @@ class User
                     // Check lưu dữ liệu user bên người đọc hay bên quản lý
                     if ($user['role'] === self::ROLE_USER) {
                         $_SESSION['user_frontend'] = $customUser;
+                        header("Location: /post");
                     } else {
                         $_SESSION['user_backend'] = $customUser;
+                        header("Location: /admin/post");
                     }
                     
-                    header("Location: /admin/post");
                 } else {
                     $_SESSION['error_login_'.$role] = true;
                     self::redirectLogin($role);

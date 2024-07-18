@@ -2,6 +2,15 @@
 
 use inc\helpers\Common;
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+$current_user = $_SESSION['user_frontend'] ?? null;
+if ($current_user === null) {
+    exit;
+}
+
 ?>
 <link rel="stylesheet" href="<?= Common::getAssetPath('css/menu.css') ?>">
 <div class="menu-navbar">
@@ -32,7 +41,7 @@ use inc\helpers\Common;
         </div>
     </div>
     <div class="menu-dropdown">
-        <button class="menu-dropbtn">Profile
+        <button class="menu-dropbtn">Profile: <?= $current_user['username'] ?>
             <i class="fa fa-caret-down"></i>
         </button>
         <div class="menu-dropdown-content">
