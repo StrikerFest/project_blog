@@ -1,5 +1,9 @@
 <?php
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 /**
  * @var mixed $args
  */
@@ -43,18 +47,30 @@ Common::requireTemplate('user/layouts/headers.php', [
     </select>
 </div>
 
-<div class="post-container">
-    <?php foreach ($currentPosts as $post): ?>
-        <div class="post-card">
-            <img src="<?php echo $post['image'] ?? ''; ?>" alt="<?php echo 'image'; ?>" class="post-card-image">
-            <div class="post-card-title"><?php echo $post['title']; ?></div>
-            <div class="post-card-content"><?php echo $post['content']; ?></div>
-        </div>
-    <?php endforeach; ?>
-</div>
+<div class="main-content">
+    <div class="post-container">
+        <?php foreach ($currentPosts as $post): ?>
+            <div class="post-card">
+                <a href="post_detail.php?post_id=<?= $post['post_id'] ?>" class="post-thumbnail">
+                    <?php if (!empty($post['image'])): ?>
+                        <img src="<?php echo $post['image']; ?>" alt="image">
+                    <?php else: ?>
+                        <div class="post-thumbnail-placeholder"></div>
+                    <?php endif; ?>
+                </a>
+                <div class="post-content">
+                    <a href="post_detail.php?post_id=<?= $post['post_id'] ?>" class="post-title"><?php echo $post['title']; ?></a>
+                    <div class="post-category">Category: INSERT</div>
+                    <div class="post-tags">Tags: INSERT</div>
+                    <a href="post_detail.php?post_id=<?= $post['post_id'] ?>" class="post-see-more">See More</a>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
 
-<div class="paginate-bar">
-    <?php echo Post::generatePagination($currentPage, $totalPages, $postsPerPage); ?>
+    <div class="paginate-bar">
+        <?php echo Post::generatePagination($currentPage, $totalPages, $postsPerPage); ?>
+    </div>
 </div>
 
 </body>
