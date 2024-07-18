@@ -1,7 +1,7 @@
 <?php
 
+use inc\helpers\admin\Post;
 use inc\helpers\Common;
-use inc\helpers\Post;
 
 /**
  * @var mixed $args

@@ -5,19 +5,12 @@
  */
 
 use inc\helpers\Common;
+use inc\helpers\user\Post;
 
-// Sample data for posts
 $posts = $args['posts'];
 
-// Get current page and posts per page from URL parameters
-$currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$postsPerPage = isset($_GET['per_page']) ? (int)$_GET['per_page'] : 8;
-
-// Validate posts per page value
-$validPostsPerPage = [8, 16, 25];
-if (!in_array($postsPerPage, $validPostsPerPage)) {
-    $postsPerPage = 8; // Default to 8 if invalid
-}
+// Phan trang
+list($currentPage, $postsPerPage, $validPostsPerPage) = Post::getPaginationParams();
 
 $totalPosts = count($posts);
 $totalPages = ceil($totalPosts / $postsPerPage);
@@ -25,13 +18,7 @@ $startIndex = ($currentPage - 1) * $postsPerPage;
 $endIndex = min($startIndex + $postsPerPage, $totalPosts);
 $currentPosts = array_slice($posts, $startIndex, $postsPerPage);
 
-// Function to generate pagination URL
-function getPaginationUrl($page, $perPage): string
-{
-    return "?page=$page&per_page=$perPage";
-}
-
-// Import dữ liệu header của Admin
+// Header
 Common::requireTemplate('user/layouts/headers.php', [
     'title' => 'Bờ Lốc'
 ]);
@@ -130,31 +117,7 @@ Common::requireTemplate('user/layouts/headers.php', [
 </div>
 
 <div class="paginate-bar">
-    <?php if ($currentPage > 1): ?>
-        <a href="<?php echo getPaginationUrl(1, $postsPerPage); ?>">First</a>
-        <a href="<?php echo getPaginationUrl($currentPage - 1, $postsPerPage); ?>">Previous</a>
-    <?php endif; ?>
-
-    <?php if ($currentPage > 2): ?>
-        <a href="<?php echo getPaginationUrl(1, $postsPerPage); ?>">1</a>
-        <?php if ($currentPage > 3): ?>
-            <span>...</span>
-        <?php endif; ?>
-    <?php endif; ?>
-
-    <a href="<?php echo getPaginationUrl($currentPage, $postsPerPage); ?>" class="current"><?php echo $currentPage; ?></a>
-
-    <?php if ($currentPage < $totalPages - 1): ?>
-        <?php if ($currentPage < $totalPages - 2): ?>
-            <span>...</span>
-        <?php endif; ?>
-        <a href="<?php echo getPaginationUrl($totalPages, $postsPerPage); ?>"><?php echo $totalPages; ?></a>
-    <?php endif; ?>
-
-    <?php if ($currentPage < $totalPages): ?>
-        <a href="<?php echo getPaginationUrl($currentPage + 1, $postsPerPage); ?>">Next</a>
-        <a href="<?php echo getPaginationUrl($totalPages, $postsPerPage); ?>">Last</a>
-    <?php endif; ?>
+    <?php echo Post::generatePagination($currentPage, $totalPages, $postsPerPage); ?>
 </div>
 
 </body>

@@ -1,6 +1,6 @@
 <?php
 
-namespace inc\helpers;
+namespace inc\helpers\admin;
 
 use inc\models\Category;
 use inc\models\Tag;
