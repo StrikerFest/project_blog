@@ -49,6 +49,11 @@ class Common
         }
         return $currentUser;
     }
+
+    public static function getUploadPath($path): string
+    {
+        return $_ENV['UPLOAD_DIR'] . $path;
+    }
     
     public static function getArrayBySQL($sql, $stmt): array
     {

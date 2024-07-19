@@ -3,6 +3,7 @@
 namespace inc\models;
 
 use database\DB;
+use inc\helpers\Common;
 
 class Post
 {
@@ -22,17 +23,37 @@ class Post
             $status = $_POST['status'] ?? '';
 
             // Kết nối DB
+            $upload_dir = __DIR__ . '/../assets/uploads/';
+            $relative_upload_dir = '/assets/uploads/';
+            $thumbnail_path = '';
+            $banner_path = '';
+
+            if (!empty($_FILES['thumbnail']['name'])) {
+                $thumbnail_filename = basename($_FILES['thumbnail']['name']);
+                $thumbnail_full_path = $upload_dir . $thumbnail_filename;
+                move_uploaded_file($_FILES['thumbnail']['tmp_name'], $thumbnail_full_path);
+                $thumbnail_path = $relative_upload_dir . $thumbnail_filename; // Store relative path
+            }
+
+            if (!empty($_FILES['banner']['name'])) {
+                $banner_filename = basename($_FILES['banner']['name']);
+                $banner_full_path = $upload_dir . $banner_filename;
+                move_uploaded_file($_FILES['banner']['tmp_name'], $banner_full_path);
+                $banner_path = $relative_upload_dir . $banner_filename; // Store relative path
+            }
+
+            // Connect to DB
             $conn = DB::db_connect();
 
             // Kiểm tra xem đang tạo mới blog hay cập nhật blog cũ
             if ($id == '') {
-                $sql = "INSERT INTO posts (title, content, author_id, status) VALUES (?, ?, ?, ?)";
+                $sql = "INSERT INTO posts (title, content, author_id, status, thumbnail_path, banner_path) VALUES (?, ?, ?, ?, ?, ?)";
                 $statement = $conn->prepare($sql);
-                $statement->bind_param("ssss", $title, $content, $author_id,  $status);
+                $statement->bind_param("ssssss", $title, $content, $author_id, $status, $thumbnail_path, $banner_path);
             } else {
-                $sql = "UPDATE posts SET title = ?, content = ?, author_id = ?,  status = ? WHERE post_id = ?";
+                $sql = "UPDATE posts SET title = ?, content = ?, author_id = ?, status = ?, thumbnail_path = ?, banner_path = ? WHERE post_id = ?";
                 $statement = $conn->prepare($sql);
-                $statement->bind_param("sssss", $title, $content, $author_id, $status, $id);
+                $statement->bind_param("sssssss", $title, $content, $author_id, $status, $thumbnail_path, $banner_path, $id);
             }
 
             // Chạy lệnh SQL
@@ -41,7 +62,7 @@ class Post
             // Kiểm tra câu lệnh SQL có chạy thành công không
             if (!$statement->errno) {
                 if ($id == '') {
-                    $id = $statement->insert_id; // Lấy ID post mới
+                    $id = $statement->insert_id;
                 }
 
                 // Xử lý category

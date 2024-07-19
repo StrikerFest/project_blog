@@ -25,7 +25,9 @@ $sql = "
         `password` VARCHAR(60) NOT NULL,
         `role` ENUM('admin', 'author', 'editor','reader') NOT NULL,
         `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        `bio` TEXT DEFAULT NULL,
+        `profile_image` VARCHAR(255) DEFAULT NULL
     );
     
     CREATE TABLE IF NOT EXISTS `posts` (

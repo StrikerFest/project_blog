@@ -57,10 +57,10 @@ Common::requireTemplate('user/layouts/headers.php', [
             ?>
             <div class="post-card">
                 <a href="/post/show?post_id=<?= $post['post_id'] ?>" class="post-thumbnail">
-                    <?php if (!empty($post['image'])): ?>
-                        <img src="<?php echo $post['image']; ?>" alt="image">
+                    <?php if (!empty($post['thumbnail_path'])): ?>
+                        <img src="<?= $post['thumbnail_path']; ?>" alt="image">
                     <?php else: ?>
-                        <div class="post-thumbnail-placeholder"></div>
+                        <img src="<?= Common::getAssetPath('images/placeholder-thumbnail') ?>" alt="post-thumbnail">
                     <?php endif; ?>
                 </a>
                 <div class="post-content">
