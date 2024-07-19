@@ -53,7 +53,7 @@ Common::requireTemplate('user/layouts/headers.php', [
     <div class="post-detail-content">
         <?= $post['content'] ?>
     </div>
-    
+
     <div class="post-detail-author-card">
         <?php if (!empty($author['image'])): ?>
             <img src="<?= 'image' ?>" alt="Author Profile" class="post-detail-author-profile-image">
@@ -70,6 +70,9 @@ Common::requireTemplate('user/layouts/headers.php', [
         <button class="post-detail-like-button" onclick="likePost(<?= $post_id ?>)">Like</button>
         <span class="post-detail-like-count" id="like-count"><?= $post['likes'] ?? 0 ?> Likes</span>
     </div>
+    <?php
+    Common::requireTemplate('user/comment/post_block.php', []);
+    ?>
 </div>
 
 <script>
