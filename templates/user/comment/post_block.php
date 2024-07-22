@@ -24,12 +24,13 @@ $comments = [
 ?>
 <div class="comment-section">
     <?php if ($is_logged_in): ?>
-        <div class="comment-textarea">
+        <form id="comment-form" class="comment-textarea" method="POST">
             <img src="<?php echo $user_avatar; ?>" alt="User Avatar" class="comment-avatar">
             <label>
-                <textarea placeholder="Write a comment..."></textarea>
+                <textarea id="comment-textarea" name="comment" placeholder="Write a comment..."></textarea>
             </label>
-        </div>
+            <button type="submit">Submit</button>
+        </form>
     <?php else: ?>
         <div class="comment-textarea">
             <p>Please <a href="/login.php">log in</a> to write a comment.</p>
@@ -39,7 +40,7 @@ $comments = [
     <ul class="comment-list">
         <?php foreach ($comments as $comment): ?>
             <li class="comment-list-item">
-                <img src="<?php echo $comment['avatar']; ?>" alt="<?php echo $comment['username']; ?>'s Avatar" class="comment-avatar">
+                <img src="<?php echo $comment['avatar']; ?>" alt="Avatar" class="comment-avatar">
                 <div class="comment-content">
                     <span class="comment-username"><?php echo $comment['username']; ?></span>
                     <span class="comment-date"><?php echo $comment['created_at']; ?></span>
@@ -49,3 +50,4 @@ $comments = [
         <?php endforeach; ?>
     </ul>
 </div>
+<?php Common::requireTemplate('user/layouts/footer.php'); ?>
