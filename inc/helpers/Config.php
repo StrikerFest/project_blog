@@ -15,7 +15,7 @@ class Config{
         // Kiểm tra nếu đường dẫn tồn tại trong mảng
         if (array_key_exists($requestUri, $routes)) {
             // Nếu đường dẫn trang tồn tại sẽ chuyển hướng về trang được yêu cầu
-            include $routes[$requestUri];
+            require_once $routes[$requestUri];
         } else {
             
             header("Location: /post");

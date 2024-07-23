@@ -38,6 +38,7 @@ $routes = [
     '/login' => Common::getControllerPath('user/auth/login.php'),
     '/logout' => Common::getControllerPath('user/auth/logout.php'),
     '/post' => Common::getControllerPath('user/post/index.php'),
+    '/' => Common::getControllerPath('user/post/index.php'),
     '/post/show' => Common::getControllerPath('user/post/detail.php'),
     '/post/comment' => Common::getControllerPath('ajax.php'),
 

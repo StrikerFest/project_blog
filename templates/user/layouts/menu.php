@@ -7,9 +7,6 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 $current_user = $_SESSION['user_frontend'] ?? null;
-if ($current_user === null) {
-    exit;
-}
 
 ?>
 <link rel="stylesheet" href="<?= Common::getAssetPath('css/menu.css') ?>">
@@ -27,8 +24,7 @@ if ($current_user === null) {
             <i class="fa fa-caret-down"></i>
         </button>
         <div class="menu-dropdown-content">
-            <a href="category">View categories</a>
-            <a href="category/create">Create category</a>
+            <a href="category">View post by categories</a>
         </div>
     </div>
     <div class="menu-dropdown">
@@ -36,20 +32,26 @@ if ($current_user === null) {
             <i class="fa fa-caret-down"></i>
         </button>
         <div class="menu-dropdown-content">
-            <a href="tag">View tags</a>
-            <a href="tag/create">Create tag</a>
+            <a href="tag">View post by tags</a>
         </div>
     </div>
     <div class="menu-dropdown">
-        <button class="menu-dropbtn">Profile: <?= $current_user['username'] ?>
+        <button class="menu-dropbtn">Profile: <?= $current_user['username'] ?? 'Guest' ?>
             <i class="fa fa-caret-down"></i>
         </button>
-        <div class="menu-dropdown-content">
-            <?php if (strstr($_SERVER['REQUEST_URI'], '/admin')) : ?>
-                <a href="/admin/logout">Logout</a>
-            <?php else : ?>
-                <a href="/logout">Logout</a>
-            <?php endif; ?>
-        </div>
+        <?php if (isset($current_user['username'])) : ?>
+            <div class="menu-dropdown-content">
+                <?php if (strstr($_SERVER['REQUEST_URI'], '/admin')) : ?>
+                    <a href="/admin/logout">Logout</a>
+                <?php else : ?>
+                    <a href="/logout">Logout</a>
+                <?php endif; ?>
+            </div>
+        <?php else: ?>
+            <div class="menu-dropdown-content">
+                <a href="/user/login">Login</a>
+                <a href="/user/login">Sign in</a>
+            </div>
+        <?php endif; ?>
     </div>
 </div>
