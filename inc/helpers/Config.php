@@ -10,14 +10,20 @@ class Config{
 
     public static function redirectRouter($routes): void
     {
+        error_reporting(E_ALL);
+        ini_set('display_errors', 1);
+
         // Lấy đường dẫn URI
         $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         // Kiểm tra nếu đường dẫn tồn tại trong mảng
         if (array_key_exists($requestUri, $routes)) {
             // Nếu đường dẫn trang tồn tại sẽ chuyển hướng về trang được yêu cầu
-            require_once $routes[$requestUri];
+            if (file_exists($routes[$requestUri])) {
+                require_once $routes[$requestUri];
+            } else {
+                echo "File does not exist: " . $routes[$requestUri];
+            }
         } else {
-            
             header("Location: /post");
         }
     }
