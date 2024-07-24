@@ -102,11 +102,15 @@ class Post
     }
 
     // Lấy tất cả bài post
-    public static function getPosts($sortOrder = 'asc', $cateAndTagToString = true): array
+    public static function getPosts($sortOrder = 'asc', $published = true): array
     {
         $conn = DB::db_connect();
 
-        $sql = "SELECT * FROM posts ORDER BY post_id $sortOrder";
+        if ($published){
+            $sql = "SELECT * FROM posts WHERE status = 'published' ORDER BY post_id DESC";
+        } else {
+            $sql = "SELECT * FROM posts ORDER BY post_id $sortOrder";
+        }
 
         $result = $conn->query($sql);
         $posts = [];
