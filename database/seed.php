@@ -2,7 +2,7 @@
 require_once '../env.php';
 require $_ENV['AUTOLOAD'];
 
-use database\DB;
+use inc\helpers\DB;
 
 // Connect to MySQL server
 $conn = DB::db_connect();

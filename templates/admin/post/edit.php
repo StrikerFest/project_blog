@@ -1,7 +1,7 @@
 <?php
 
+use inc\helpers\admin\Post;
 use inc\helpers\Common;
-use inc\helpers\Post;
 
 /**
  * @var mixed $args
@@ -12,7 +12,7 @@ Common::requireTemplate('admin/layouts/headers.php', ['title' => 'burogu']);
 $current_user = Common::getCurrentBackendUser();
 $post = $args['post'];
 
-$post_category_ids = Post::getPostCategories($post['post_id'] ?? null,'id');
+$post_category_ids = Post::getPostCategories($post['post_id'] ?? null, 'id');
 $post_tag_ids = Post::getPostTags($post['post_id'] ?? null, 'id');
 
 $allowed = Post::canChangeStatus($post['status'] ?? null, $current_user['role']);
@@ -27,7 +27,7 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
     <?php else: ?>
         <h1 class="post-edit-title">Create New Post</h1>
     <?php endif; ?>
-    <form id="post-edit-createPostForm" method="POST">
+    <form id="post-edit-createPostForm" method="POST" enctype="multipart/form-data">
         <input type="hidden" value="<?= $post['post_id'] ?? '' ?>" name="id"/>
         <input type="hidden" value="<?= $current_user['id'] ?? $args['current_user_id'] ?>" name="author_id"/>
         <input type="hidden" value="<?= $post['approved_by'] ?? '' ?>" name="approved_by"/>
@@ -40,6 +40,16 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
         <div class="post-edit-field">
             <label for="post-edit-content">Content:</label>
             <textarea id="post-edit-content" name="content" placeholder="Content" required><?= $post['content'] ?? '' ?></textarea>
+        </div>
+
+        <div class="post-edit-field">
+            <label for="post-edit-thumbnail">Thumbnail:</label>
+            <input type="file" id="post-edit-thumbnail" name="thumbnail" accept="image/*">
+        </div>
+
+        <div class="post-edit-field">
+            <label for="post-edit-banner">Banner:</label>
+            <input type="file" id="post-edit-banner" name="banner" accept="image/*">
         </div>
 
         <div class="post-edit-field">
@@ -89,7 +99,7 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
                         }
                         break;
                     case 'editor':
-                        if (!$currentStatus) { 
+                        if (!$currentStatus) {
                             $availableStatuses = ['draft']; // Editor ko tao post dc
                         } else {
                             switch ($currentStatus) {
@@ -141,13 +151,12 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
                         break;
                 }
 
-
                 echo "<option value='$currentStatus' selected>$currentStatus</option>";
-                
+
                 foreach ($availableStatuses as $status) {
-                    if ($currentStatus === $status){
+                    if ($currentStatus === $status) {
                         continue;
-                        }
+                    }
                     echo "<option value='$status'>$status</option>";
                 }
                 ?>
@@ -159,5 +168,9 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
         </div>
     </form>
 </div>
+<script src="https://cdn.ckeditor.com/4.24.0-lts/standard/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace('post-edit-content');
+</script>
 <script src="<?= Common::getAssetPath('js/script.js') ?>"></script>
 </body>

@@ -49,6 +49,11 @@ class Common
         }
         return $currentUser;
     }
+
+    public static function getUploadPath($path): string
+    {
+        return $_ENV['UPLOAD_DIR'] . $path;
+    }
     
     public static function getArrayBySQL($sql, $stmt): array
     {
@@ -65,6 +70,14 @@ class Common
 
         $stmt->close();
         return $results;
+    }
+    
+    public static function getFrontendUser(){
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        return $_SESSION['user_frontend'] ?? null;
     }
     
 }

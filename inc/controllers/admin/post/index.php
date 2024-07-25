@@ -6,7 +6,7 @@ use inc\models\Post;
 
 // Import template của index
 Common::requireTemplate('admin/post/index.php', [
-    'posts' => Post::getPosts('desc'),
+    'posts' => Post::getPosts('desc', false),
 ]);
 
 exit;

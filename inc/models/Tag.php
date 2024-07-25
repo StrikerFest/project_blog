@@ -2,8 +2,8 @@
 
 namespace inc\models;
 
-use database\DB;
 use inc\helpers\Common;
+use inc\helpers\DB;
 
 class Tag
 {

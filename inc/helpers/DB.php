@@ -1,6 +1,6 @@
 <?php
 
-namespace database;
+namespace inc\helpers;
 
 use mysqli;
 

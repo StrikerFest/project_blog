@@ -1,9 +1,14 @@
 <?php
 
 use inc\helpers\Common;
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 $current_user = $_SESSION['user_backend'] ?? null;
 if ($current_user === null) {
-    exit;
+    exit('No user session');
 }
 
 ?>

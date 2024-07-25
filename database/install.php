@@ -2,7 +2,7 @@
 require_once '../env.php';
 require $_ENV['AUTOLOAD'];
 
-use database\DB;
+use inc\helpers\DB;
 
 // Connect to MySQL server
 $conn = DB::db_connect();
@@ -25,7 +25,9 @@ $sql = "
         `password` VARCHAR(60) NOT NULL,
         `role` ENUM('admin', 'author', 'editor','reader') NOT NULL,
         `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        `bio` TEXT DEFAULT NULL,
+        `profile_image` VARCHAR(255) DEFAULT NULL
     );
     
     CREATE TABLE IF NOT EXISTS `posts` (
@@ -70,6 +72,17 @@ $sql = "
         PRIMARY KEY (post_id, tag_id),
         FOREIGN KEY (post_id) REFERENCES posts(post_id),
         FOREIGN KEY (tag_id) REFERENCES tags(tag_id)
+    );
+    
+    CREATE TABLE comments (
+        comment_id INT AUTO_INCREMENT PRIMARY KEY,
+        post_id INT,
+        user_id INT,
+        content TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        FOREIGN KEY (post_id) REFERENCES posts(post_id),
+        FOREIGN KEY (user_id) REFERENCES users(user_id)
     );
 ";
 

@@ -1,0 +1,116 @@
+.post-detail-breadcrumb {
+    margin: 20px 0;
+}
+
+.post-detail-breadcrumb a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.post-detail-breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.post-detail-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.post-detail-title {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.post-detail-categories {
+    font-size: 1.2em;
+    color: #666;
+}
+
+.post-detail-tags {
+    margin: 10px 0;
+}
+
+.post-detail-tag-button {
+    padding: 5px 10px;
+    margin: 5px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+
+.post-detail-tag-button:hover {
+    background-color: #0056b3;
+}
+
+.post-detail-banner img, .post-detail-banner-placeholder {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    background-color: #ccc;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.post-detail-banner-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    font-size: 1.5em;
+}
+
+.post-detail-author-card {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.post-detail-author-profile-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+}
+
+.post-detail-author-details h4 {
+    margin: 0 0 5px 0;
+}
+
+.post-detail-content {
+    margin-bottom: 20px;
+}
+
+.post-detail-footer {
+    display: flex;
+    align-items: center;
+}
+
+.post-detail-like-button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+
+.post-detail-like-button:hover {
+    background-color: #0056b3;
+}
+
+.post-detail-like-count {
+    margin-left: 10px;
+    font-size: 1em;
+    color: #666;
+}
