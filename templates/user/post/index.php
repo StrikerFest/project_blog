@@ -29,6 +29,7 @@ Common::requireTemplate('user/layouts/headers.php', [
 ]);
 ?>
 <body>
+<?php Common::requireTemplate('user/layouts/menu.php', []); ?>
 <script>
     function updatePerPage(value) {
         const urlParams = new URLSearchParams(window.location.search);

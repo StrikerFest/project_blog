@@ -27,6 +27,8 @@ Common::requireTemplate('user/layouts/headers.php', [
 ]);
 ?>
 <body>
+<?php Common::requireTemplate('user/layouts/menu.php', []); ?>
+
 <div class="post-detail-breadcrumb">
     <a href="index.php">Home</a> > <a href="posts.php">Posts</a> > <?= $post['title'] ?>
 </div>
@@ -70,9 +72,7 @@ Common::requireTemplate('user/layouts/headers.php', [
         <button class="post-detail-like-button" onclick="likePost(<?= $post_id ?>)">Like</button>
         <span class="post-detail-like-count" id="like-count"><?= $post['likes'] ?? 0 ?> Likes</span>
     </div>
-    <?php
-    Common::requireTemplate('user/comment/post_block.php', []);
-    ?>
+    <?php Common::requireTemplate('user/comment/post_block.php', ['post_id' => $post['post_id'] ?? null, 'user' => Common::getFrontendUser() ? Common::getFrontendUser() : null  ]); ?>
 </div>
 
 <script>

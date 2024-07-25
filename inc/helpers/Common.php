@@ -72,4 +72,12 @@ class Common
         return $results;
     }
     
+    public static function getFrontendUser(){
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        return $_SESSION['user_frontend'] ?? null;
+    }
+    
 }

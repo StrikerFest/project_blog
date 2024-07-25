@@ -2,7 +2,8 @@
 
 namespace inc\models;
 
-use database\DB;
+use inc\helpers\Common;
+use inc\helpers\DB;
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -48,6 +49,7 @@ class User
                         'id' => $user['user_id'],
                         'username' => $user['username'],
                         'role' => $user['role'],
+                        'profile_picture' => $user['profile_picture'] ?? Common::getAssetPath('images/avatar'),
                     ];
                     unset($_SESSION['error_login_'.$role]);
                     
