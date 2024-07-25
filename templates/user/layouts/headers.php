@@ -15,5 +15,6 @@ use inc\helpers\Common;
     <link rel="stylesheet" href="<?= Common::getAssetPath('css/user/post.css') ?>">
     <link rel="stylesheet" href="<?= Common::getAssetPath('css/user/post-detail.css') ?>">
     <link rel="stylesheet" href="<?= Common::getAssetPath('css/user/comment.css') ?>">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 

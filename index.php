@@ -41,7 +41,8 @@ $routes = [
     '/' => Common::getControllerPath('user/post/index.php'),
     '/post/show' => Common::getControllerPath('user/post/detail.php'),
     '/post/comment' => Common::getControllerPath('ajax.php'),
-
+    '/category' => Common::getControllerPath('user/category/index.php'),
+ 
 ];
 
 // Hàm chuyển hướng router
