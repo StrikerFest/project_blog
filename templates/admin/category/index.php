@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @var mixed $args
  */
@@ -14,7 +13,7 @@ Common::requireTemplate('admin/layouts/headers.php', [
 <div class="listing-container">
     <h1>Categories</h1>
     <div>
-        <table class="listing-styled-table">
+        <table id="categoryTable" class="listing-styled-table">
             <thead>
             <tr>
                 <th>Id</th>
@@ -25,7 +24,6 @@ Common::requireTemplate('admin/layouts/headers.php', [
             </tr>
             </thead>
             <tbody>
-
             <?php foreach ($args['categories'] as $category) : ?>
                 <tr class="table-row">
                     <td class="text-align-center"><?= $category['category_id']; ?></td>
@@ -42,3 +40,10 @@ Common::requireTemplate('admin/layouts/headers.php', [
         </table>
     </div>
 </div>
+
+<!-- Initialize DataTables -->
+<script>
+    $(document).ready(function() {
+        $('#categoryTable').DataTable();
+    });
+</script>

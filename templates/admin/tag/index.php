@@ -14,7 +14,7 @@ Common::requireTemplate('admin/layouts/headers.php', [
 <div class="listing-container">
     <h1>Tag</h1>
     <div>
-        <table class="listing-styled-table">
+        <table id="tagTable" class="listing-styled-table">
             <thead>
             <tr>
                 <th>Id</th>
@@ -27,12 +27,12 @@ Common::requireTemplate('admin/layouts/headers.php', [
 
             <?php foreach ($args['tags'] as $tag) : ?>
                 <tr class="table-row">
-                    <td class="text-align-center"><?= $tag['id']; ?></td>
+                    <td class="text-align-center"><?= $tag['tag_id']; ?></td>
                     <td><?= $tag['name']; ?></td>
                     <td class="text-align-center"><?= $tag['status']; ?></td>
                     <td class="text-align-center">
-                        <a href="tag/edit?id=<?= $tag['id']; ?>" class="btn_action">Edit</a>
-                        <a href="tag/delete?id=<?= $tag['id']; ?>" class="btn_action">Delete</a>
+                        <a href="tag/edit?id=<?= $tag['tag_id']; ?>" class="listing-btn_action">Edit</a>
+                        <a href="tag/delete?id=<?= $tag['tag_id']; ?>" class="listing-btn_action">Delete</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -40,3 +40,10 @@ Common::requireTemplate('admin/layouts/headers.php', [
         </table>
     </div>
 </div>
+
+<!-- Initialize DataTables -->
+<script>
+    $(document).ready(function() {
+        $('#tagTable').DataTable();
+    });
+</script>
