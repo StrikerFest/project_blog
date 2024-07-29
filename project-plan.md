@@ -280,3 +280,40 @@ CREATE TABLE options (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 ```
+
+# Work process
+
+## Done
+- Create base database schema
+- Create simple CRUD for post
+- Create simple CRUD for category, tag
+- Create simple login logic
+- Separate admin and user site
+- Add proper structure for folder management
+- Improve database structure for all table
+- Improve site user interface for both admin and user
+- Improve authentication system
+- Improve CRUD for post using the new database schema
+- Add post approval system
+- Add comment system
+
+# Planning - Fulfill
+- Add view post by category and task system
+- Add search post by keyword
+
+- Add user management on admin site
+- Add change user profile system
+
+- Add like system for login user
++ Add like-post table
+
+- Add approval log
+
+- Add banner management 
++ Add banner table and banner-post table
+
+# Extra planning
+- Add activities log
+
+- Add post histories
+
