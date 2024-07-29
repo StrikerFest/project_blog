@@ -15,16 +15,17 @@ class Category
             $name = $_POST['name'] ?? '';
             $status = $_POST['status'] ?? '';
             $description = $_POST['description'] ?? '';
+            $position = $_POST['position'] ?? '';
             $conn = DB::db_connect();
 
             if ($id == '') {
-                $sql = "INSERT INTO categories (name, status, description) VALUES (?,?,?)";
+                $sql = "INSERT INTO categories (name, status, description, position) VALUES (?,?,?,?)";
                 $statement = $conn->prepare($sql);
-                $statement->bind_param("sss", $name, $status, $description);
+                $statement->bind_param("ssss", $name, $status, $description, $position);
             } else {
-                $sql = "UPDATE categories SET categories.name = ?, categories.status = ?, categories.description = ? WHERE category_id = ?";
+                $sql = "UPDATE categories SET categories.name = ?, categories.status = ?, categories.description = ?, categories.position = ? WHERE category_id = ?";
                 $statement = $conn->prepare($sql);
-                $statement->bind_param("ssss", $name, $status, $description, $id);
+                $statement->bind_param("sssss", $name, $status, $description, $position, $id);
             }
             $statement->execute();
 

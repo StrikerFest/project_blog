@@ -20,6 +20,7 @@ Common::requireTemplate('admin/layouts/headers.php', [
                 <th>Name</th>
                 <th>Status</th>
                 <th>Description</th>
+                <th>Position</th>
                 <th>Action</th>
             </tr>
             </thead>
@@ -30,6 +31,7 @@ Common::requireTemplate('admin/layouts/headers.php', [
                     <td><?= $category['name']; ?></td>
                     <td class="text-align-center"><?= $category['status']; ?></td>
                     <td class="text-align-center"><?= $category['description']; ?></td>
+                    <td class="text-align-center"><?= $category['position']; ?></td>
                     <td class="text-align-center">
                         <a href="category/edit?id=<?= $category['category_id']; ?>" class="listing-btn_action">Edit</a>
                         <a href="category/delete?id=<?= $category['category_id']; ?>" class="listing-btn_action">Delete</a>

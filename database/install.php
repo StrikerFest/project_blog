@@ -45,11 +45,12 @@ $sql = "
         FOREIGN KEY (author_id) REFERENCES users(user_id)
     );
 
-    CREATE TABLE IF NOT EXISTS `categories` (
-        `category_id` INT AUTO_INCREMENT PRIMARY KEY,
-        `name` VARCHAR(100) NOT NULL,
-        `status` ENUM('enabled', 'disabled') NOT NULL,
-        `description` TEXT
+    CREATE TABLE IF NOT EXISTS categories (
+        category_id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(100) NOT NULL,
+        status ENUM('enabled', 'disabled') NOT NULL,
+        description TEXT,
+        position INT NOT NULL DEFAULT 0
     );
     
     CREATE TABLE IF NOT EXISTS `post_categories` (
@@ -60,10 +61,11 @@ $sql = "
         FOREIGN KEY (category_id) REFERENCES categories(category_id)
     );
 
-    CREATE TABLE IF NOT EXISTS `tags` (
-        `tag_id` INT AUTO_INCREMENT PRIMARY KEY,
-        `name` VARCHAR(100) NOT NULL,
-        `status` ENUM('enabled', 'disabled') NOT NULL
+    CREATE TABLE IF NOT EXISTS tags (
+        tag_id INT AUTO_INCREMENT PRIMARY KEY,
+        status ENUM('enabled', 'disabled') NOT NULL,
+        name VARCHAR(100) NOT NULL,
+        position INT NOT NULL DEFAULT 0
     );
     
     CREATE TABLE IF NOT EXISTS post_tags (

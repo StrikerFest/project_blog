@@ -14,16 +14,17 @@ class Tag
             $id = $_POST['id'] ?? '';
             $name = $_POST['name'] ?? '';
             $status = $_POST['status'] ?? '';
+            $position = $_POST['position'] ?? '';
             $conn = DB::db_connect();
 
             if ($id == '') {
-                $sql = "INSERT INTO tags (name, status) VALUES (?, ?)";
+                $sql = "INSERT INTO tags (name, status, position) VALUES (?, ?, ?)";
                 $statement = $conn->prepare($sql);
-                $statement->bind_param("ss", $name, $status);
+                $statement->bind_param("sss", $name, $status, $position);
             } else {
-                $sql = "UPDATE tags SET name = ?, status = ? WHERE tag_id = ?";
+                $sql = "UPDATE tags SET name = ?, status = ?, position = ? WHERE tag_id = ?";
                 $statement = $conn->prepare($sql);
-                $statement->bind_param("sss", $name, $status, $id);
+                $statement->bind_param("ssss", $name, $status, $position, $id);
             }
 
             $statement->execute();
