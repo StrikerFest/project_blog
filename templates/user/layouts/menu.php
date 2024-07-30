@@ -16,7 +16,7 @@ $current_user = $_SESSION['user_frontend'] ?? null;
             <i class="fa fa-caret-down"></i>
         </button>
         <div class="menu-dropdown-content">
-            <a href="post">View posts</a>
+            <a href="<?= Common::get_url('post') ?>">View posts</a>
         </div>
     </div>
     <div class="menu-dropdown">
@@ -24,7 +24,7 @@ $current_user = $_SESSION['user_frontend'] ?? null;
             <i class="fa fa-caret-down"></i>
         </button>
         <div class="menu-dropdown-content">
-            <a href="category">View post by categories</a>
+            <a href="<?= Common::get_url('category') ?>">View post by categories</a>
         </div>
     </div>
     <div class="menu-dropdown">
@@ -32,7 +32,7 @@ $current_user = $_SESSION['user_frontend'] ?? null;
             <i class="fa fa-caret-down"></i>
         </button>
         <div class="menu-dropdown-content">
-            <a href="tag">View post by tags</a>
+            <a href="<?= Common::get_url('tag') ?>">View post by tags</a>
         </div>
     </div>
     <div class="menu-dropdown">
@@ -42,15 +42,15 @@ $current_user = $_SESSION['user_frontend'] ?? null;
         <?php if (isset($current_user['username'])) : ?>
             <div class="menu-dropdown-content">
                 <?php if (strstr($_SERVER['REQUEST_URI'], '/admin')) : ?>
-                    <a href="/admin/logout">Logout</a>
+                    <a href="<?= Common::get_url('admin/logout') ?>">Logout</a>
                 <?php else : ?>
-                    <a href="/logout">Logout</a>
+                    <a href="<?= Common::get_url('logout') ?>">Logout</a>
                 <?php endif; ?>
             </div>
         <?php else: ?>
             <div class="menu-dropdown-content">
-                <a href="/user/login">Login</a>
-                <a href="/user/login">Sign in</a>
+                <a href="<?= Common::get_url('user/login') ?>">Login</a>
+                <a href="<?= Common::get_url('user/register') ?>">Sign in</a>
             </div>
         <?php endif; ?>
     </div>
