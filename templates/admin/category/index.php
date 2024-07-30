@@ -18,8 +18,9 @@ Common::requireTemplate('admin/layouts/headers.php', [
             <tr>
                 <th>Id</th>
                 <th>Name</th>
-                <th>Status</th>
+                <th>Slug</th>
                 <th>Description</th>
+                <th>Status</th>
                 <th>Position</th>
                 <th>Action</th>
             </tr>
@@ -29,8 +30,9 @@ Common::requireTemplate('admin/layouts/headers.php', [
                 <tr class="table-row">
                     <td class="text-align-center"><?= $category['category_id']; ?></td>
                     <td><?= $category['name']; ?></td>
-                    <td class="text-align-center"><?= $category['status']; ?></td>
+                    <td class="text-align-center"><?= $category['slug']; ?></td>
                     <td class="text-align-center"><?= $category['description']; ?></td>
+                    <td class="text-align-center"><?= $category['status']; ?></td>
                     <td class="text-align-center"><?= $category['position']; ?></td>
                     <td class="text-align-center">
                         <a href="category/edit?id=<?= $category['category_id']; ?>" class="listing-btn_action">Edit</a>

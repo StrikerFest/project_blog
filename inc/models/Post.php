@@ -22,7 +22,7 @@ class Post
             $status = $_POST['status'] ?? '';
 
             // Kết nối DB
-            $upload_dir = __DIR__ . '/../assets/uploads/';
+            $upload_dir = $_ENV['UPLOAD_DIR'];
             $relative_upload_dir = '/assets/uploads/';
             $thumbnail_path = '';
             $banner_path = '';
@@ -139,6 +139,78 @@ class Post
         $conn->close();
         return $post;
     }
+    
+    public static function getPostsByCategoryId($categoryId, $limit = 3): array
+    {
+        $conn = DB::db_connect();
+        $sql = "
+        SELECT p.*
+        FROM posts p
+        INNER JOIN post_categories pc ON p.post_id = pc.post_id
+        WHERE pc.category_id = ?
+        ORDER BY p.updated_at DESC, p.post_id DESC
+        LIMIT ?
+    ";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ii", $categoryId, $limit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $posts = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $posts[] = $row;
+            }
+        }
+        $stmt->close();
+        $conn->close();
+        return $posts;
+    }
+
+    public static function getPostsByCategoryIdWithPagination($categoryId, $offset, $limit = 3): array
+    {
+        $conn = DB::db_connect();
+        $sql = "
+        SELECT p.*
+        FROM posts p
+        INNER JOIN post_categories pc ON p.post_id = pc.post_id
+        WHERE pc.category_id = ?
+        ORDER BY p.post_id DESC
+        LIMIT ?, ?
+    ";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("iii", $categoryId, $offset, $limit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $posts = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $posts[] = $row;
+            }
+        }
+        $stmt->close();
+        $conn->close();
+        return $posts;
+    }
+
+    public static function countPostsByCategoryId($categoryId): int
+    {
+        $conn = DB::db_connect();
+        $sql = "
+        SELECT COUNT(*) as total
+        FROM posts p
+        INNER JOIN post_categories pc ON p.post_id = pc.post_id
+        WHERE pc.category_id = ?
+    ";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $categoryId);
+        $stmt->execute();
+        $stmt->bind_result($total);
+        $stmt->fetch();
+        $stmt->close();
+        $conn->close();
+        return $total;
+    }
+
 
     // Xóa bài post theo mã post
     public static function deletePost($id): void

@@ -170,6 +170,7 @@ description
 CREATE TABLE categories (
     category_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
+    slug VARCHAR(150) NOT NULL,
     status ENUM('enabled', 'disabled') NOT NULL,
     description TEXT,
     position INT NOT NULL DEFAULT 0
@@ -203,10 +204,12 @@ name
 ```mysql
 CREATE TABLE tags (
     tag_id INT AUTO_INCREMENT PRIMARY KEY,
-    status ENUM('enabled', 'disabled') NOT NULL,
     name VARCHAR(100) NOT NULL,
+    slug VARCHAR(150) NOT NULL,
+    status ENUM('enabled', 'disabled') NOT NULL,
     position INT NOT NULL DEFAULT 0
 );
+
 ```
 
 post_tags (trung gian)

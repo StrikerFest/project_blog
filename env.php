@@ -5,7 +5,7 @@
 $_ENV['BASE_DIR'] = __DIR__;
 $_ENV['AUTOLOAD'] = __DIR__ . '/Autoloader.php';
 $_ENV['ASSETS_DIR'] = '/assets/';
-$_ENV['UPLOAD_DIR'] = __DIR__ . '/assets/';
+$_ENV['UPLOAD_DIR'] = __DIR__ . '/assets/uploads/';
 $_ENV['TEMPLATE_DIR'] = __DIR__ . '/templates';
 $_ENV['CONTROLLER_DIR'] = __DIR__ . '/inc/controllers/';
 

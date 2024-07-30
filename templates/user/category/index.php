@@ -9,8 +9,8 @@ if (session_status() === PHP_SESSION_NONE) {
  */
 
 use inc\helpers\Common;
-use inc\helpers\admin\Post as CommonPost;
-use inc\helpers\user\Post;
+use inc\models\Category;
+use inc\models\Post;
 
 // Header
 Common::requireTemplate('user/layouts/headers.php', [
@@ -34,10 +34,14 @@ Common::requireTemplate('user/layouts/headers.php', [
         justify-content: space-between;
     }
 
-    .category-index-buttons button {
+    .category-index-buttons a {
         flex: 1 1 calc(33.33% - 20px);
-        padding: 10px;
         margin: 5px 0;
+    }
+
+    .category-index-buttons a button {
+        width: 100%;
+        padding: 10px;
         background-color: #007BFF;
         color: white;
         border: none;
@@ -71,8 +75,8 @@ Common::requireTemplate('user/layouts/headers.php', [
     }
 
     .category-index-card img {
-        width: 100%;
-        height: auto;
+        width: 300px;
+        height: 300px;
     }
 
     .category-index-card-title {
@@ -87,75 +91,56 @@ Common::requireTemplate('user/layouts/headers.php', [
         background-color: #f8f9fa;
         cursor: pointer;
     }
+
+    .category-index-all-categories {
+        flex: 100% !important;
+    }
 </style>
 <body>
 <?php Common::requireTemplate('user/layouts/menu.php', []); ?>
 <div class="category-index-container">
+    <h1>Blog Categories</h1>
     <section class="category-index-important-categories">
         <div class="category-index-buttons">
             <?php
-            $categories = [
-                'cat1' => 'Category 1',
-                'cat2' => 'Category 2',
-                'cat3' => 'Category 3',
-                'cat4' => 'Category 4',
-                'cat5' => 'Category 5',
-                'cat6' => 'Category 6',
-                'cat7' => 'Category 7',
-                'cat8' => 'Category 8',
-                'cat9' => 'Category 9'
-            ];
+            $category_ids = Category::getCategoriesByPosition(9);
+            $category_posts = [];
+            $categories = [];
 
-            foreach ($categories as $key => $name) {
-                echo "<button data-category=\"$key\">$name</button>";
+            foreach ($category_ids as $category_id) {
+                $category_posts[$category_id] = Post::getPostsByCategoryId($category_id);
+                $categories[] = Category::getCategoryById($category_id);
             }
             ?>
+            <?php foreach ($categories as $category) : ?>
+                <a href="/category/<?= $category['slug']; ?>">
+                    <button>
+                        <?= $category['name']; ?>
+                    </button>
+                </a>
+            <?php endforeach; ?>
+            <a href="/category-all" class="category-index-all-categories">
+                <button>View all categories</button>
+            </a>
         </div>
     </section>
     <section class="category-index-categories">
-        <?php
-        $posts = [
-            'cat1' => [
-                ['thumbnail' => 'https://via.placeholder.com/150', 'title' => 'Post 1'],
-                ['thumbnail' => 'https://via.placeholder.com/150', 'title' => 'Post 2'],
-                ['thumbnail' => 'https://via.placeholder.com/150', 'title' => 'Post 3']
-            ],
-            'cat2' => [
-                ['thumbnail' => 'https://via.placeholder.com/150', 'title' => 'Post 1'],
-                ['thumbnail' => 'https://via.placeholder.com/150', 'title' => 'Post 2'],
-                ['thumbnail' => 'https://via.placeholder.com/150', 'title' => 'Post 3']
-            ],
-            // Add more mock data for other categories
-        ];
-
-        foreach ($categories as $key => $name) {
-            if (isset($posts[$key])) {
-                echo "<div class=\"category-index-category\">";
-                echo "<h2 class=\"category-index-category-title\">$name</h2>";
-                echo "<div class=\"category-index-cards\">";
-                foreach ($posts[$key] as $post) {
-                    echo "<div class=\"category-index-card\">";
-                    echo "<img src=\"{$post['thumbnail']}\" alt=\"{$post['title']}\">";
-                    echo "<div class=\"category-index-card-title\">{$post['title']}</div>";
-                    echo "</div>";
-                }
-                echo "<div class=\"category-index-card category-index-see-more\">";
-                echo "<div class=\"category-index-card-title\">See More</div>";
-                echo "</div>";
-                echo "</div>";
-                echo "</div>";
-            }
-        }
-        ?>
+        <?php foreach ($categories as $category) : ?>
+            <?php if (!empty($category_posts[$category['category_id']])) : ?>
+                <a href="/category/<?= $category['slug']; ?>"><h2 class="category-index-category-title"><?= $category['name']; ?></h2></a>
+                <div class="category-index-cards">
+                    <?php foreach ($category_posts[$category['category_id']] as $post) : ?>
+                        <a href="/post/show?post_id=<?= $post['post_id'] ?>" class="category-index-card">
+                                <img src="<?= empty($post['thumbnail_path']) ? PH_THUMBNAIL : $post['thumbnail_path'] ?>" alt="<?= $post['title']; ?>">
+                                <div class="category-index-card-title"><?= $post['title']; ?></div>
+                        </a>
+                    <?php endforeach; ?>
+                    <a class="category-index-card category-index-see-more" href="/category/<?= $category['slug'] ?>">
+                        <div class="category-index-card-title">See More</div>
+                    </a>
+                </div>
+            <?php endif; ?>
+        <?php endforeach; ?>
     </section>
 </div>
-<script>
-    $(document).ready(function() {
-        $('.category-index-buttons button').on('click', function() {
-            const categoryKey = $(this).data('category');
-            $('.category-index-categories .category-index-category').hide();
-            $(`.category-index-categories .category-index-category:has(h2:contains("${categoryKey.replace('cat', 'Category ')}"))`).show();
-        });
-    });
-</script>
 </body>

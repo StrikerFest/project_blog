@@ -1,5 +1,7 @@
 body{
     font-family: "Helvetica Neue", sans-serif;
+    width: 1270px;
+    margin: 0 auto;
 }
 
 .container {
