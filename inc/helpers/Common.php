@@ -79,5 +79,10 @@ class Common
 
         return $_SESSION['user_frontend'] ?? null;
     }
-    
+
+    public static function get_url($path): string
+    {
+        $base_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
+        return rtrim($base_url, '/') . '/' . ltrim($path, '/');
+    }
 }

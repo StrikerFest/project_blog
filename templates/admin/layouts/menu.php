@@ -19,8 +19,8 @@ if ($current_user === null) {
             <i class="fa fa-caret-down"></i>
         </button>
         <div class="menu-dropdown-content">
-            <a href="post">View posts</a>
-            <a href="post/create">Create post</a>
+            <a href="<?= Common::get_url('admin/post') ?>">View posts</a>
+            <a href="<?= Common::get_url('admin/post/create') ?>">Create post</a>
         </div>
     </div>
     <div class="menu-dropdown">
@@ -28,8 +28,8 @@ if ($current_user === null) {
             <i class="fa fa-caret-down"></i>
         </button>
         <div class="menu-dropdown-content">
-            <a href="/admin/category">View categories</a>
-            <a href="/admin/category/create">Create category</a>
+            <a href="<?= Common::get_url('admin/category') ?>">View categories</a>
+            <a href="<?= Common::get_url('admin/category/create') ?>">Create category</a>
         </div>
     </div>
     <div class="menu-dropdown">
@@ -37,8 +37,8 @@ if ($current_user === null) {
             <i class="fa fa-caret-down"></i>
         </button>
         <div class="menu-dropdown-content">
-            <a href="/admin/tag">View tags</a>
-            <a href="/admin/tag/create">Create tag</a>
+            <a href="<?= Common::get_url('admin/tag') ?>">View tags</a>
+            <a href="<?= Common::get_url('admin/tag/create') ?>">Create tag</a>
         </div>
     </div>
     <div class="menu-dropdown">
@@ -46,8 +46,8 @@ if ($current_user === null) {
             <i class="fa fa-caret-down"></i>
         </button>
         <div class="menu-dropdown-content">
-            <a href="approval-log">Approval logs</a>
-            <a href="activity-log">Activity logs</a>
+            <a href="<?= Common::get_url('admin/approval-log') ?>">Approval logs</a>
+            <a href="<?= Common::get_url('admin/activity-log') ?>">Activity logs</a>
         </div>
     </div>
     <div class="menu-dropdown">
@@ -55,21 +55,16 @@ if ($current_user === null) {
             <i class="fa fa-caret-down"></i>
         </button>
         <div class="menu-dropdown-content">
-            <a href="user">View users</a>
-            <a href="user/create">Create user</a>
+            <a href="<?= Common::get_url('admin/user') ?>">View users</a>
+            <a href="<?= Common::get_url('admin/user/create') ?>">Create user</a>
         </div>
     </div>
-
     <div class="menu-dropdown">
         <button class="menu-dropbtn">Profile: <?= $current_user['username'] ?>
             <i class="fa fa-caret-down"></i>
         </button>
         <div class="menu-dropdown-content">
-            <?php if (strstr($_SERVER['REQUEST_URI'], '/admin')) : ?>
-                <a href="/admin/logout">Logout</a>
-            <?php else : ?>
-                <a href="/logout">Logout</a>
-            <?php endif; ?>
+            <a href="<?= Common::get_url('admin/logout') ?>">Logout</a>
         </div>
     </div>
 </div>

@@ -5,7 +5,7 @@ use inc\helpers\Common;
 /**
  * @var mixed $args
  */
-
+define('PH_THUMBNAIL', Common::getAssetPath('images/placeholder-thumbnail'));
 ?>
 <head>
     <meta charset="UTF-8">
@@ -15,5 +15,6 @@ use inc\helpers\Common;
     <link rel="stylesheet" href="<?= Common::getAssetPath('css/user/post.css') ?>">
     <link rel="stylesheet" href="<?= Common::getAssetPath('css/user/post-detail.css') ?>">
     <link rel="stylesheet" href="<?= Common::getAssetPath('css/user/comment.css') ?>">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 

@@ -50,7 +50,6 @@ $comments = $commentModel->getCommentsByPostId($post_id);
         <?php endforeach; ?>
     </ul>
 </div>
-<?php Common::requireTemplate('user/layouts/footer.php'); ?>
 <?php if (!empty($user_id)) : ?>
     <script src="<?= Common::getAssetPath('embedded_scripts/user/comment.js.php') ?>?post_id=<?= $post_id ?>&user_id=<?= $user_id ?>&user_avatar=<?= $user['profile_picture'] ?? '' ?>&user_name=<?= urlencode($user['user_name'] ?? 'anon') ?>"></script>
 <?php endif; ?>

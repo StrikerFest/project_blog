@@ -13,19 +13,21 @@ class Tag
 
             $id = $_POST['id'] ?? '';
             $name = $_POST['name'] ?? '';
+            $slug = $_POST['slug'] ?? '';
+            $slug = self::generateSlug($slug); // Generate slug from name
             $status = $_POST['status'] ?? '';
+            $position = $_POST['position'] ?? '';
             $conn = DB::db_connect();
 
             if ($id == '') {
-                $sql = "INSERT INTO tags (name, status) VALUES (?, ?)";
+                $sql = "INSERT INTO tags (name, slug, status, position) VALUES (?,?,?,?)";
                 $statement = $conn->prepare($sql);
-                $statement->bind_param("ss", $name, $status);
+                $statement->bind_param("sssi", $name, $slug, $status, $position);
             } else {
-                $sql = "UPDATE tags SET name = ?, status = ? WHERE tag_id = ?";
+                $sql = "UPDATE tags SET name = ?, slug = ?, status = ?, position = ? WHERE tag_id = ?";
                 $statement = $conn->prepare($sql);
-                $statement->bind_param("sss", $name, $status, $id);
+                $statement->bind_param("sssii", $name, $slug, $status, $position, $id);
             }
-
             $statement->execute();
 
             if (!$statement->errno) {
@@ -39,6 +41,18 @@ class Tag
         }
     }
 
+    private static function generateSlug($name): string
+    {
+        // Convert to lowercase
+        $slug = strtolower($name);
+        // Remove non-alphanumeric characters
+        $slug = preg_replace('/[^a-z0-9-]+/', '-', $slug);
+        // Remove multiple dashes
+        $slug = preg_replace('/-+/', '-', $slug);
+        // Trim dashes from ends
+        return trim($slug, '-');
+    }
+    
     public static function getTags(): array
     {
         $conn = DB::db_connect();
