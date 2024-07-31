@@ -28,37 +28,7 @@ foreach ($tags as $tag) {
 }
 
 ?>
-<style>
-    .all-tags-container {
-        width: 90%;
-        margin: auto;
-    }
-
-    .all-tags-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-    }
-
-    .all-tags-list-item {
-        flex: 1 1 calc(33.33% - 20px);
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        background-color: #f9f9f9;
-        text-align: center;
-        font-size: 18px;
-    }
-
-    .all-tags-list-item a {
-        text-decoration: none;
-        color: #007BFF;
-    }
-
-    .all-tags-list-item a:hover {
-        text-decoration: underline;
-    }
-</style>
+<link rel="stylesheet" href="<?= Common::getAssetPath('css/user/tag/all_tags_page.css') ?>">
 <body>
 <?php Common::requireTemplate('user/layouts/menu.php', []); ?>
 <div class="all-tags-container">

@@ -1,0 +1,77 @@
+.tag-index-container {
+    width: 90%;
+    margin: auto;
+}
+
+.tag-index-important-tags {
+    margin-bottom: 20px;
+}
+
+.tag-index-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.tag-index-buttons a {
+    flex: 1 1 calc(33.33% - 20px);
+    margin: 5px 0;
+}
+
+.tag-index-buttons a button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.tag-index-buttons button:hover {
+    background-color: #0056b3;
+}
+
+.tag-index-tag {
+    margin-bottom: 30px;
+}
+
+.tag-index-tag-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.tag-index-cards {
+    display: flex;
+    gap: 10px;
+}
+
+.tag-index-card {
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.tag-index-card img {
+    width: 300px;
+    height: 300px;
+}
+
+.tag-index-card-title {
+    padding: 10px;
+    font-size: 18px;
+}
+
+.tag-index-see-more {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f9fa;
+    cursor: pointer;
+}
+
+.tag-index-all-tags {
+    flex: 100% !important;
+}

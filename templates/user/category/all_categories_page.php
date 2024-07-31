@@ -28,37 +28,7 @@ foreach ($categories as $category) {
 }
 
 ?>
-<style>
-    .all-categories-container {
-        width: 90%;
-        margin: auto;
-    }
-
-    .all-categories-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-    }
-
-    .all-categories-list-item {
-        flex: 1 1 calc(33.33% - 20px);
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        background-color: #f9f9f9;
-        text-align: center;
-        font-size: 18px;
-    }
-
-    .all-categories-list-item a {
-        text-decoration: none;
-        color: #007BFF;
-    }
-
-    .all-categories-list-item a:hover {
-        text-decoration: underline;
-    }
-</style>
+<link rel="stylesheet" href="<?= Common::getAssetPath('css/user/categories/all_categories_page.css') ?>">
 <body>
 <?php Common::requireTemplate('user/layouts/menu.php', []); ?>
 <div class="all-categories-container">
