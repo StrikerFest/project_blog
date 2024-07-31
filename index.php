@@ -44,6 +44,9 @@ $routes = [
     '/category' => Common::getControllerPath('user/category/index.php'),
     '/category/{category_slug}' => Common::getControllerPath('user/category/detail.php'),
     '/category-all' => Common::getControllerPath('user/category/all_categories_page.php'),
+    '/tag' => Common::getControllerPath('user/tag/index.php'),
+    '/tag/{tag_slug}' => Common::getControllerPath('user/tag/detail.php'),
+    '/tag-all' => Common::getControllerPath('user/tag/all_tags_page.php'),
  
 ];
 
