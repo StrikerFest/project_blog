@@ -47,6 +47,7 @@ $routes = [
     '/tag' => Common::getControllerPath('user/tag/index.php'),
     '/tag/{tag_slug}' => Common::getControllerPath('user/tag/detail.php'),
     '/tag-all' => Common::getControllerPath('user/tag/all_tags_page.php'),
+    '/post/ajax' => Common::getControllerPath('ajax.php'),
  
 ];
 
