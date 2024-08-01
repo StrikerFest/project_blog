@@ -56,7 +56,10 @@ class User
                     // Check lưu dữ liệu user bên người đọc hay bên quản lý
                     if ($user['role'] === self::ROLE_USER) {
                         $_SESSION['user_frontend'] = $customUser;
-                        header("Location: /post");
+                        $redirectUrl = $_SESSION['redirect_url'] ?? $_GET['redirect_url'] ?? '/post';
+                        unset($_SESSION['redirect_url']);
+                        header("Location: $redirectUrl");
+                        exit();
                     } else {
                         $_SESSION['user_backend'] = $customUser;
                         header("Location: /admin/post");
@@ -80,6 +83,15 @@ class User
 
     public static function logout(string $role): void
     {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // Store the redirect URL in the session
+        if (isset($_GET['redirect_url'])) {
+            $_SESSION['redirect_url'] = $_GET['redirect_url'];
+        }
+        
         unset($_SESSION['error_login_'.$role]);
 
         if ($role === self::ROLE_USER) {
@@ -87,17 +99,29 @@ class User
         } else {
             unset($_SESSION['user_backend']);
         }
+        
         self::redirectLogin($role);
     }
 
     public static function redirectLogin(string $role): void
     {
-        
-        if ($role === self::ROLE_USER) {
-            header("Location: /login");
-            return;
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
         }
-        header("Location: /admin/login");
+
+        $redirectUrl = $_SESSION['redirect_url'] ?? null;
+        unset($_SESSION['redirect_url']);
+
+        if ($role === self::ROLE_USER) {
+            if ($redirectUrl) {
+                header("Location: $redirectUrl");
+            } else {
+                header("Location: /login");
+            }
+        } else {
+            header("Location: /admin/login");
+        }
+        exit();
     }
 
     public static function getUserByAuthorId($author_id) {

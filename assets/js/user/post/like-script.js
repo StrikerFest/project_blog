@@ -6,7 +6,15 @@ function likePost(postId) {
         dataType: 'json',
         success: function(response) {
             if (response.status === 'redirect') {
-                window.location.href = 'login.php';
+                // Store the current URL in the session before redirecting
+                $.ajax({
+                    url: 'ajax',
+                    type: 'POST',
+                    data: { action: 'store_redirection_session', redirect_url: window.location.href },
+                    success: function() {
+                        window.location.href = '/login';
+                    }
+                });
             } else if (response.status === 'liked') {
                 let likeButton = document.querySelector('.post-detail-like-button');
                 likeButton.innerText = 'Liked';

@@ -14,6 +14,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             case 'like_post':
                 handleLikePostAjax();
                 break;
+            case 'store_redirection_session':
+                store_redirection_session();
+                break;
             default:
                 if (checkCurrentUrl('/post/comment')) {
                     saveCommentAjax();
@@ -24,6 +27,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } else {
         echo json_encode(['success' => false]);
+    }
+}
+
+function store_redirection_session(): void
+{
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    if (isset($_POST['redirect_url'])) {
+        $_SESSION['redirect_url'] = $_POST['redirect_url'];
+        echo json_encode(['status' => 'success']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'No URL provided']);
     }
 }
 
