@@ -37,6 +37,7 @@ $routes = [
     // Blog - Người dùng
     '/login' => Common::getControllerPath('user/auth/login.php'),
     '/logout' => Common::getControllerPath('user/auth/logout.php'),
+    '/register' => Common::getControllerPath('user/auth/register.php'),
     '/post' => Common::getControllerPath('user/post/index.php'),
     '/' => Common::getControllerPath('user/post/index.php'),
     '/post/show' => Common::getControllerPath('user/post/detail.php'),

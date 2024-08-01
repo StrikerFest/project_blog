@@ -13,8 +13,8 @@ if (isset($_SESSION['user_reader'])) {
 
 
 <body>
-    <link rel="stylesheet" href="<?= Common::getAssetPath('css/login-user.css') ?>">
-    <div class="sign-up">
+<link rel="stylesheet" href="<?= Common::getAssetPath('css/login-user.css') ?>">
+<div class="sign-up">
         <div class="circle circle--red"></div>
         <div class="circle circle--yellow"></div>
         <div class="circle circle--green"></div>
