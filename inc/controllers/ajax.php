@@ -17,12 +17,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             case 'store_redirection_session':
                 store_redirection_session();
                 break;
+            case 'save_comment':
+                saveCommentAjax();
+                break;
             default:
-                if (checkCurrentUrl('/post/comment')) {
-                    saveCommentAjax();
-                } else {
-                    echo json_encode(['success' => false]);
-                }
+                echo json_encode(['success' => false]);
                 break;
         }
     } else {
