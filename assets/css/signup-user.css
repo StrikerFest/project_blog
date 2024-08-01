@@ -1,4 +1,4 @@
-.user-login-wrapper {
+.user-signup-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -7,7 +7,7 @@
   background-color: #f4f4f4;
 }
 
-.user-login-container {
+.user-signup-container {
   background-color: #fff;
   padding: 40px;
   border-radius: 10px;
@@ -17,23 +17,23 @@
   box-sizing: border-box;
 }
 
-.user-login-form {
+.user-signup-form {
   display: flex;
   flex-direction: column;
 }
 
-.user-login-content {
+.user-signup-content {
   margin-bottom: 20px;
 }
 
-.user-login-title {
+.user-signup-title {
   margin-bottom: 20px;
   font-size: 24px;
   text-align: center;
   color: #333;
 }
 
-.user-login-input {
+.user-signup-input {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
@@ -43,30 +43,23 @@
   box-sizing: border-box;
 }
 
-.user-login-input:focus {
+.user-signup-input:focus {
   border-color: #007BFF;
   outline: none;
 }
 
-.user-login-error, .user-login-success {
+.user-signup-error {
+  color: red;
   margin-bottom: 10px;
   text-align: center;
 }
 
-.user-login-error {
-  color: red;
-}
-
-.user-login-success {
-  color: green;
-}
-
-.user-login-buttons {
+.user-signup-buttons {
   display: flex;
   justify-content: center;
 }
 
-.user-login-btn {
+.user-signup-btn {
   background-color: #007BFF;
   color: #fff;
   padding: 10px 20px;
@@ -77,6 +70,10 @@
   transition: background-color 0.3s ease;
 }
 
-.user-login-btn:hover {
+.user-signup-btn:hover {
   background-color: #0056b3;
+}
+
+ul.user-signup-error li {
+  text-align: left;
 }

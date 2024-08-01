@@ -1,0 +1,118 @@
+.profile-container {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: auto;
+    box-sizing: border-box;
+}
+
+.profile-title {
+    margin-bottom: 20px;
+    font-size: 24px;
+    text-align: center;
+    color: #333;
+}
+
+.profile-success, .profile-error {
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.profile-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.profile-error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.profile-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-content {
+    margin-bottom: 20px;
+}
+
+.profile-field {
+    margin-bottom: 10px;
+}
+
+.profile-field label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.profile-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.profile-input:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+.profile-error {
+    color: red;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.profile-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.profile-btn {
+    background-color: #007BFF;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.profile-btn:hover {
+    background-color: #0056b3;
+}
+
+.profile-btn-small {
+    background-color: #007BFF;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+.profile-btn-small:hover {
+    background-color: #0056b3;
+}
+
+.profile-picture-display {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-top: 10px;
+    display: block;
+}

@@ -37,13 +37,24 @@ $routes = [
     // Blog - Người dùng
     '/login' => Common::getControllerPath('user/auth/login.php'),
     '/logout' => Common::getControllerPath('user/auth/logout.php'),
-    '/post' => Common::getControllerPath('user/post/index.php'),
+    '/register' => Common::getControllerPath('user/auth/register.php'),
+    '/profile' => Common::getControllerPath('user/profile/detail.php'),
+
     '/' => Common::getControllerPath('user/post/index.php'),
+    '/post' => Common::getControllerPath('user/post/index.php'),
     '/post/show' => Common::getControllerPath('user/post/detail.php'),
     '/post/comment' => Common::getControllerPath('ajax.php'),
+    '/post/ajax' => Common::getControllerPath('ajax.php'),
+    '/search' => Common::getControllerPath('user/post/search.php'),
+    
     '/category' => Common::getControllerPath('user/category/index.php'),
     '/category/{category_slug}' => Common::getControllerPath('user/category/detail.php'),
     '/category-all' => Common::getControllerPath('user/category/all_categories_page.php'),
+    
+    '/tag' => Common::getControllerPath('user/tag/index.php'),
+    '/tag/{tag_slug}' => Common::getControllerPath('user/tag/detail.php'),
+    '/tag-all' => Common::getControllerPath('user/tag/all_tags_page.php'),
+    
  
 ];
 

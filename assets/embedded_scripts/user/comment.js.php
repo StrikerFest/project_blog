@@ -15,7 +15,7 @@ $(document).ready(function () {
         $.ajax({
             url: 'comment',
             type: 'POST',
-            data: $(this).serialize(),
+            data: $(this).serialize() + '&action=save_comment',
             dataType: 'json',
             success: function (data) {
                 if (data.success) {

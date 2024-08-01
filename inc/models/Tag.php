@@ -52,7 +52,7 @@ class Tag
         // Trim dashes from ends
         return trim($slug, '-');
     }
-    
+
     public static function getTags(): array
     {
         $conn = DB::db_connect();
@@ -98,10 +98,44 @@ class Tag
             WHERE pt.post_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $postId);
-        $result = Common::getArrayBySQL($sql,$stmt);
+        $result = Common::getArrayBySQL($sql, $stmt);
         $conn->close();
-        
+
         return $result;
+    }
+
+    public static function getTagsByPosition($limit): array
+    {
+        $conn = DB::db_connect();
+        $sql = "SELECT tag_id FROM tags ORDER BY position , tag_id LIMIT ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $limit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $tagIds = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $tagIds[] = $row['tag_id'];
+            }
+        }
+        $stmt->close();
+        $conn->close();
+        return $tagIds;
+    }
+
+    public static function getTagIdBySlug($slug): ?int
+    {
+        $conn = DB::db_connect();
+        $sql = "SELECT tag_id FROM tags WHERE slug = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $slug);
+        $stmt->execute();
+        $stmt->bind_result($tag_id);
+        $stmt->fetch();
+        $stmt->close();
+        $conn->close();
+
+        return $tag_id ?: null;
     }
 
 }

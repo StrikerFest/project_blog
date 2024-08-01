@@ -6,31 +6,37 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 $currentPage = $_SERVER['REQUEST_URI'];
-if (isset($_SESSION['user_reader'])) {
+if (isset($_SESSION['user_frontend'])) {
     header("Location: /post");
+    exit();
 }
+Common::requireTemplate('user/layouts/headers.php', [
+    'title' => 'Login'
+]);
 ?>
-
-
+<link rel="stylesheet" href="<?= Common::getAssetPath('css/login-user.css') ?>">
 <body>
-    <link rel="stylesheet" href="<?= Common::getAssetPath('css/login-user.css') ?>">
-    <div class="sign-up">
-        <div class="circle circle--red"></div>
-        <div class="circle circle--yellow"></div>
-        <div class="circle circle--green"></div>
-        <div class="circle circle--purple"></div>
-        <form class="sign-up__form" method="POST">
-            <div class="sign-up__content">
-                <h2 class="sign-up__title">Login</h2>
-                <input class="sign-up__inp" type="text" name="username" placeholder="Username" required="required" />
-                <input class="sign-up__inp" type="password" name="password" placeholder="Password" required="required" />
+<?php Common::requireTemplate('user/layouts/menu.php', []); ?>
+<div class="user-login-wrapper">
+    <div class="user-login-container">
+        <form class="user-login-form" method="POST">
+            <div class="user-login-content">
+                <h2 class="user-login-title">Login</h2>
+                <input class="user-login-input" type="text" name="username" placeholder="Username" required="required" />
+                <input class="user-login-input" type="password" name="password" placeholder="Password" required="required" />
             </div>
-            <?php if (isset($_SESSION['error_login_reader'])) {  ?>
-                <div class="error">Username or password incorrect</div>
-            <?php } ?>
-            <div class="sign-up__buttons">
-                <button class="btn btn--signin" type="submit">Sign in</button>
+            <?php if (isset($_SESSION['error_login_reader'])) :  ?>
+                <div class="user-login-error">Username or password incorrect</div>
+                <?php unset($_SESSION['error_login_reader']); ?>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['success_signup'])) :  ?>
+                <div class="user-login-success"><?= $_SESSION['success_signup']; ?></div>
+                <?php unset($_SESSION['success_signup']); ?>
+            <?php endif; ?>
+            <div class="user-login-buttons">
+                <button class="user-login-btn" type="submit">Sign in</button>
             </div>
         </form>
     </div>
+</div>
 </body>

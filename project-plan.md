@@ -70,14 +70,16 @@ updated_at
 ```
 - phần role ENUM chỉ là string bình thường thôi, nhưng mà nếu điền giá trị không giống trong mảng đấy thì mysql không cho điền
 ```mysql
-CREATE TABLE users (
-    user_id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) NOT NULL,
-    email VARCHAR(100) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    role ENUM('admin', 'author', 'editor','reader') NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+CREATE TABLE IF NOT EXISTS `users` (
+   `user_id` INT AUTO_INCREMENT PRIMARY KEY,
+   `email` VARCHAR(255) NOT NULL,
+   `username` VARCHAR(50) NOT NULL UNIQUE,
+   `password` VARCHAR(60) NOT NULL,
+   `role` ENUM('admin', 'author', 'editor','reader') NOT NULL,
+   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+   `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+   `bio` TEXT DEFAULT NULL,
+   `profile_image` VARCHAR(255) DEFAULT NULL
 );
 ```
 
@@ -95,21 +97,20 @@ created_at
 updated_at
 ```
 ```mysql
-CREATE TABLE posts (
-    post_id INT AUTO_INCREMENT PRIMARY KEY,
-    author_id INT,
-    title VARCHAR(255) NOT NULL,
-    content TEXT NOT NULL,
-    banner_path VARCHAR(255) DEFAULT NULL,
-    thumbnail_path VARCHAR(255) DEFAULT NULL,
-    likes INT DEFAULT 0,
-    status ENUM('draft', 'pending_approval', 'approved', 'published') NOT NULL,
-    published_at TIMESTAMP NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (author_id) REFERENCES users(user_id),
-    FOREIGN KEY (approved_by) REFERENCES users(user_id)
-);
+CREATE TABLE IF NOT EXISTS `posts` (
+   `post_id` INT AUTO_INCREMENT PRIMARY KEY,
+   `author_id` INT,
+   `title` VARCHAR(255) NOT NULL,
+   `content` TEXT NOT NULL,
+   `banner_path` VARCHAR(255) DEFAULT NULL,
+   `thumbnail_path` VARCHAR(255) DEFAULT NULL,
+   `likes` INT DEFAULT 0,
+   `status` ENUM('draft', 'pending_approval', 'approval_retracted', 'approval_denied', 'approved', 'published_retracted', 'published') NOT NULL,
+   `published_at` TIMESTAMP NULL,
+   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+   `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   FOREIGN KEY (author_id) REFERENCES users(user_id)
+    );
 ```
 
 approval_logs
@@ -285,6 +286,20 @@ CREATE TABLE options (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 ```
+
+post_likes
+```mysql
+CREATE TABLE IF NOT EXISTS `post_likes` (
+`like_id` INT AUTO_INCREMENT PRIMARY KEY,
+`user_id` INT NOT NULL,
+`post_id` INT NOT NULL,
+`liked_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`),
+FOREIGN KEY (`post_id`) REFERENCES `posts`(`post_id`),
+UNIQUE (`user_id`, `post_id`)
+);
+```
+
 
 # Work process
 

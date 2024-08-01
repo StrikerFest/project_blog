@@ -220,4 +220,130 @@ class Post
         $conn->query($sql);
         $conn->close();
     }
+
+    public static function getPostsByTagId($tagId, $limit = 3): array
+    {
+        $conn = DB::db_connect();
+        $sql = "
+        SELECT p.*
+        FROM posts p
+        INNER JOIN post_tags pc ON p.post_id = pc.post_id
+        WHERE pc.tag_id = ?
+        ORDER BY p.updated_at DESC, p.post_id DESC
+        LIMIT ?
+    ";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ii", $tagId, $limit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $posts = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $posts[] = $row;
+            }
+        }
+        $stmt->close();
+        $conn->close();
+        return $posts;
+    }
+
+    public static function getPostsByTagIdWithPagination($tagId, $offset, $limit = 3): array
+    {
+        $conn = DB::db_connect();
+        $sql = "
+        SELECT p.*
+        FROM posts p
+        INNER JOIN post_tags pc ON p.post_id = pc.post_id
+        WHERE pc.tag_id = ?
+        ORDER BY p.post_id DESC
+        LIMIT ?, ?
+    ";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("iii", $tagId, $offset, $limit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $posts = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $posts[] = $row;
+            }
+        }
+        $stmt->close();
+        $conn->close();
+        return $posts;
+    }
+
+    public static function countPostsByTagId($tagId): int
+    {
+        $conn = DB::db_connect();
+        $sql = "
+        SELECT COUNT(*) as total
+        FROM posts p
+        INNER JOIN post_tags pc ON p.post_id = pc.post_id
+        WHERE pc.tag_id = ?
+    ";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $tagId);
+        $stmt->execute();
+        $stmt->bind_result($total);
+        $stmt->fetch();
+        $stmt->close();
+        $conn->close();
+        return $total;
+    }
+
+    public static function searchPostsCategoriesTags($query): array
+    {
+        $conn = DB::db_connect();
+        $searchQuery = '%' . $conn->real_escape_string($query) . '%';
+
+        // Search posts
+        $sql = "SELECT * FROM posts WHERE (title LIKE ? OR content LIKE ?) AND status = 'published' ORDER BY post_id DESC";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $searchQuery, $searchQuery);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $posts = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $posts[] = $row;
+            }
+        }
+        $stmt->close();
+
+        // Search categories
+        $sql = "SELECT * FROM categories WHERE name LIKE ? OR description LIKE ? ORDER BY category_id DESC";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $searchQuery, $searchQuery);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $categories = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $categories[] = $row;
+            }
+        }
+        $stmt->close();
+
+        // Search tags
+        $sql = "SELECT * FROM tags WHERE name LIKE ? OR slug LIKE ? ORDER BY tag_id DESC";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $searchQuery, $searchQuery);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $tags = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $tags[] = $row;
+            }
+        }
+        $stmt->close();
+        $conn->close();
+
+        return [
+            'posts' => $posts,
+            'categories' => $categories,
+            'tags' => $tags,
+        ];
+    }
 }

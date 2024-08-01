@@ -88,6 +88,17 @@ $sql = "
         FOREIGN KEY (post_id) REFERENCES posts(post_id),
         FOREIGN KEY (user_id) REFERENCES users(user_id)
     );
+    
+    CREATE TABLE IF NOT EXISTS `post_likes` (
+        `like_id` INT AUTO_INCREMENT PRIMARY KEY,
+        `user_id` INT NOT NULL,
+        `post_id` INT NOT NULL,
+        `liked_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`),
+        FOREIGN KEY (`post_id`) REFERENCES `posts`(`post_id`),
+        UNIQUE (`user_id`, `post_id`)
+    );
+
 ";
 
 // Execute SQL script

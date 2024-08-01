@@ -108,7 +108,7 @@ class Category
     public static function getCategoriesByPosition($limit): array
     {
         $conn = DB::db_connect();
-        $sql = "SELECT category_id FROM categories ORDER BY position ASC, category_id ASC LIMIT ?";
+        $sql = "SELECT category_id FROM categories ORDER BY position , category_id LIMIT ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $limit);
         $stmt->execute();

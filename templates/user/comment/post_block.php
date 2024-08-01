@@ -27,7 +27,7 @@ $comments = $commentModel->getCommentsByPostId($post_id);
         </form>
     <?php else: ?>
         <div class="comment-textarea">
-            <p>Please <a href="/login">log in</a> to write a comment.</p>
+            <p>Please <a href="/login?redirect_url=<?= urlencode($_SERVER['REQUEST_URI']) ?>">log in</a> to write a comment.</p>
         </div>
     <?php endif; ?>
 
