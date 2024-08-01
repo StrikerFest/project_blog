@@ -48,7 +48,8 @@ $current_user = $_SESSION['user_frontend'] ?? null;
         </button>
         <?php if (isset($current_user['username'])) : ?>
             <div class="menu-dropdown-content">
-                <?php if (strstr($_SERVER['REQUEST_URI'], '/admin')) : ?>
+                <a href="<?= Common::get_url('profile') ?>">View profile</a>
+                <?php if (str_contains($_SERVER['REQUEST_URI'], '/admin')) : ?>
                     <a href="<?= Common::get_url('admin/logout') ?>?redirect_url=<?= urlencode($_SERVER['REQUEST_URI']) ?>">Logout</a>
                 <?php else : ?>
                     <a href="<?= Common::get_url('logout') ?>?redirect_url=<?= urlencode($_SERVER['REQUEST_URI']) ?>">Logout</a>

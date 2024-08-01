@@ -26,9 +26,9 @@ class User
             $conn = DB::db_connect();
 
             if ($role == self::ROLE_USER) {
-                $sql = "SELECT * FROM users where username = ? and `role` = '" . self::ROLE_USER . "' ";
+                $sql = "SELECT * FROM users WHERE username = ? AND `role` = '" . self::ROLE_USER . "' ";
             } else {
-                $sql = "SELECT * FROM users where username = ? and `role` != '" . self::ROLE_USER . "' ";
+                $sql = "SELECT * FROM users WHERE username = ? AND `role` != '" . self::ROLE_USER . "' ";
             }
             $statement = $conn->prepare($sql);
             $statement->bind_param("s", $username);
@@ -46,8 +46,12 @@ class User
                     $customUser = [
                         'id' => $user['user_id'],
                         'username' => $user['username'],
+                        'email' => $user['email'],
                         'role' => $user['role'],
-                        'profile_picture' => $user['profile_picture'] ?? Common::getAssetPath('images/avatar'),
+                        'bio' => $user['bio'],
+                        'profile_picture' => $user['profile_image'] ?? Common::getAssetPath('images/avatar'),
+                        'created_at' => $user['created_at'],
+                        'updated_at' => $user['updated_at'],
                     ];
                     unset($_SESSION['error_login_' . $role]);
 
@@ -193,5 +197,74 @@ class User
             $conn->close();
             exit();
         }
+    }
+
+    public static function updateUserProfile(): bool
+    {
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $userId = Common::getFrontendUser()['id'];
+            $data = [
+                'username' => $_POST['username'] ?? '',
+                'email' => $_POST['email'] ?? '',
+                'bio' => $_POST['bio'] ?? '',
+                'old_password' => $_POST['old_password'] ?? '',
+                'password' => $_POST['password'] ?? '',
+            ];
+
+            $conn = DB::db_connect();
+
+            // Verify the old password if a new password is provided
+            if (!empty($data['password'])) {
+                $sql = "SELECT password FROM users WHERE user_id = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param('i', $userId);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $user = $result->fetch_assoc();
+                $stmt->close();
+
+                if (!password_verify($data['old_password'], $user['password'])) {
+                    $_SESSION['error_update'] = 'Old password is incorrect.';
+                    return false;
+                }
+            }
+
+            // Prepare the SQL statement for updating user information
+            $sql = "UPDATE users SET username = ?, email = ?, bio = ?, updated_at = CURRENT_TIMESTAMP() WHERE user_id = ?";
+            $stmt = $conn->prepare($sql);
+            if ($stmt === false) {
+                die('Prepare failed: ' . htmlspecialchars($conn->error));
+            }
+
+            $stmt->bind_param('sssi', $data['username'], $data['email'], $data['bio'], $userId);
+
+            $updateResult = $stmt->execute();
+
+            // Update password if provided
+            if (!empty($data['password'])) {
+                $hashedPassword = password_hash($data['password'], PASSWORD_BCRYPT);
+                $passwordSql = "UPDATE users SET password = ? WHERE user_id = ?";
+                $passwordStmt = $conn->prepare($passwordSql);
+                if ($passwordStmt === false) {
+                    die('Prepare failed: ' . htmlspecialchars($conn->error));
+                }
+                $passwordStmt->bind_param('si', $hashedPassword, $userId);
+                $passwordStmt->execute();
+                $passwordStmt->close();
+            }
+
+            $stmt->close();
+            $conn->close();
+
+            // Update the session data with the new information
+            $_SESSION['user_frontend']['username'] = $data['username'];
+            $_SESSION['user_frontend']['email'] = $data['email'];
+            $_SESSION['user_frontend']['bio'] = $data['bio'];
+            $_SESSION['user_frontend']['updated_at'] = date('Y-m-d H:i:s');
+
+            return $updateResult;
+        }
+
+        return false;
     }
 }

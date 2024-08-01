@@ -10,9 +10,7 @@ if (isset($_SESSION['user_frontend'])) {
     header("Location: /post");
     exit();
 }
-?>
 
-<?php
 Common::requireTemplate('user/layouts/headers.php', [
     'title' => 'Sign Up'
 ]);
