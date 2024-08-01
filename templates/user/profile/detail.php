@@ -29,8 +29,14 @@ Common::requireTemplate('user/layouts/headers.php', [
         <div class="profile-error"><?= $_SESSION['error_update'] ?></div>
         <?php unset($_SESSION['error_update']); ?>
     <?php endif; ?>
-    <form id="profile-form" class="profile-form" method="POST">
+    <form id="profile-form" class="profile-form" method="POST" enctype="multipart/form-data">
         <div class="profile-content">
+            <div class="profile-field">
+                <label for="profile-picture">Profile Picture:</label>
+                <img src="<?= $user_information['profile_picture'] ?>" alt="Profile Picture" class="profile-picture-display" id="profile-picture-display">
+                <input type="file" id="profile-picture" name="profile_picture" class="profile-input" style="display: none;">
+                <button type="button" id="change-picture-button" class="profile-btn-small">Change Picture</button>
+            </div>
             <div class="profile-field">
                 <label for="username">Username:</label>
                 <input class="profile-input" type="text" id="username" name="username" value="<?= $user_information['username'] ?>" readonly />
@@ -70,7 +76,7 @@ Common::requireTemplate('user/layouts/headers.php', [
             </div>
         </div>
         <div class="profile-buttons">
-            <button type="button" id="edit-button" class="profile-btn">TOGGLE Edit</button>
+            <button type="button" id="edit-button" class="profile-btn">Edit</button>
             <button type="submit" id="save-button" class="profile-btn" style="display:none;">Save</button>
         </div>
     </form>
@@ -88,25 +94,32 @@ Common::requireTemplate('user/layouts/headers.php', [
         const confirmPasswordInput = $('#confirm-password');
         const passwordError = $('#password-error');
         const oldPasswordError = $('#old-password-error');
+        const profilePictureInput = $('#profile-picture');
+        const profilePictureDisplay = $('#profile-picture-display');
+        const changePictureButton = $('#change-picture-button');
 
         const originalValues = {
             username: $('#username').val(),
             email: $('#email').val(),
             bio: $('#bio').val(),
+            profile_picture: profilePictureDisplay.attr('src'),
         };
 
         editButton.click(function () {
             if (editButton.text() === 'Edit') {
                 $('#username, #email, #bio').prop('readonly', false);
                 passwordFields.show();
+                changePictureButton.show();
                 editButton.text('Cancel');
                 saveButton.show();
             } else {
                 $('#username').val(originalValues.username);
                 $('#email').val(originalValues.email);
                 $('#bio').val(originalValues.bio);
+                profilePictureDisplay.attr('src', originalValues.profile_picture);
                 $('#username, #email, #bio').prop('readonly', true);
                 passwordFields.hide();
+                changePictureButton.hide();
                 editButton.text('Edit');
                 saveButton.hide();
                 oldPasswordInput.val('');
@@ -115,6 +128,21 @@ Common::requireTemplate('user/layouts/headers.php', [
                 passwordRequirements.hide();
                 passwordError.hide();
                 oldPasswordError.hide();
+            }
+        });
+
+        changePictureButton.click(function () {
+            profilePictureInput.click();
+        });
+
+        profilePictureInput.change(function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    profilePictureDisplay.attr('src', e.target.result);
+                };
+                reader.readAsDataURL(file);
             }
         });
 

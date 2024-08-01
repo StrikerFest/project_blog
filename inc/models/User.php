@@ -229,14 +229,29 @@ class User
                 }
             }
 
+            // Handle profile picture upload
+            $upload_dir = $_ENV['UPLOAD_DIR'];
+            $relative_upload_dir = '/assets/uploads/';
+            $profilePicturePath = $user['profile_image'];
+            if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] == UPLOAD_ERR_OK) {
+                $profilePictureFilename = basename($_FILES['profile_picture']['name']);
+                $profilePictureFullPath = $upload_dir . $profilePictureFilename;
+                if (move_uploaded_file($_FILES['profile_picture']['tmp_name'], $profilePictureFullPath)) {
+                    $profilePicturePath = $relative_upload_dir . $profilePictureFilename;
+                } else {
+                    $_SESSION['error_update'] = 'Failed to upload profile picture.';
+                    return false;
+                }
+            }
+
             // Prepare the SQL statement for updating user information
-            $sql = "UPDATE users SET username = ?, email = ?, bio = ?, updated_at = CURRENT_TIMESTAMP() WHERE user_id = ?";
+            $sql = "UPDATE users SET username = ?, email = ?, bio = ?, profile_image = ?, updated_at = CURRENT_TIMESTAMP() WHERE user_id = ?";
             $stmt = $conn->prepare($sql);
             if ($stmt === false) {
                 die('Prepare failed: ' . htmlspecialchars($conn->error));
             }
 
-            $stmt->bind_param('sssi', $data['username'], $data['email'], $data['bio'], $userId);
+            $stmt->bind_param('ssssi', $data['username'], $data['email'], $data['bio'], $profilePicturePath, $userId);
 
             $updateResult = $stmt->execute();
 
@@ -260,6 +275,7 @@ class User
             $_SESSION['user_frontend']['username'] = $data['username'];
             $_SESSION['user_frontend']['email'] = $data['email'];
             $_SESSION['user_frontend']['bio'] = $data['bio'];
+            $_SESSION['user_frontend']['profile_picture'] = $profilePicturePath;
             $_SESSION['user_frontend']['updated_at'] = date('Y-m-d H:i:s');
 
             return $updateResult;
