@@ -49,3 +49,29 @@
 .menu-navbar .menu-dropdown:hover .menu-dropdown-content {
     display: block;
 }
+
+.menu-searchbar {
+    float: right;
+    padding: 14px 16px;
+}
+
+.menu-search-input {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 14px;
+}
+
+.menu-search-button {
+    background-color: #ddd;
+    border: 1px solid #ccc;
+    border-left: none;
+    border-radius: 3px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.menu-search-button i {
+    font-size: 14px;
+    color: black;
+}

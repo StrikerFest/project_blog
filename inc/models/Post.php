@@ -291,4 +291,26 @@ class Post
         $conn->close();
         return $total;
     }
+
+    // Function to search posts based on a search query
+    public static function searchPosts($query): array
+    {
+        $conn = DB::db_connect();
+        $searchQuery = '%' . $conn->real_escape_string($query) . '%';
+
+        $sql = "SELECT * FROM posts WHERE (title LIKE ? OR content LIKE ?) AND status = 'published' ORDER BY post_id DESC";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $searchQuery, $searchQuery);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $posts = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $posts[] = $row;
+            }
+        }
+        $stmt->close();
+        $conn->close();
+        return $posts;
+    }
 }
