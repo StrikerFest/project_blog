@@ -292,12 +292,12 @@ class Post
         return $total;
     }
 
-    // Function to search posts based on a search query
-    public static function searchPosts($query): array
+    public static function searchPostsCategoriesTags($query): array
     {
         $conn = DB::db_connect();
         $searchQuery = '%' . $conn->real_escape_string($query) . '%';
 
+        // Search posts
         $sql = "SELECT * FROM posts WHERE (title LIKE ? OR content LIKE ?) AND status = 'published' ORDER BY post_id DESC";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ss", $searchQuery, $searchQuery);
@@ -310,7 +310,40 @@ class Post
             }
         }
         $stmt->close();
+
+        // Search categories
+        $sql = "SELECT * FROM categories WHERE name LIKE ? OR description LIKE ? ORDER BY category_id DESC";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $searchQuery, $searchQuery);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $categories = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $categories[] = $row;
+            }
+        }
+        $stmt->close();
+
+        // Search tags
+        $sql = "SELECT * FROM tags WHERE name LIKE ? OR slug LIKE ? ORDER BY tag_id DESC";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $searchQuery, $searchQuery);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $tags = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $tags[] = $row;
+            }
+        }
+        $stmt->close();
         $conn->close();
-        return $posts;
+
+        return [
+            'posts' => $posts,
+            'categories' => $categories,
+            'tags' => $tags,
+        ];
     }
 }

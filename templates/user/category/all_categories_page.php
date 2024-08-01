@@ -28,7 +28,7 @@ foreach ($categories as $category) {
 }
 
 ?>
-<link rel="stylesheet" href="<?= Common::getAssetPath('css/user/categories/all_categories_page.css') ?>">
+<link rel="stylesheet" href="<?= Common::getAssetPath('css/user/category/all_categories_page.css') ?>">
 <body>
 <?php Common::requireTemplate('user/layouts/menu.php', []); ?>
 <div class="all-categories-container">

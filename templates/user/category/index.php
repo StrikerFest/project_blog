@@ -17,7 +17,7 @@ Common::requireTemplate('user/layouts/headers.php', [
     'title' => 'Bờ Lốc'
 ]);
 ?>
-<link rel="stylesheet" href="<?= Common::getAssetPath('css/user/categories/index.css') ?>">
+<link rel="stylesheet" href="<?= Common::getAssetPath('css/user/category/index.css') ?>">
 <body>
 <?php Common::requireTemplate('user/layouts/menu.php', []); ?>
 <div class="category-index-container">

@@ -29,7 +29,7 @@ Common::requireTemplate('user/layouts/headers.php', [
     'title' => $category['name']
 ]);
 ?>
-<link rel="stylesheet" href="<?= Common::getAssetPath('css/user/categories/detail.css') ?>">
+<link rel="stylesheet" href="<?= Common::getAssetPath('css/user/category/detail.css') ?>">
 <body>
 <?php Common::requireTemplate('user/layouts/menu.php', []); ?>
 <div class="category-detail-container">

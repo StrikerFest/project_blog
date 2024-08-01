@@ -24,7 +24,12 @@ class Post
     // Tạo link phân trang
     private static function getPaginationUrl($page, $perPage): string
     {
-        return "?page=$page&per_page=$perPage";
+        $query = $_GET['query'] ?? '';
+        $baseUrl = "?page=$page&per_page=$perPage";
+        if ($query !== '') {
+            $baseUrl .= "&query=" . urlencode($query);
+        }
+        return $baseUrl;
     }
 
     // Tạo template phân trang
