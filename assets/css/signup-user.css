@@ -73,3 +73,7 @@
 .user-signup-btn:hover {
   background-color: #0056b3;
 }
+
+ul.user-signup-error li {
+  text-align: left;
+}

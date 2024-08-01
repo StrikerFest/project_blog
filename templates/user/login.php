@@ -25,10 +25,14 @@ Common::requireTemplate('user/layouts/headers.php', [
                 <input class="user-login-input" type="text" name="username" placeholder="Username" required="required" />
                 <input class="user-login-input" type="password" name="password" placeholder="Password" required="required" />
             </div>
-            <?php if (isset($_SESSION['error_login_reader'])) {  ?>
+            <?php if (isset($_SESSION['error_login_reader'])) :  ?>
                 <div class="user-login-error">Username or password incorrect</div>
                 <?php unset($_SESSION['error_login_reader']); ?>
-            <?php } ?>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['success_signup'])) :  ?>
+                <div class="user-login-success"><?= $_SESSION['success_signup']; ?></div>
+                <?php unset($_SESSION['success_signup']); ?>
+            <?php endif; ?>
             <div class="user-login-buttons">
                 <button class="user-login-btn" type="submit">Sign in</button>
             </div>

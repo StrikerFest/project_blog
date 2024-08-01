@@ -35,14 +35,13 @@ class User
 
             $statement->execute();
             $result = $statement->get_result();
-            
-            // Kiểm tra xem có bản ghi nào được trả về không
+
+            // Check if any record was returned
             if ($result->num_rows > 0) {
-                
-                // Lấy thông tin người dùng từ kết quả truy vấn
+                // Fetch user data from the query result
                 $user = $result->fetch_assoc();
 
-                // Kiểm tra mật khẩu được nhập vào với mật khẩu trong cơ sở dữ liệu
+                // Verify the entered password with the password in the database
                 if (password_verify($password, $user['password'])) {
                     $customUser = [
                         'id' => $user['user_id'],
@@ -50,9 +49,9 @@ class User
                         'role' => $user['role'],
                         'profile_picture' => $user['profile_picture'] ?? Common::getAssetPath('images/avatar'),
                     ];
-                    unset($_SESSION['error_login_'.$role]);
-                    
-                    // Check lưu dữ liệu user bên người đọc hay bên quản lý
+                    unset($_SESSION['error_login_' . $role]);
+
+                    // Save user data to the session based on the user role
                     if ($user['role'] === self::ROLE_USER) {
                         $_SESSION['user_frontend'] = $customUser;
                         $redirectUrl = $_SESSION['redirect_url'] ?? $_GET['redirect_url'] ?? '/post';
@@ -68,12 +67,12 @@ class User
                     self::redirectLogin($role);
                 }
             } else {
-                // Không tìm thấy tên đăng nhập trong cơ sở dữ liệu
-                $_SESSION['error_login_'.$role] = true;
+                // Username not found in the database
+                $_SESSION['error_login_' . $role] = true;
                 self::redirectLogin($role);
             }
 
-            // Đóng kết nối đến cơ sở dữ liệu
+            // Close the database connection
             $statement->close();
             $conn->close();
         }
@@ -122,8 +121,7 @@ class User
         exit();
     }
 
-    public static function getUserByAuthorId($author_id)
-    {
+    public static function getUserByAuthorId($author_id) {
         $conn = DB::db_connect();
         $sql = 'SELECT * FROM users WHERE user_id = ?';
         $stmt = $conn->prepare($sql);
@@ -149,6 +147,13 @@ class User
 
             if ($password !== $confirmPassword) {
                 $_SESSION['error_signup'] = 'Passwords do not match.';
+                header("Location: register");
+                exit();
+            }
+
+            // Server-side password validation
+            if (strlen($password) < 8 || !preg_match('/[A-Z]/', $password) || !preg_match('/[0-9!@#$%^&*(),.?":{}|<>]/', $password)) {
+                $_SESSION['error_signup'] = 'Password must be at least 8 characters long and include at least one uppercase letter and one number or special character.';
                 header("Location: register");
                 exit();
             }
