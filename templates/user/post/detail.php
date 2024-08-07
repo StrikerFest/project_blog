@@ -55,7 +55,7 @@ Common::requireTemplate('user/layouts/headers.php', [
         <?php if (!empty($post['banner_path'])): ?>
             <img src="<?= $post['banner_path'] ?>" alt="banner">
         <?php else: ?>
-            <img src="<?= Common::getAssetPath('images/placeholder-banner') ?>" alt="post-banner">
+            <img src="<?= Common::getAssetPath('images/placeholder-banner.webp') ?>" alt="post-banner">
         <?php endif; ?>
     </div>
 
@@ -67,7 +67,7 @@ Common::requireTemplate('user/layouts/headers.php', [
         <?php if (!empty($author['image'])): ?>
             <img src="<?= 'image' ?>" alt="Author Profile" class="post-detail-author-profile-image">
         <?php else: ?>
-            <img src="<?= Common::getAssetPath('images/avatar') ?>" alt="Author Profile" class="post-detail-author-profile-image">
+            <img src="<?= Common::getAssetPath('images/avatar.webp') ?>" alt="Author Profile" class="post-detail-author-profile-image">
         <?php endif; ?>
         <div class="post-detail-author-details">
             <h4><?= $author['username'] ?></h4>

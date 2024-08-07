@@ -61,7 +61,7 @@ Common::requireTemplate('user/layouts/headers.php', [
                     <?php if (!empty($post['thumbnail_path'])): ?>
                         <img src="<?= $post['thumbnail_path']; ?>" alt="image">
                     <?php else: ?>
-                        <img src="<?= Common::getAssetPath('images/placeholder-thumbnail') ?>" alt="post-thumbnail">
+                        <img src="<?= Common::getAssetPath('images/placeholder-thumbnail.webp') ?>" alt="post-thumbnail">
                     <?php endif; ?>
                 </a>
                 <div class="post-content">

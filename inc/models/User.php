@@ -49,7 +49,7 @@ class User
                         'email' => $user['email'],
                         'role' => $user['role'],
                         'bio' => $user['bio'],
-                        'profile_picture' => $user['profile_image'] ?? Common::getAssetPath('images/avatar'),
+                        'profile_picture' => $user['profile_image'] ?? Common::getAssetPath('images/avatar.webp'),
                         'created_at' => $user['created_at'],
                         'updated_at' => $user['updated_at'],
                     ];
