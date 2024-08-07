@@ -85,4 +85,15 @@ class Common
         $base_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
         return rtrim($base_url, '/') . '/' . ltrim($path, '/');
     }
+
+    public static function logApprovalAction($post_id, $user_id, $status_from, $status_to, $reason = null): void
+    {
+        $conn = DB::db_connect();
+        $sql = "INSERT INTO approval_logs (post_id, user_id, status_from, status_to, reason) VALUES (?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("iisss", $post_id, $user_id, $status_from, $status_to, $reason);
+        $stmt->execute();
+        $stmt->close();
+        $conn->close();
+    }
 }
