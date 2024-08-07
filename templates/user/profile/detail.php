@@ -12,7 +12,7 @@ if (session_status() == PHP_SESSION_NONE) {
 $user_information = $args['user_information'];
 
 Common::requireTemplate('user/layouts/headers.php', [
-    'title' => 'Sign Up'
+    'title' => 'User Profile'
 ]);
 ?>
 
@@ -35,7 +35,7 @@ Common::requireTemplate('user/layouts/headers.php', [
                 <label for="profile-picture">Profile Picture:</label>
                 <img src="<?= $user_information['profile_picture'] ?>" alt="Profile Picture" class="profile-picture-display" id="profile-picture-display">
                 <input type="file" id="profile-picture" name="profile_picture" class="profile-input" style="display: none;">
-                <button type="button" id="change-picture-button" class="profile-btn-small">Change Picture</button>
+                <button type="button" id="change-picture-button" class="profile-btn-small" style="display: none;">Change Picture</button>
             </div>
             <div class="profile-field">
                 <label for="username">Username:</label>
