@@ -64,6 +64,7 @@ if ($current_user === null) {
             <i class="fa fa-caret-down"></i>
         </button>
         <div class="menu-dropdown-content">
+            <a href="<?= Common::get_url('admin/profile') ?>">View profile</a>
             <a href="<?= Common::get_url('admin/logout') ?>">Logout</a>
         </div>
     </div>

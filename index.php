@@ -42,6 +42,7 @@ $routes = [
     '/admin/user/create' => Common::getControllerPath('admin/user/edit.php'),
     '/admin/user/edit'   => Common::getControllerPath('admin/user/edit.php'),
     '/admin/user/delete'   => Common::getControllerPath('admin/user/delete.php'),
+    '/admin/profile'   => Common::getControllerPath('admin/profile/detail.php'),
     
     // Blog - Người dùng
     '/login' => Common::getControllerPath('user/auth/login.php'),
