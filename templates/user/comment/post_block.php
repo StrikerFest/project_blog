@@ -34,7 +34,7 @@ $comments = $commentModel->getCommentsByPostId($post_id);
     <ul class="comment-list">
         <?php foreach ($comments as $comment): ?>
             <li class="comment-list-item">
-                <img src="<?php echo $comment['avatar'] ?? ''; ?>" alt="Avatar" class="comment-avatar">
+                <img src="<?php echo $comment['profile_image'] ?? ''; ?>" alt="Avatar" class="comment-avatar">
                 <div class="comment-content">
                     <span class="comment-username"><?php echo $comment['username']; ?></span>
                     <span class="comment-date"><?php echo $comment['created_at']; ?></span>

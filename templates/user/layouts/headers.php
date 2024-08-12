@@ -5,7 +5,7 @@ use inc\helpers\Common;
 /**
  * @var mixed $args
  */
-define('PH_THUMBNAIL', Common::getAssetPath('images/placeholder-thumbnail'));
+define('PH_THUMBNAIL', Common::getAssetPath('images/placeholder-thumbnail.webp'));
 ?>
 <head>
     <meta charset="UTF-8">

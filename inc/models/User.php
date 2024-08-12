@@ -49,7 +49,7 @@ class User
                         'email' => $user['email'],
                         'role' => $user['role'],
                         'bio' => $user['bio'],
-                        'profile_picture' => $user['profile_image'] ?? Common::getAssetPath('images/avatar'),
+                        'profile_picture' => $user['profile_image'] ?? Common::getAssetPath('images/avatar.webp'),
                         'created_at' => $user['created_at'],
                         'updated_at' => $user['updated_at'],
                     ];
@@ -282,5 +282,161 @@ class User
         }
 
         return false;
+    }
+
+    public static function getUsers($activeOnly = true): array
+    {
+        $conn = DB::db_connect();
+
+        if ($activeOnly) {
+            $sql = "SELECT * FROM users WHERE deleted_at IS NULL ORDER BY user_id ASC";
+        } else {
+            $sql = "SELECT * FROM users ORDER BY user_id ASC";
+        }
+
+        $result = $conn->query($sql);
+        $users = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $users[] = $row;
+            }
+        }
+        $conn->close();
+        return $users;
+    }
+
+    public static function saveUser($userId = null): bool
+    {
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $data = [
+                'username' => $_POST['username'] ?? '',
+                'email' => $_POST['email'] ?? '',
+                'bio' => $_POST['bio'] ?? '',
+                'password' => $_POST['password'] ?? '',
+                'role' => $_POST['role'] ?? 'reader',
+            ];
+
+            $conn = DB::db_connect();
+
+            // Handle profile picture upload
+            $upload_dir = $_ENV['UPLOAD_DIR'];
+            $relative_upload_dir = '/assets/uploads/';
+            $profilePicturePath = $userId ? self::getUserById($userId)['profile_image'] : Common::getAssetPath('images/default-avatar.png');
+
+            if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == UPLOAD_ERR_OK) {
+                $profilePictureFilename = basename($_FILES['profile_image']['name']);
+                $profilePictureFullPath = $upload_dir . $profilePictureFilename;
+
+                if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $profilePictureFullPath)) {
+                    $profilePicturePath = $relative_upload_dir . $profilePictureFilename;
+                } else {
+                    $_SESSION['error_update'] = 'Failed to upload profile picture.';
+                    return false;
+                }
+            }
+
+            if ($userId) {
+                // Update existing user
+                $sql = "UPDATE users SET username = ?, email = ?, bio = ?, profile_image = ?, role = ?, updated_at = CURRENT_TIMESTAMP() WHERE user_id = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param('sssssi', $data['username'], $data['email'], $data['bio'], $profilePicturePath, $data['role'], $userId);
+            } else {
+                // Insert new user
+                $hashedPassword = password_hash($data['password'], PASSWORD_BCRYPT);
+                $sql = "INSERT INTO users (username, email, bio, profile_image, role, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP())";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param('ssssss', $data['username'], $data['email'], $data['bio'], $profilePicturePath, $data['role'], $hashedPassword);
+            }
+
+            $result = $stmt->execute();
+
+            if ($userId && !empty($data['password'])) {
+                // Update password if provided
+                $hashedPassword = password_hash($data['password'], PASSWORD_BCRYPT);
+                $passwordSql = "UPDATE users SET password = ? WHERE user_id = ?";
+                $passwordStmt = $conn->prepare($passwordSql);
+                $passwordStmt->bind_param('si', $hashedPassword, $userId);
+                $passwordStmt->execute();
+                $passwordStmt->close();
+            }
+
+            $stmt->close();
+            $conn->close();
+
+            return $result;
+        }
+
+        return false;
+    }
+
+    public static function getUserById($userId)
+    {
+        if ($userId === null) {
+            return null;
+        }
+
+        $conn = DB::db_connect();
+        $sql = "SELECT * FROM users WHERE user_id = ?";
+        $stmt = $conn->prepare($sql);
+
+        if ($stmt === false) {
+            die('Prepare failed: ' . htmlspecialchars($conn->error));
+        }
+
+        $stmt->bind_param('i', $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+
+        $stmt->close();
+        $conn->close();
+
+        return $user ?: null;
+    }
+
+    public static function softDeleteUser($userId): bool
+    {
+        if ($userId === null) {
+            return false;
+        }
+
+        $conn = DB::db_connect();
+        $sql = "UPDATE users SET deleted_at = CURRENT_TIMESTAMP WHERE user_id = ?";
+        $stmt = $conn->prepare($sql);
+
+        if ($stmt === false) {
+            die('Prepare failed: ' . htmlspecialchars($conn->error));
+        }
+
+        $stmt->bind_param('i', $userId);
+        $result = $stmt->execute();
+
+        $stmt->close();
+        $conn->close();
+
+        return $result;
+    }
+
+    public static function recoverUser($userId): bool
+    {
+        if ($userId === null) {
+            return false;
+        }
+
+        $conn = DB::db_connect();
+        $sql = "UPDATE users SET deleted_at = NULL WHERE user_id = ?";
+        $stmt = $conn->prepare($sql);
+
+        if ($stmt === false) {
+            die('Prepare failed: ' . htmlspecialchars($conn->error));
+        }
+
+        $stmt->bind_param('i', $userId);
+        $result = $stmt->execute();
+
+        $stmt->close();
+        $conn->close();
+
+        return $result;
     }
 }

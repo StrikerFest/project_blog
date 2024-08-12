@@ -18,21 +18,30 @@ $routes = [
 
     // Quản lý blog
     '/admin/post'        => Common::getControllerPath('admin/post/index.php'),
+    '/admin/post/index'        => Common::getControllerPath('admin/post/index.php'),
     '/admin/post/create' => Common::getControllerPath('admin/post/edit.php'),
     '/admin/post/edit'   => Common::getControllerPath('admin/post/edit.php'),
     '/admin/post/delete' => Common::getControllerPath('admin/post/delete.php'),
 
     // Quản lý danh mục
     '/admin/category'        => Common::getControllerPath('admin/category/index.php'),
+    '/admin/category/index'        => Common::getControllerPath('admin/category/index.php'),
     '/admin/category/create' => Common::getControllerPath('admin/category/edit.php'),
     '/admin/category/edit'   => Common::getControllerPath('admin/category/edit.php'),
     '/admin/category/delete' => Common::getControllerPath('admin/category/delete.php'),
 
     // Quản lý nhãn
     '/admin/tag'        => Common::getControllerPath('admin/tag/index.php'),
+    '/admin/tag/index'        => Common::getControllerPath('admin/tag/index.php'),
     '/admin/tag/create' => Common::getControllerPath('admin/tag/edit.php'),
     '/admin/tag/edit'   => Common::getControllerPath('admin/tag/edit.php'),
     '/admin/tag/delete' => Common::getControllerPath('admin/tag/delete.php'),
+
+    '/admin/user'        => Common::getControllerPath('admin/user/index.php'),
+    '/admin/user/index'        => Common::getControllerPath('admin/user/index.php'),
+    '/admin/user/create' => Common::getControllerPath('admin/user/edit.php'),
+    '/admin/user/edit'   => Common::getControllerPath('admin/user/edit.php'),
+    '/admin/user/delete'   => Common::getControllerPath('admin/user/delete.php'),
     
     // Blog - Người dùng
     '/login' => Common::getControllerPath('user/auth/login.php'),
