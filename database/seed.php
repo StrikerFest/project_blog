@@ -39,10 +39,9 @@ for ($i = 0; $i < 11; $i++) {
     $thumbnail_path = null;
     $likes = rand(0, 100);
     $status = $statuses[array_rand($statuses)];
-    $published_at = null;
 
-    $sql = "INSERT INTO posts (author_id, title, content, banner_path, thumbnail_path, likes, status, published_at) 
-          VALUES ($authors[0], '$title', '$content', '$banner_path', '$thumbnail_path', $likes, '$status', '$published_at')";
+    $sql = "INSERT INTO posts (author_id, title, content, banner_path, thumbnail_path, likes, status) 
+          VALUES ($authors[0], '$title', '$content', '$banner_path', '$thumbnail_path', $likes, '$status')";
 
     // Execute the insert query
     $result = mysqli_query($conn, $sql);
@@ -60,12 +59,12 @@ $result = $conn->query($sql);
 if ($result) {
     $row = $result->fetch_assoc();
     if ($row['count'] == 0) {
-        $sql = "INSERT INTO categories (name, status, description) VALUES
-            ('Công nghệ', 'enabled', '" . generateRandomString(10) . "'),
-            ('Bóng đá', 'enabled', '" . generateRandomString(10) . "'),
-            ('Du lịch', 'enabled', '" . generateRandomString(10) . "'),
-            ('Sức khỏe', 'enabled', '" . generateRandomString(10) . "'),
-            ('Ẩm thực', 'enabled', '" . generateRandomString(10) . "')";
+        $sql = "INSERT INTO categories (name, slug, status, description) VALUES
+            ('Công nghệ', 'tech', 'enabled', '" . generateRandomString(10) . "'),
+            ('Bóng đá', 'football', 'enabled', '" . generateRandomString(10) . "'),
+            ('Du lịch', 'travel','enabled', '" . generateRandomString(10) . "'),
+            ('Sức khỏe', 'health', 'enabled', '" . generateRandomString(10) . "'),
+            ('Ẩm thực', 'food', 'enabled', '" . generateRandomString(10) . "')";
         print($sql);
         if ($conn->query($sql) === TRUE) {
             echo "Category inserted successfully.<br>";
@@ -98,12 +97,12 @@ $result = $conn->query($sql);
 if ($result) {
     $row = $result->fetch_assoc();
     if ($row['count'] == 0) {
-        $sql = "INSERT INTO tags (name, status) VALUES
-            ('Apple', 'enabled'),
-            ('Nike', 'enabled'),
-            ('Coca-Cola', 'enabled'),
-            ('Samsung', 'enabled'),
-            ('Google', 'enabled')";
+        $sql = "INSERT INTO tags (name, slug, status) VALUES
+            ('Apple', 'apple', 'enabled'),
+            ('Nike', 'nike', 'enabled'),
+            ('Coca-Cola', 'coca', 'enabled'),
+            ('Samsung', 'samsung', 'enabled'),
+            ('Google', 'google', 'enabled')";
         if ($conn->query($sql) === TRUE) {
             echo "Tag inserted successfully.<br>";
         } else {
