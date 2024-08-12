@@ -39,3 +39,12 @@ if (!isset($_SESSION['user_backend']) && !isset($_SESSION['user_frontend'])) {
 </head>
 
 <?php Common::requireTemplate('admin/layouts/menu.php', []);
+if (isset($_SESSION['toast_message'])): ?>
+    <div class="toast <?= $_SESSION['toast_type'] ?>">
+        <?= $_SESSION['toast_message'] ?>
+    </div>
+    <?php 
+    unset($_SESSION['toast_message']); 
+    unset($_SESSION['toast_type']);
+    ?>
+<?php endif; ?>

@@ -40,7 +40,7 @@
   text-decoration: underline;
 }
 
-.post-edit-container {
+.edit-container {
   width: 50%;
   margin: auto;
   padding: 20px;
@@ -49,36 +49,38 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.post-edit-title {
+.edit-title {
   text-align: center;
   color: #333;
 }
 
-.post-edit-field {
+.edit-field {
   margin-bottom: 15px;
 }
 
-.post-edit-field label {
+.edit-field label {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
   color: #555;
 }
 
-.post-edit-field input[type="text"],
-.post-edit-field textarea,
-.post-edit-field select {
+.edit-field input[type="text"],
+.edit-field input[type="email"],
+.edit-field input[type="password"],
+.edit-field textarea,
+.edit-field select {
   width: 100%;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
 
-.post-edit-field select[multiple] {
+.edit-field select[multiple] {
   height: 100px;
 }
 
-.post-edit-btn {
+.edit-btn {
   width: 100%;
   padding: 10px;
   background-color: #4CAF50;
@@ -88,6 +90,6 @@
   cursor: pointer;
 }
 
-.post-edit-btn:hover {
+.edit-btn:hover {
   background-color: #45a049;
 }

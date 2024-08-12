@@ -67,6 +67,7 @@ password
 role (e.g., 'admin', 'author', 'editor')
 created_at
 updated_at
+deleted_at
 ```
 - phần role ENUM chỉ là string bình thường thôi, nhưng mà nếu điền giá trị không giống trong mảng đấy thì mysql không cho điền
 ```mysql
@@ -75,11 +76,12 @@ CREATE TABLE IF NOT EXISTS `users` (
    `email` VARCHAR(255) NOT NULL,
    `username` VARCHAR(50) NOT NULL UNIQUE,
    `password` VARCHAR(60) NOT NULL,
-   `role` ENUM('admin', 'author', 'editor','reader') NOT NULL,
+   `role` ENUM('admin', 'author', 'editor', 'reader') NOT NULL,
    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-   `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+   `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    `bio` TEXT DEFAULT NULL,
-   `profile_image` VARCHAR(255) DEFAULT NULL
+   `profile_image` VARCHAR(255) DEFAULT NULL,
+   `deleted_at` TIMESTAMP NULL DEFAULT NULL
 );
 ```
 

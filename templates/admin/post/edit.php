@@ -21,38 +21,38 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
 ?>
 
 <body>
-<div class="post-edit-container">
+<div class="edit-container">
     <?php if (isset($post['id'])): ?>
-        <h1 class="post-edit-title">Update Post ID: <?= $post['id'] ?></h1>
+        <h1 class="edit-title">Update Post ID: <?= $post['id'] ?></h1>
     <?php else: ?>
-        <h1 class="post-edit-title">Create New Post</h1>
+        <h1 class="edit-title">Create New Post</h1>
     <?php endif; ?>
     <form id="post-edit-createPostForm" method="POST" enctype="multipart/form-data">
         <input type="hidden" value="<?= $post['post_id'] ?? '' ?>" name="id"/>
         <input type="hidden" value="<?= $current_user['id'] ?? $args['current_user_id'] ?>" name="author_id"/>
         <input type="hidden" value="<?= $post['approved_by'] ?? '' ?>" name="approved_by"/>
 
-        <div class="post-edit-field">
+        <div class="edit-field">
             <label for="post-edit-title">Title:</label>
             <input type="text" id="post-edit-title" name="title" value="<?= $post['title'] ?? '' ?>" placeholder="Title" maxlength="255" required>
         </div>
 
-        <div class="post-edit-field">
+        <div class="edit-field">
             <label for="post-edit-content">Content:</label>
             <textarea id="post-edit-content" name="content" placeholder="Content" required><?= $post['content'] ?? '' ?></textarea>
         </div>
 
-        <div class="post-edit-field">
+        <div class="edit-field">
             <label for="post-edit-thumbnail">Thumbnail:</label>
             <input type="file" id="post-edit-thumbnail" name="thumbnail" accept="image/*">
         </div>
 
-        <div class="post-edit-field">
+        <div class="edit-field">
             <label for="post-edit-banner">Banner:</label>
             <input type="file" id="post-edit-banner" name="banner" accept="image/*">
         </div>
 
-        <div class="post-edit-field">
+        <div class="edit-field">
             <label>Categories:</label>
             <select name="categories[]" id="post-edit-categories" multiple required>
                 <?php foreach ($args['categories'] as $category): ?>
@@ -64,11 +64,10 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
             </select>
         </div>
 
-        <div class="post-edit-field">
+        <div class="edit-field">
             <label>Tags:</label>
             <select name="tags[]" id="post-edit-tags" multiple required>
-                <?php
-                foreach ($args['tags'] as $tag): ?>
+                <?php foreach ($args['tags'] as $tag): ?>
                     <option value="<?= $tag['tag_id'] ?>"
                         <?= (in_array($tag['tag_id'], $post_tag_ids ?? [])) ? 'selected' : '' ?>>
                         <?= $tag['name'] ?>
@@ -77,7 +76,7 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
             </select>
         </div>
 
-        <div class="post-edit-field">
+        <div class="edit-field">
             <label for="post-edit-status">Status: <?= $permissionMissing ?></label>
             <select id="post-edit-status" name="status" required <?= !$allowed ? 'disabled' : '' ?>>
                 <?php
@@ -100,7 +99,7 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
                         break;
                     case 'editor':
                         if (!$currentStatus) {
-                            $availableStatuses = ['draft']; // Editor ko tao post dc
+                            $availableStatuses = ['draft']; // Editors cannot create posts
                         } else {
                             switch ($currentStatus) {
                                 case 'pending_approval':
@@ -163,8 +162,8 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
             </select>
         </div>
 
-        <div class="post-edit-field">
-            <button type="submit" class="post-edit-btn">Save Post</button>
+        <div class="edit-field">
+            <button type="submit" class="edit-btn">Save Post</button>
         </div>
     </form>
 </div>

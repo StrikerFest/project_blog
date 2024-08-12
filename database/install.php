@@ -23,11 +23,12 @@ $sql = "
         `email` VARCHAR(255) NOT NULL,
         `username` VARCHAR(50) NOT NULL UNIQUE,
         `password` VARCHAR(60) NOT NULL,
-        `role` ENUM('admin', 'author', 'editor','reader') NOT NULL,
+        `role` ENUM('admin', 'author', 'editor', 'reader') NOT NULL,
         `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         `bio` TEXT DEFAULT NULL,
-        `profile_image` VARCHAR(255) DEFAULT NULL
+        `profile_image` VARCHAR(255) DEFAULT NULL,
+        `deleted_at` TIMESTAMP NULL DEFAULT NULL
     );
     
     CREATE TABLE IF NOT EXISTS `posts` (
@@ -153,13 +154,7 @@ CREATE TABLE IF NOT EXISTS `approval_logs` (
     FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`)
 );
 
-INSERT INTO `approval_logs` (`post_id`, `user_id`, `status_from`, `status_to`, `reason`) VALUES
-(1, 2, 'draft', 'pending_approval', 'Initial submission for review'),
-(1, 3, 'pending_approval', 'approved', 'Approved after review'),
-(2, 2, 'draft', 'pending_approval', 'Ready for review'),
-(2, 3, 'pending_approval', 'approval_denied', 'Requires more details'),
-(3, 2, 'draft', 'pending_approval', 'Submitted for approval'),
-(3, 3, 'pending_approval', 'approved', 'Looks good to publish');
+
 ";
 
 // Execute SQL script
