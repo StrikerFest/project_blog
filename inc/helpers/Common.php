@@ -37,16 +37,19 @@ class Common
     {
         require self::getTemplatePath($path);
     }
-    
+
     public static function getCurrentBackendUser()
     {
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
-        $currentUser = $_SESSION['user_backend'];   
-        if ($currentUser === null) {
-            header("Location: /admin/logout");
+        $currentUser = $_SESSION['user_backend'];
+
+        if ($currentUser === null || $currentUser['role'] === 'reader') {
+            header("Location: /");
+            exit();
         }
+
         return $currentUser;
     }
 
@@ -54,10 +57,10 @@ class Common
     {
         return $_ENV['UPLOAD_DIR'] . $path;
     }
-    
+
     public static function getArrayBySQL($sql, $stmt): array
     {
-        
+
         $stmt->execute();
         $results = [];
         $result = $stmt->get_result();
@@ -71,8 +74,9 @@ class Common
         $stmt->close();
         return $results;
     }
-    
-    public static function getFrontendUser(){
+
+    public static function getFrontendUser()
+    {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -95,5 +99,55 @@ class Common
         $stmt->execute();
         $stmt->close();
         $conn->close();
+    }
+
+    public static function checkUserPermission($permission): void
+    {
+        $currentUser = self::getCurrentBackendUser();
+        $role = $currentUser['role'];
+        $currentUrl = $_SERVER['REQUEST_URI'];
+        $redirectUrl = "/admin/post"; // Default redirect URL
+
+        switch ($permission) {
+            case 'ADMIN_ONLY':
+                if ($role !== 'admin') {
+                    $_SESSION['toast_message'] = "Access denied: Admins only.";
+                    $_SESSION['toast_type'] = "error";
+                    header("Location: $redirectUrl");
+                    exit();
+                }
+                break;
+
+            case 'NO_EDITOR':
+                if ($role === 'editor') {
+                    $_SESSION['toast_message'] = "Access denied: Editors are not allowed here.";
+                    $_SESSION['toast_type'] = "error";
+                    header("Location: $redirectUrl");
+                    exit();
+                }
+                break;
+
+            case 'NO_AUTHOR':
+                if ($role === 'author') {
+                    $_SESSION['toast_message'] = "Access denied: Authors are not allowed here.";
+                    $_SESSION['toast_type'] = "error";
+                    header("Location: $redirectUrl");
+                    exit();
+                }
+                break;
+
+            case 'NO_EDITOR_CREATE':
+                if ($role === 'editor' && preg_match('/\/create$/', $currentUrl)) {
+                    $_SESSION['toast_message'] = "Access denied: Editors cannot create content.";
+                    $_SESSION['toast_type'] = "error";
+                    header("Location: $redirectUrl");
+                    exit();
+                }
+                break;
+
+            default:
+                // If no specific permission is provided, do nothing
+                break;
+        }
     }
 }
