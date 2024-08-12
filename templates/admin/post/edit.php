@@ -7,7 +7,7 @@ use inc\helpers\Common;
  * @var mixed $args
  */
 
-Common::requireTemplate('admin/layouts/headers.php', ['title' => 'burogu']);
+Common::requireTemplate('admin/layouts/headers.php', ['title' => 'burogu', 'permission' => 'NO_EDITOR_CREATE']);
 
 $current_user = Common::getCurrentBackendUser();
 $post = $args['post'];

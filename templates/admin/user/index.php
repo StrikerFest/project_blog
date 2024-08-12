@@ -9,7 +9,8 @@ use inc\helpers\Common;
 $users = $args['users'];
 
 Common::requireTemplate('admin/layouts/headers.php', [
-    'title' => 'User Management'
+    'title' => 'User Management',
+    'permission' => 'ADMIN_ONLY',
 ]);
 ?>
 

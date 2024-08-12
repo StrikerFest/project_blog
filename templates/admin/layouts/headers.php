@@ -1,12 +1,14 @@
 <?php
 
 use inc\helpers\Common;
+
 /**
  * @var mixed $args
  */
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
+
 $currentPage = $_SERVER['REQUEST_URI'];
 if (!isset($_SESSION['user_backend']) && !isset($_SESSION['user_frontend'])) {
     if (strstr($currentPage, "/admin")) {
@@ -24,12 +26,17 @@ if (!isset($_SESSION['user_backend']) && !isset($_SESSION['user_frontend'])) {
     }
 }
 
+// Check the permission passed from the template
+if (isset($args['permission'])) {
+    Common::checkUserPermission($args['permission']);
+}
+
 ?>
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $args['title'] ?? '' ?></title>
+    <title><?= htmlspecialchars($args['title'] ?? '') ?></title>
     <link rel="stylesheet" href="<?= Common::getAssetPath('css/style.css') ?>">
     <link rel="stylesheet" href="<?= Common::getAssetPath('css/listing.css') ?>">
     <link rel="stylesheet" href="<?= Common::getAssetPath('css/form-table.css') ?>">
@@ -38,13 +45,14 @@ if (!isset($_SESSION['user_backend']) && !isset($_SESSION['user_frontend'])) {
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 </head>
 
-<?php Common::requireTemplate('admin/layouts/menu.php', []);
+<?php
+Common::requireTemplate('admin/layouts/menu.php', []);
 if (isset($_SESSION['toast_message'])): ?>
-    <div class="toast <?= $_SESSION['toast_type'] ?>">
-        <?= $_SESSION['toast_message'] ?>
+    <div class="toast <?= htmlspecialchars($_SESSION['toast_type']) ?>">
+        <?= htmlspecialchars($_SESSION['toast_message']) ?>
     </div>
-    <?php 
-    unset($_SESSION['toast_message']); 
+    <?php
+    unset($_SESSION['toast_message']);
     unset($_SESSION['toast_type']);
     ?>
 <?php endif; ?>

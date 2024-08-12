@@ -439,4 +439,52 @@ class User
 
         return $result;
     }
+
+    public static function updateAdminProfile($userId, $data, $files): bool
+    {
+        // Use similar logic as the user's profile update, adjusting as necessary
+        // Example:
+        // - Validate and sanitize input
+        // - Handle profile image upload
+        // - Update the database with the new information
+
+        // Example:
+        $conn = DB::db_connect();
+
+        // Handle profile picture upload
+        $upload_dir = $_ENV['UPLOAD_DIR'];
+        $relative_upload_dir = '/assets/uploads/';
+        $profilePicturePath = $userId ? self::getUserById($userId)['profile_image'] : Common::getAssetPath('images/default-avatar.png');
+
+        if (isset($files['profile_image']) && $files['profile_image']['error'] == UPLOAD_ERR_OK) {
+            $profilePictureFilename = basename($files['profile_image']['name']);
+            $profilePictureFullPath = $upload_dir . $profilePictureFilename;
+
+            if (move_uploaded_file($files['profile_image']['tmp_name'], $profilePictureFullPath)) {
+                $profilePicturePath = $relative_upload_dir . $profilePictureFilename;
+            } else {
+                $_SESSION['error_update'] = 'Failed to upload profile picture.';
+                return false;
+            }
+        }
+
+        $sql = "UPDATE users SET username = ?, email = ?, bio = ?, profile_image = ?, updated_at = CURRENT_TIMESTAMP() WHERE user_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('ssssi', $data['username'], $data['email'], $data['bio'], $profilePicturePath, $userId);
+        $result = $stmt->execute();
+
+        if (!empty($data['password']) && $data['password'] === $data['confirm_password']) {
+            $hashedPassword = password_hash($data['password'], PASSWORD_BCRYPT);
+            $passwordSql = "UPDATE users SET password = ? WHERE user_id = ?";
+            $passwordStmt = $conn->prepare($passwordSql);
+            $passwordStmt->bind_param('si', $hashedPassword, $userId);
+            $passwordStmt->execute();
+            $passwordStmt->close();
+        }
+
+        $stmt->close();
+        $conn->close();
+
+        return $result;
+    }
 }

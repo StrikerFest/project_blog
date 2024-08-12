@@ -11,6 +11,7 @@ if ($current_user === null) {
     exit('No user session');
 }
 
+$role = $current_user['role'];
 ?>
 <link rel="stylesheet" href="<?= Common::getAssetPath('css/menu.css') ?>">
 <div class="menu-navbar">
@@ -20,7 +21,9 @@ if ($current_user === null) {
         </button>
         <div class="menu-dropdown-content">
             <a href="<?= Common::get_url('admin/post') ?>">View posts</a>
-            <a href="<?= Common::get_url('admin/post/create') ?>">Create post</a>
+            <?php if ($role === 'admin' || $role === 'author'): ?>
+                <a href="<?= Common::get_url('admin/post/create') ?>">Create post</a>
+            <?php endif; ?>
         </div>
     </div>
     <div class="menu-dropdown">
@@ -29,7 +32,9 @@ if ($current_user === null) {
         </button>
         <div class="menu-dropdown-content">
             <a href="<?= Common::get_url('admin/category') ?>">View categories</a>
-            <a href="<?= Common::get_url('admin/category/create') ?>">Create category</a>
+            <?php if ($role === 'admin' || $role === 'author'): ?>
+                <a href="<?= Common::get_url('admin/category/create') ?>">Create category</a>
+            <?php endif; ?>
         </div>
     </div>
     <div class="menu-dropdown">
@@ -38,32 +43,37 @@ if ($current_user === null) {
         </button>
         <div class="menu-dropdown-content">
             <a href="<?= Common::get_url('admin/tag') ?>">View tags</a>
-            <a href="<?= Common::get_url('admin/tag/create') ?>">Create tag</a>
+            <?php if ($role === 'admin' || $role === 'author'): ?>
+                <a href="<?= Common::get_url('admin/tag/create') ?>">Create tag</a>
+            <?php endif; ?>
         </div>
     </div>
+    <?php if ($role === 'admin'): ?>
+        <div class="menu-dropdown">
+            <button class="menu-dropbtn">Logs
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="menu-dropdown-content">
+                <a href="<?= Common::get_url('admin/approval-log') ?>">Approval logs</a>
+                <a href="<?= Common::get_url('admin/activity-log') ?>">Activity logs</a>
+            </div>
+        </div>
+        <div class="menu-dropdown">
+            <button class="menu-dropbtn">Users
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="menu-dropdown-content">
+                <a href="<?= Common::get_url('admin/user') ?>">View users</a>
+                <a href="<?= Common::get_url('admin/user/create') ?>">Create user</a>
+            </div>
+        </div>
+    <?php endif; ?>
     <div class="menu-dropdown">
-        <button class="menu-dropbtn">Logs
+        <button class="menu-dropbtn">Profile: <?= htmlspecialchars($current_user['username']) ?>
             <i class="fa fa-caret-down"></i>
         </button>
         <div class="menu-dropdown-content">
-            <a href="<?= Common::get_url('admin/approval-log') ?>">Approval logs</a>
-            <a href="<?= Common::get_url('admin/activity-log') ?>">Activity logs</a>
-        </div>
-    </div>
-    <div class="menu-dropdown">
-        <button class="menu-dropbtn">Users
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="menu-dropdown-content">
-            <a href="<?= Common::get_url('admin/user') ?>">View users</a>
-            <a href="<?= Common::get_url('admin/user/create') ?>">Create user</a>
-        </div>
-    </div>
-    <div class="menu-dropdown">
-        <button class="menu-dropbtn">Profile: <?= $current_user['username'] ?>
-            <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="menu-dropdown-content">
+            <a href="<?= Common::get_url('admin/profile') ?>">View profile</a>
             <a href="<?= Common::get_url('admin/logout') ?>">Logout</a>
         </div>
     </div>
