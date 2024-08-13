@@ -17,9 +17,44 @@ class Category
             $description = $_POST['description'] ?? '';
             $slug = $_POST['slug'] ?? '';
             $position = $_POST['position'] ?? '';
+
             $slug = self::generateSlug($slug);
             $conn = DB::db_connect();
 
+            // Validate unique name and slug
+            $errors = [];
+
+            // Check for unique name
+            $sql = "SELECT COUNT(*) as count FROM categories WHERE name = ? AND category_id != ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("si", $name, $id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+            if ($row['count'] > 0) {
+                $errors[] = "The category name '$name' is already taken.";
+            }
+
+            // Check for unique slug
+            $sql = "SELECT COUNT(*) as count FROM categories WHERE slug = ? AND category_id != ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("si", $slug, $id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+            if ($row['count'] > 0) {
+                $errors[] = "The slug '$slug' is already taken.";
+            }
+
+            // If there are validation errors, store them in session and redirect back
+            if (!empty($errors)) {
+                $_SESSION['category_errors'] = $errors;
+                $_SESSION['category_data'] = $_POST;
+                header("Location: " . ($_POST['id'] ? "/admin/category/edit?id=".$_POST['id'] : "/admin/category/create"));
+                exit();
+            }
+
+            // If no errors, proceed with saving
             if ($id == '') {
                 $sql = "INSERT INTO categories (name, status, description, position, slug) VALUES (?,?,?,?,?)";
                 $statement = $conn->prepare($sql);
@@ -41,7 +76,6 @@ class Category
             }
         }
     }
-
     private static function generateSlug($name): string
     {
         // Convert to lowercase
