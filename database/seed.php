@@ -7,78 +7,72 @@ use inc\helpers\DB;
 // Connect to MySQL server
 $conn = DB::db_connect();
 
-
-
-
-// Generate user
+// Seed users
 $sql = "SELECT count(*) as count FROM users";
 $result = $conn->query($sql);
 if ($result) {
     $row = $result->fetch_assoc();
     if ($row['count'] == 0) {
         $sql = "INSERT INTO users (username, email, password, role) VALUES
-        ('admin', 'admin@gmail.com', '$2a$12$9msGes.EQ1t3kEvK/HnWi.tb8O2wDtVLYXcvRGE/IhV2DgEoV0A4a', 'admin'),
-        ('author', 'author@gmail.com', '$2a$12$9msGes.EQ1t3kEvK/HnWi.tb8O2wDtVLYXcvRGE/IhV2DgEoV0A4a', 'author'),
-        ('editor', 'editor@gmail.com', '$2a$12$9msGes.EQ1t3kEvK/HnWi.tb8O2wDtVLYXcvRGE/IhV2DgEoV0A4a', 'editor'),
-        ('user', 'user@gmail.com', '$2a$12$89RY.tomk.SecxkYTb4E6uQEAd7yWSTrLU4VFV1wP456XsQhCxVcO', 'reader')";
+        ('admin', 'admin@gmail.com', '" . password_hash('adminpass', PASSWORD_BCRYPT) . "', 'admin'),
+        ('author', 'author@gmail.com', '" . password_hash('authorpass', PASSWORD_BCRYPT) . "', 'author'),
+        ('editor', 'editor@gmail.com', '" . password_hash('editorpass', PASSWORD_BCRYPT) . "', 'editor'),
+        ('user', 'user@gmail.com', '" . password_hash('userpass', PASSWORD_BCRYPT) . "', 'reader')";
         if ($conn->query($sql) === TRUE) {
-            echo "User inserted successfully.<br>";
+            echo "Users inserted successfully.<br>";
         } else {
-            echo "Error inserting user: " . $conn->error . "<br>";
+            echo "Error inserting users: " . $conn->error . "<br>";
         }
     }
 }
 
-$authors = [1];
-$statuses = ['draft', 'pending_approval', 'approval_retracted', 'approval_denied', 'approved', 'published_retracted', 'published'];
+// Seed posts
+$authors = [1, 2];
+$statuses = ['draft', 'pending_approval', 'approved', 'published'];
 
-for ($i = 0; $i < 11; $i++) {
-    $title = "Post Title " . ($i + 1);
-    $content = generateRandomString(10);
-    $banner_path = null;
-    $thumbnail_path = null;
+for ($i = 1; $i <= 10; $i++) {
+    $title = "Sample Post Title " . $i;
+    $content = "This is the content for Sample Post Title " . $i . ". It contains detailed information on various topics.";
+    $banner_path = "/assets/uploads/sample_banner_$i.jpg";
+    $thumbnail_path = "/assets/uploads/sample_thumbnail_$i.jpg";
     $likes = rand(0, 100);
     $status = $statuses[array_rand($statuses)];
-
+    $author = $authors[array_rand($authors)];
     $sql = "INSERT INTO posts (author_id, title, content, banner_path, thumbnail_path, likes, status) 
-          VALUES ($authors[0], '$title', '$content', '$banner_path', '$thumbnail_path', $likes, '$status')";
+            VALUES ('$author', '$title', '$content', '$banner_path', '$thumbnail_path', $likes, '$status')";
 
-    // Execute the insert query
-    $result = mysqli_query($conn, $sql);
-
-    if ($result) {
-        echo "Post " . ($i + 1) . " inserted successfully!<br>";
+    if ($conn->query($sql) === TRUE) {
+        echo "Post $i inserted successfully!<br>";
     } else {
-        echo "Error inserting post: " . mysqli_error($conn) . "<br>";
+        echo "Error inserting post $i: " . $conn->error . "<br>";
     }
 }
 
-// Generate category
+// Seed categories
 $sql = "SELECT count(*) as count FROM categories";
 $result = $conn->query($sql);
 if ($result) {
     $row = $result->fetch_assoc();
     if ($row['count'] == 0) {
         $sql = "INSERT INTO categories (name, slug, status, description) VALUES
-            ('Công nghệ', 'tech', 'enabled', '" . generateRandomString(10) . "'),
-            ('Bóng đá', 'football', 'enabled', '" . generateRandomString(10) . "'),
-            ('Du lịch', 'travel','enabled', '" . generateRandomString(10) . "'),
-            ('Sức khỏe', 'health', 'enabled', '" . generateRandomString(10) . "'),
-            ('Ẩm thực', 'food', 'enabled', '" . generateRandomString(10) . "')";
-        print($sql);
+            ('Technology', 'technology', 'enabled', 'Latest updates on technology.'),
+            ('Sports', 'sports', 'enabled', 'All about sports events and news.'),
+            ('Travel', 'travel', 'enabled', 'Travel tips and destination guides.'),
+            ('Health', 'health', 'enabled', 'Health advice and wellness tips.'),
+            ('Food', 'food', 'enabled', 'Delicious recipes and food reviews.')";
         if ($conn->query($sql) === TRUE) {
-            echo "Category inserted successfully.<br>";
+            echo "Categories inserted successfully.<br>";
         } else {
-            echo "Error inserting category: " . $conn->error . "<br>";
+            echo "Error inserting categories: " . $conn->error . "<br>";
         }
     }
 }
 
-// Generate post_categories data
+// Seed post_categories
 $sql = "REPLACE INTO post_categories (post_id, category_id) VALUES ";
 
-for ($i = 0; $i < 20; $i++) {
-    $post_id = rand(1, 10);
+for ($i = 1; $i <= 10; $i++) {
+    $post_id = $i;
     $category_id = rand(1, 5);
     $sql .= "($post_id, $category_id),";
 }
@@ -91,34 +85,33 @@ if ($conn->query($sql) === TRUE) {
     echo "Error inserting/updating post-category associations: " . $conn->error . "<br>";
 }
 
-// Generate tag
+// Seed tags
 $sql = "SELECT count(*) as count FROM tags";
 $result = $conn->query($sql);
 if ($result) {
     $row = $result->fetch_assoc();
     if ($row['count'] == 0) {
         $sql = "INSERT INTO tags (name, slug, status) VALUES
-            ('Apple', 'apple', 'enabled'),
-            ('Nike', 'nike', 'enabled'),
-            ('Coca-Cola', 'coca', 'enabled'),
-            ('Samsung', 'samsung', 'enabled'),
-            ('Google', 'google', 'enabled')";
+            ('AI', 'ai', 'enabled'),
+            ('Machine Learning', 'machine-learning', 'enabled'),
+            ('Blockchain', 'blockchain', 'enabled'),
+            ('Nutrition', 'nutrition', 'enabled'),
+            ('Fitness', 'fitness', 'enabled')";
         if ($conn->query($sql) === TRUE) {
-            echo "Tag inserted successfully.<br>";
+            echo "Tags inserted successfully.<br>";
         } else {
-            echo "Error inserting tag: " . $conn->error . "<br>";
+            echo "Error inserting tags: " . $conn->error . "<br>";
         }
     }
 }
 
-// Generate post_tags data using REPLACE INTO
-
+// Seed post_tags
 $sql = "REPLACE INTO post_tags (post_id, tag_id) VALUES ";
 
-for ($i = 0; $i < 20; $i++) {
-    $post_id = rand(1, 10);
+for ($i = 1; $i <= 10; $i++) {
+    $post_id = $i;
     $num_tags = rand(1, 3);
-    
+
     for ($j = 0; $j < $num_tags; $j++) {
         $tag_id = rand(1, 5);
         $sql .= "($post_id, $tag_id),";
@@ -133,17 +126,20 @@ if ($conn->query($sql) === TRUE) {
     echo "Error inserting/updating post-tag associations: " . $conn->error . "<br>";
 }
 
+// Seed comments
+for ($i = 1; $i <= 20; $i++) {
+    $post_id = rand(1, 10);
+    $user_id = rand(1, 4);
+    $content = "This is a comment on post $post_id by user $user_id.";
+
+    $sql = "INSERT INTO comments (post_id, user_id, content) VALUES ($post_id, $user_id, '$content')";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "Comment $i inserted successfully!<br>";
+    } else {
+        echo "Error inserting comment $i: " . $conn->error . "<br>";
+    }
+}
+
 // Close MySQL connection
 $conn->close();
-
-// Function to generate a random string
-function generateRandomString($length = 10): string
-{
-    $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    $charactersLength = strlen($characters);
-    $randomString = '';
-    for ($i = 0; $i < $length; $i++) {
-        $randomString .= $characters[rand(0, $charactersLength - 1)];
-    }
-    return $randomString;
-}
