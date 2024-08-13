@@ -21,27 +21,35 @@ class User
             $password = $_POST['password'] ?? '';
 
             if (!isset($role)) {
-                die('No role were passed to login logic');
+                die('No role was passed to the login logic');
             }
+
             $conn = DB::db_connect();
 
+            $sql = "SELECT * FROM users WHERE username = ?";
             if ($role == self::ROLE_USER) {
-                $sql = "SELECT * FROM users WHERE username = ? AND `role` = '" . self::ROLE_USER . "' ";
+                $sql .= " AND `role` = '" . self::ROLE_USER . "' ";
             } else {
-                $sql = "SELECT * FROM users WHERE username = ? AND `role` != '" . self::ROLE_USER . "' ";
+                $sql .= " AND `role` != '" . self::ROLE_USER . "' ";
             }
+
             $statement = $conn->prepare($sql);
             $statement->bind_param("s", $username);
-
             $statement->execute();
             $result = $statement->get_result();
 
-            // Check if any record was returned
             if ($result->num_rows > 0) {
-                // Fetch user data from the query result
                 $user = $result->fetch_assoc();
 
-                // Verify the entered password with the password in the database
+                if (!is_null($user['deleted_at'])) {
+                    if ($role == self::ROLE_USER) {
+                        $_SESSION['inactive_user_reader'] = true;
+                    } else {
+                        $_SESSION['inactive_user_admin'] = true;
+                    }
+                    self::redirectLogin($role);
+                }
+
                 if (password_verify($password, $user['password'])) {
                     $customUser = [
                         'id' => $user['user_id'],
@@ -55,7 +63,6 @@ class User
                     ];
                     unset($_SESSION['error_login_' . $role]);
 
-                    // Save user data to the session based on the user role
                     if ($user['role'] === self::ROLE_USER) {
                         $_SESSION['user_frontend'] = $customUser;
                         $redirectUrl = $_SESSION['redirect_url'] ?? $_GET['redirect_url'] ?? '/post';
@@ -65,18 +72,17 @@ class User
                     } else {
                         $_SESSION['user_backend'] = $customUser;
                         header("Location: /admin/post");
+                        exit();
                     }
                 } else {
                     $_SESSION['error_login_' . $role] = true;
                     self::redirectLogin($role);
                 }
             } else {
-                // Username not found in the database
                 $_SESSION['error_login_' . $role] = true;
                 self::redirectLogin($role);
             }
 
-            // Close the database connection
             $statement->close();
             $conn->close();
         }
