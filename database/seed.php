@@ -30,6 +30,7 @@ if ($result) {
 $authors = [1, 2];
 $editors = [3];
 $statuses = ['draft', 'pending_approval', 'approved', 'published'];
+$deleted_at = null;
 
 for ($i = 1; $i <= 10; $i++) {
     $title = "Sample Post Title " . $i;
@@ -43,8 +44,15 @@ for ($i = 1; $i <= 10; $i++) {
     $editor_id = ($status !== 'draft') ? $editors[array_rand($editors)] : null;
     $published_at = ($status === 'published') ? date('Y-m-d H:i:s') : null;
 
-    $sql = "INSERT INTO posts (author_id, editor_id, title, slug, content, banner_path, thumbnail_path, likes, status, published_at) 
-            VALUES ('$author', " . ($editor_id ? "'$editor_id'" : "NULL") . ", '$title', '$slug', '$content', '$banner_path', '$thumbnail_path', $likes, '$status', " . ($published_at ? "'$published_at'" : "NULL") . ")";
+    // Randomly assign some posts as soft-deleted
+    if (rand(0, 1)) {
+        $deleted_at = date('Y-m-d H:i:s', strtotime("-" . rand(1, 10) . " days"));
+    } else {
+        $deleted_at = null;
+    }
+
+    $sql = "INSERT INTO posts (author_id, editor_id, title, slug, content, banner_path, thumbnail_path, likes, status, published_at, deleted_at) 
+            VALUES ('$author', " . ($editor_id ? "'$editor_id'" : "NULL") . ", '$title', '$slug', '$content', '$banner_path', '$thumbnail_path', $likes, '$status', " . ($published_at ? "'$published_at'" : "NULL") . ", " . ($deleted_at ? "'$deleted_at'" : "NULL") . ")";
 
     if ($conn->query($sql) === TRUE) {
         echo "Post $i inserted successfully!<br>";

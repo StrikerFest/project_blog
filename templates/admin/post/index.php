@@ -41,11 +41,10 @@ Common::requireTemplate('admin/layouts/headers.php', [
 
                 <td>
                     <?php
-                    // Check if 'categories' key exists in the post data
                     if (isset($post_category_ids) && count($post_category_ids) > 0) {
-                        echo implode(', ',$post_category_ids);
+                        echo implode(', ', $post_category_ids);
                     } else {
-                        echo 'No Categories'; // Display a message if no categories exist
+                        echo 'No Categories';
                     }
                     ?>
                 </td>
@@ -53,16 +52,22 @@ Common::requireTemplate('admin/layouts/headers.php', [
                 <td>
                     <?php
                     if (isset($post_tag_ids)) {
-                        echo implode(',',$post_tag_ids);
+                        echo implode(', ', $post_tag_ids);
                     } else {
-                        echo 'No Tags'; 
+                        echo 'No Tags';
                     }
                     ?>
                 </td>
 
                 <td><?php echo htmlspecialchars($post['status']); ?></td>
-                <td><a href="post/edit?id=<?= $post['post_id']; ?>" class="btn">Edit</a>
-                    <a href="post/delete?id=<?= $post['post_id']; ?>" class="btn">Delete</a></td>
+                <td>
+                    <?php if ($post['deleted_at']): ?>
+                        <a href="post/delete?action=recover&id=<?= $post['post_id']; ?>" class="btn btn-recover">Recover</a>
+                    <?php else: ?>
+                        <a href="post/edit?id=<?= $post['post_id']; ?>" class="btn">Edit</a>
+                        <a href="post/delete?action=delete&id=<?= $post['post_id']; ?>" class="btn btn-delete">Delete</a>
+                    <?php endif; ?>
+                </td>
             </tr>
         <?php endforeach; ?>
         </tbody>
@@ -76,6 +81,31 @@ Common::requireTemplate('admin/layouts/footer.php');
     $(document).ready(function() {
         $('#listing-table').DataTable({
             "searching": true
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteButtons = document.querySelectorAll('.btn-delete');
+        const recoverButtons = document.querySelectorAll('.btn-recover');
+
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+                const confirmDelete = confirm('Are you sure you want to delete this post?');
+                if (confirmDelete) {
+                    window.location.href = this.href;
+                }
+            });
+        });
+
+        recoverButtons.forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+                const confirmRecover = confirm('Are you sure you want to recover this post?');
+                if (confirmRecover) {
+                    window.location.href = this.href;
+                }
+            });
         });
     });
 </script>

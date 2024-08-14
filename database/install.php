@@ -34,7 +34,7 @@ $sql = "
     CREATE TABLE IF NOT EXISTS `posts` (
         `post_id` INT AUTO_INCREMENT PRIMARY KEY,
         `author_id` INT,
-        `editor_id` INT DEFAULT NULL, 
+        `editor_id` INT DEFAULT NULL,
         `title` VARCHAR(255) NOT NULL,
         `slug` VARCHAR(255) NOT NULL UNIQUE,
         `content` TEXT NOT NULL,
@@ -45,8 +45,9 @@ $sql = "
         `published_at` TIMESTAMP NULL,
         `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        `deleted_at` TIMESTAMP NULL DEFAULT NULL,
         FOREIGN KEY (author_id) REFERENCES users(user_id),
-        FOREIGN KEY (editor_id) REFERENCES users(user_id) 
+        FOREIGN KEY (editor_id) REFERENCES users(user_id)
     );
 
     CREATE TABLE categories (

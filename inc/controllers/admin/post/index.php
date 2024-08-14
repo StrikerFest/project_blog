@@ -4,9 +4,10 @@ require $_ENV['AUTOLOAD'];
 use inc\helpers\Common;
 use inc\models\Post;
 
-// Import template của index
+$posts = Post::getPosts('asc', false, true);
+
 Common::requireTemplate('admin/post/index.php', [
-    'posts' => Post::getPosts('desc', false),
+    'posts' => $posts,
 ]);
 
 exit;

@@ -58,6 +58,7 @@ class Post
                     $id = $statement->insert_id;
                 }
 
+                // Handle categories
                 $sql = "DELETE FROM post_categories WHERE post_id = ?";
                 $statement = $conn->prepare($sql);
                 $statement->bind_param("s", $id);
@@ -70,6 +71,7 @@ class Post
                     $statement->execute();
                 }
 
+                // Handle tags
                 $sql = "DELETE FROM post_tags WHERE post_id = ?";
                 $statement = $conn->prepare($sql);
                 $statement->bind_param("s", $id);
@@ -97,16 +99,29 @@ class Post
         return strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $title)));
     }
 
-    public static function getPosts($sortOrder = 'asc', $published = true): array
+    public static function getPosts($sortOrder = 'asc', $published = true, $includeDeleted = false): array
     {
         $conn = DB::db_connect();
 
-        if ($published) {
-            $sql = "SELECT * FROM posts WHERE status = 'published' ORDER BY post_id DESC";
+        // Base SQL query
+        $sql = "SELECT * FROM posts";
+
+        // Conditionally add the WHERE clause based on whether deleted posts should be included
+        if (!$includeDeleted) {
+            $sql .= " WHERE deleted_at IS NULL";
         } else {
-            $sql = "SELECT * FROM posts ORDER BY post_id $sortOrder";
+            $sql .= " WHERE 1=1"; // Dummy condition to make appending other conditions easier
         }
 
+        // Add the condition for published status if necessary
+        if ($published) {
+            $sql .= " AND status = 'published'";
+        }
+
+        // Append the ORDER BY clause
+        $sql .= " ORDER BY post_id $sortOrder";
+
+        // Execute the query
         $result = $conn->query($sql);
         $posts = [];
         if ($result->num_rows > 0) {
@@ -114,9 +129,13 @@ class Post
                 $posts[] = $row;
             }
         }
+
+        // Close the connection
         $conn->close();
+
         return $posts;
     }
+
 
     public static function getPostById($id): bool|array|null
     {
@@ -125,14 +144,40 @@ class Post
         }
 
         $conn = DB::db_connect();
-        $sql = "SELECT * FROM posts WHERE post_id=$id";
-        $result = $conn->query($sql);
+        $sql = "SELECT * FROM posts WHERE post_id = ? AND deleted_at IS NULL";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
         $post = null;
         if ($result->num_rows == 1) {
             $post = $result->fetch_assoc();
         }
+        $stmt->close();
         $conn->close();
         return $post;
+    }
+
+    public static function softDeletePost($id): void
+    {
+        $conn = DB::db_connect();
+        $sql = "UPDATE posts SET deleted_at = NOW() WHERE post_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $stmt->close();
+        $conn->close();
+    }
+
+    public static function restorePost($id): void
+    {
+        $conn = DB::db_connect();
+        $sql = "UPDATE posts SET deleted_at = NULL WHERE post_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $stmt->close();
+        $conn->close();
     }
 
     public static function getPostsByCategoryId($categoryId, $limit = 3): array
