@@ -31,16 +31,44 @@ foreach ($categories as $category) {
 <link rel="stylesheet" href="<?= Common::getAssetPath('css/user/category/all_categories_page.css') ?>">
 <body>
 <?php Common::requireTemplate('user/layouts/menu.php', []); ?>
-<div class="all-categories-container">
-    <h1>All Categories</h1>
-    <div class="all-categories-list">
-        <?php foreach ($categories as $category) : ?>
-            <div class="all-categories-list-item">
-                <a href="/category/<?= $category['slug']; ?>">
-                    <?= $category['name']; ?> [<?= $category_post_counts[$category['category_id']]; ?>]
-                </a>
+
+<div class="page-container">
+    <!-- Left 3/4 Section -->
+    <div class="content-section">
+        <!-- Header Banner -->
+        <div class="header-banner">
+            <?php Common::requireTemplate('user/layouts/header_banner.php', [
+                'banner_image' => Common::getAssetPath('images/line.jpg') // Replace with dynamic banner path
+            ]); ?>
+        </div>
+
+        <div class="all-categories-container">
+            <h1>All Categories</h1>
+            <div class="all-categories-list">
+                <?php foreach ($categories as $category) : ?>
+                    <div class="all-categories-list-item">
+                        <a href="/category/<?= $category['slug']; ?>">
+                            <?= $category['name']; ?> [<?= $category_post_counts[$category['category_id']]; ?>]
+                        </a>
+                    </div>
+                <?php endforeach; ?>
             </div>
-        <?php endforeach; ?>
+        </div>
+
+        <!-- Footer Banner -->
+        <div class="footer-banner">
+            <?php Common::requireTemplate('user/layouts/footer_banner.php', [
+                'banner_image' => Common::getAssetPath('images/line.jpg') // Replace with dynamic banner path
+            ]); ?>
+        </div>
+    </div>
+
+    <!-- Right 1/4 Section (Sidebar) -->
+    <div class="side-banner-section">
+        <?php Common::requireTemplate('user/layouts/side_banner_right.php', [
+            'banner_image' => Common::getAssetPath('images/300x1270_placeholder_banner.webp') // Replace with dynamic banner path
+        ]); ?>
     </div>
 </div>
+
 </body>

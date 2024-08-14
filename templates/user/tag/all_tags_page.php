@@ -31,16 +31,44 @@ foreach ($tags as $tag) {
 <link rel="stylesheet" href="<?= Common::getAssetPath('css/user/tag/all_tags_page.css') ?>">
 <body>
 <?php Common::requireTemplate('user/layouts/menu.php', []); ?>
-<div class="all-tags-container">
-    <h1>All Tags</h1>
-    <div class="all-tags-list">
-        <?php foreach ($tags as $tag) : ?>
-            <div class="all-tags-list-item">
-                <a href="/tag/<?= $tag['slug']; ?>">
-                    <?= $tag['name']; ?> [<?= $tag_post_counts[$tag['tag_id']]; ?>]
-                </a>
+
+<div class="page-container">
+    <!-- Left 3/4 Section -->
+    <div class="content-section">
+        <!-- Header Banner -->
+        <div class="header-banner">
+            <?php Common::requireTemplate('user/layouts/header_banner.php', [
+                'banner_image' => Common::getAssetPath('images/line.jpg')
+            ]); ?>
+        </div>
+
+        <div class="all-tags-container">
+            <h1>All Tags</h1>
+            <div class="all-tags-list">
+                <?php foreach ($tags as $tag) : ?>
+                    <div class="all-tags-list-item">
+                        <a href="/tag/<?= $tag['slug']; ?>">
+                            <?= $tag['name']; ?> [<?= $tag_post_counts[$tag['tag_id']]; ?>]
+                        </a>
+                    </div>
+                <?php endforeach; ?>
             </div>
-        <?php endforeach; ?>
+        </div>
+
+        <!-- Footer Banner -->
+        <div class="footer-banner">
+            <?php Common::requireTemplate('user/layouts/footer_banner.php', [
+                'banner_image' => Common::getAssetPath('images/line.jpg')
+            ]); ?>
+        </div>
+    </div>
+
+    <!-- Right 1/4 Section (Sidebar) -->
+    <div class="side-banner-section">
+        <?php Common::requireTemplate('user/layouts/side_banner_right.php', [
+            'banner_image' => Common::getAssetPath('images/300x1270_placeholder_banner.webp')
+        ]); ?>
     </div>
 </div>
+
 </body>
