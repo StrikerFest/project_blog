@@ -36,23 +36,17 @@ for ($i = 1; $i <= 10; $i++) {
     $title = "Sample Post Title " . $i;
     $slug = strtolower(str_replace(' ', '-', $title));
     $content = "This is the content for Sample Post Title " . $i . ". It contains detailed information on various topics.";
-    $banner_path = "/assets/uploads/sample_banner_$i.jpg";
-    $thumbnail_path = "/assets/uploads/sample_thumbnail_$i.jpg";
+    $banner_path = "/assets/images/placeholder-banner.webp";
+    $thumbnail_path = "/assets/images/placeholder-thumbnail.webp";
     $likes = rand(0, 100);
-    $status = $statuses[array_rand($statuses)];
+    $status = 'published';
     $author = $authors[array_rand($authors)];
-    $editor_id = ($status !== 'draft') ? $editors[array_rand($editors)] : null;
-    $published_at = ($status === 'published') ? date('Y-m-d H:i:s') : null;
-
-    // Randomly assign some posts as soft-deleted
-    if (rand(0, 1)) {
-        $deleted_at = date('Y-m-d H:i:s', strtotime("-" . rand(1, 10) . " days"));
-    } else {
-        $deleted_at = null;
-    }
+    $editor_id = $editors[array_rand($editors)];
+    $published_at = date('Y-m-d H:i:s');
+    $deleted_at = null;
 
     $sql = "INSERT INTO posts (author_id, editor_id, title, slug, content, banner_path, thumbnail_path, likes, status, published_at, deleted_at) 
-            VALUES ('$author', " . ($editor_id ? "'$editor_id'" : "NULL") . ", '$title', '$slug', '$content', '$banner_path', '$thumbnail_path', $likes, '$status', " . ($published_at ? "'$published_at'" : "NULL") . ", " . ($deleted_at ? "'$deleted_at'" : "NULL") . ")";
+            VALUES ('$author', '$editor_id', '$title', '$slug', '$content', '$banner_path', '$thumbnail_path', $likes, '$status', '$published_at', NULL)";
 
     if ($conn->query($sql) === TRUE) {
         echo "Post $i inserted successfully!<br>";
@@ -167,6 +161,105 @@ for ($i = 1; $i <= 20; $i++) {
     } else {
         echo "Error inserting comment $i: " . $conn->error . "<br>";
     }
+}
+
+// Seed banner types
+$sql = "SELECT count(*) as count FROM banner_types";
+$result = $conn->query($sql);
+if ($result) {
+    $row = $result->fetch_assoc();
+    if ($row['count'] == 0) {
+        $sql = "INSERT INTO `banner_types` (`name`, `description`) VALUES
+           ('Header', 'Banners displayed at the top of the page'),
+           ('Sidebar', 'Banners displayed on the sidebar of the page'),
+           ('Footer', 'Banners displayed at the bottom of the page'),
+           ('Inline', 'Banners displayed within the content of the page')";
+
+        if ($conn->query($sql) === TRUE) {
+            echo "Banner types inserted successfully!<br>";
+        } else {
+            echo "Error inserting banner types: " . $conn->error . "<br>";
+        }
+    }
+}
+
+// Seed banners
+$banners = [
+    [
+        'title' => 'Header Banner 1',
+        'image_path' => '/assets/images/line.jpg',
+        'text' => 'Discover the newest gadgets and electronics on our blog. Click here to read more!',
+        'link' => 'https://techblog.com/gadgets',
+        'start_date' => '2024-08-01 00:00:00',
+        'end_date' => '2024-12-31 23:59:59',
+        'is_active' => 1,
+        'type_id' => 1, // Header
+        'position' => 0
+    ],
+    [
+        'title' => 'Subscribe to Our Newsletter',
+        'image_path' => '/assets/uploads/banner_newsletter.jpg',
+        'text' => 'Stay updated with the latest tech news. Subscribe to our newsletter!',
+        'link' => 'https://techblog.com/newsletter',
+        'start_date' => '2024-08-01 00:00:00',
+        'end_date' => '2024-12-31 23:59:59',
+        'is_active' => 1,
+        'type_id' => 1, // Header
+        'position' => 1
+    ],
+    [
+        'title' => 'Top 10 Coding Practices',
+        'image_path' => '/assets/images/300x1270_placeholder_banner.webp',
+        'text' => 'Enhance your coding skills with our top 10 coding practices. Click here to learn more!',
+        'link' => 'https://techblog.com/coding-practices',
+        'start_date' => '2024-08-01 00:00:00',
+        'end_date' => '2024-12-31 23:59:59',
+        'is_active' => 1,
+        'type_id' => 2, // Sidebar
+        'position' => 0
+    ],
+    [
+        'title' => 'Cybersecurity Tips',
+        'image_path' => '/assets/uploads/banner_cybersecurity.jpg',
+        'text' => 'Protect yourself online with our top cybersecurity tips. Click here to read more!',
+        'link' => 'https://techblog.com/cybersecurity-tips',
+        'start_date' => '2024-08-01 00:00:00',
+        'end_date' => '2024-10-31 23:59:59',
+        'is_active' => 1,
+        'type_id' => 2, // Sidebar
+        'position' => 1
+    ],
+    [
+        'title' => 'Join Our Webinar',
+        'image_path' => '/assets/images/1270x300_placeholder_banner.webp',
+        'text' => 'Join our free webinar on the future of AI. Click here to register!',
+        'link' => 'https://techblog.com/webinar',
+        'start_date' => '2024-08-01 00:00:00',
+        'end_date' => '2024-08-31 23:59:59',
+        'is_active' => 1,
+        'type_id' => 3, // Footer
+        'position' => 0
+    ],
+    [
+        'title' => 'Latest Tech Reviews',
+        'image_path' => '/assets/uploads/banner_reviews.jpg',
+        'text' => 'Read our latest reviews on the newest tech products. Click here to check them out!',
+        'link' => 'https://techblog.com/reviews',
+        'start_date' => '2024-08-01 00:00:00',
+        'end_date' => '2024-11-30 23:59:59',
+        'is_active' => 1,
+        'type_id' => 4, // Inline
+        'position' => 0
+    ],
+];
+
+foreach ($banners as $banner) {
+    $sql = "INSERT INTO banners (title, image_path, text, link, start_date, end_date, is_active, type_id, position) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('ssssssiis', $banner['title'], $banner['image_path'], $banner['text'], $banner['link'], $banner['start_date'], $banner['end_date'], $banner['is_active'], $banner['type_id'], $banner['position']);
+    $stmt->execute();
+    $stmt->close();
 }
 
 // Close MySQL connection

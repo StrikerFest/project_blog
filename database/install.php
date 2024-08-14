@@ -129,27 +129,12 @@ CREATE TABLE IF NOT EXISTS `banners` (
      `end_date` DATETIME NOT NULL,
      `is_active` BOOLEAN DEFAULT TRUE,
      `type_id` INT,
+     `position` INT NOT NULL DEFAULT 0,
      `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
      `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
      `deleted_at` TIMESTAMP NULL DEFAULT NULL,
      FOREIGN KEY (`type_id`) REFERENCES `banner_types`(`id`)
 );
-
--- Insert data into banner_types table
-INSERT INTO `banner_types` (`name`, `description`) VALUES
-   ('Header', 'Banners displayed at the top of the page'),
-   ('Sidebar', 'Banners displayed on the sidebar of the page'),
-   ('Footer', 'Banners displayed at the bottom of the page'),
-   ('Inline', 'Banners displayed within the content of the page');
-
--- Insert data into banners table
-INSERT INTO `banners` (`title`, `image_path`, `text`, `link`, `start_date`, `end_date`, `is_active`, `type_id`) VALUES
-    ('Get the Latest Tech Gadgets!', '/assets/uploads/banner_gadgets.jpg', 'Discover the newest gadgets and electronics on our blog. Click here to read more!', 'https://techblog.com/gadgets', '2024-08-01 00:00:00', '2024-12-31 23:59:59', TRUE, 1),
-    ('Top 10 Coding Practices', '/assets/uploads/banner_coding.jpg', 'Enhance your coding skills with our top 10 coding practices. Click here to learn more!', 'https://techblog.com/coding-practices', '2024-08-01 00:00:00', '2024-12-31 23:59:59', TRUE, 2),
-    ('Join Our Webinar', '/assets/uploads/banner_webinar.jpg', 'Join our free webinar on the future of AI. Click here to register!', 'https://techblog.com/webinar', '2024-08-01 00:00:00', '2024-08-31 23:59:59', TRUE, 3),
-    ('Latest Tech Reviews', '/assets/uploads/banner_reviews.jpg', 'Read our latest reviews on the newest tech products. Click here to check them out!', 'https://techblog.com/reviews', '2024-08-01 00:00:00', '2024-11-30 23:59:59', TRUE, 4),
-    ('Subscribe to Our Newsletter', '/assets/uploads/banner_newsletter.jpg', 'Stay updated with the latest tech news. Subscribe to our newsletter!', 'https://techblog.com/newsletter', '2024-08-01 00:00:00', '2024-12-31 23:59:59', TRUE, 1),
-    ('Cybersecurity Tips', '/assets/uploads/banner_cybersecurity.jpg', 'Protect yourself online with our top cybersecurity tips. Click here to read more!', 'https://techblog.com/cybersecurity-tips', '2024-08-01 00:00:00', '2024-10-31 23:59:59', TRUE, 2);
 
 -- Create the approval_logs table
 CREATE TABLE IF NOT EXISTS `approval_logs` (

@@ -169,4 +169,26 @@ class Banner
 
         return $type['name'] ?? 'Unknown Type';
     }
+
+    public static function getBannerByType($type)
+    {
+        $conn = DB::db_connect();
+        $sql = "
+        SELECT * FROM banners 
+        WHERE type_id = (SELECT id FROM banner_types WHERE name = ?) 
+          AND is_active = 1 
+          AND deleted_at IS NULL
+        ORDER BY position ASC, id DESC
+        LIMIT 1";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('s', $type);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $banner = $result->fetch_assoc();
+
+        $stmt->close();
+        $conn->close();
+
+        return $banner['image_path'] ?? null;
+    }
 }

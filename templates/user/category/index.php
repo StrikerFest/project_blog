@@ -12,7 +12,10 @@ use inc\helpers\Common;
 use inc\models\Category;
 use inc\models\Post;
 
-// Header
+use inc\models\Banner;
+$headerBanner = Banner::getBannerByType('Header');
+$sideBanner = Banner::getBannerByType('Sidebar');
+$footerBanner = Banner::getBannerByType('Footer');
 Common::requireTemplate('user/layouts/headers.php', [
     'title' => 'Bờ Lốc'
 ]);
@@ -27,7 +30,7 @@ Common::requireTemplate('user/layouts/headers.php', [
         <!-- Header Banner -->
         <div class="header-banner">
             <?php Common::requireTemplate('user/layouts/header_banner.php', [
-                'banner_image' => Common::getAssetPath('images/line.jpg') // Replace with dynamic banner path
+                'banner_image' => $headerBanner
             ]); ?>
         </div>
 
@@ -80,7 +83,7 @@ Common::requireTemplate('user/layouts/headers.php', [
         <!-- Footer Banner -->
         <div class="footer-banner">
             <?php Common::requireTemplate('user/layouts/footer_banner.php', [
-                'banner_image' => Common::getAssetPath('images/line.jpg') // Replace with dynamic banner path
+                'banner_image' => $footerBanner
             ]); ?>
         </div>
     </div>
@@ -88,7 +91,7 @@ Common::requireTemplate('user/layouts/headers.php', [
     <!-- Right 1/4 Section (Sidebar) -->
     <div class="side-banner-section">
         <?php Common::requireTemplate('user/layouts/side_banner_right.php', [
-            'banner_image' => Common::getAssetPath('images/300x1270_placeholder_banner.webp') // Replace with dynamic banner path
+            'banner_image' => $sideBanner
         ]); ?>
     </div>
 </div>

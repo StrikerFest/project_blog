@@ -12,7 +12,11 @@ use inc\helpers\Common;
 use inc\models\Tag;
 use inc\models\Post;
 
-// Header
+
+use inc\models\Banner;
+$headerBanner = Banner::getBannerByType('Header');
+$sideBanner = Banner::getBannerByType('Sidebar');
+$footerBanner = Banner::getBannerByType('Footer');
 Common::requireTemplate('user/layouts/headers.php', [
     'title' => 'All Tags'
 ]);
@@ -38,7 +42,7 @@ foreach ($tags as $tag) {
         <!-- Header Banner -->
         <div class="header-banner">
             <?php Common::requireTemplate('user/layouts/header_banner.php', [
-                'banner_image' => Common::getAssetPath('images/line.jpg')
+                'banner_image' => $headerBanner
             ]); ?>
         </div>
 
@@ -58,7 +62,7 @@ foreach ($tags as $tag) {
         <!-- Footer Banner -->
         <div class="footer-banner">
             <?php Common::requireTemplate('user/layouts/footer_banner.php', [
-                'banner_image' => Common::getAssetPath('images/line.jpg')
+                'banner_image' => $footerBanner
             ]); ?>
         </div>
     </div>
@@ -66,7 +70,7 @@ foreach ($tags as $tag) {
     <!-- Right 1/4 Section (Sidebar) -->
     <div class="side-banner-section">
         <?php Common::requireTemplate('user/layouts/side_banner_right.php', [
-            'banner_image' => Common::getAssetPath('images/300x1270_placeholder_banner.webp')
+            'banner_image' => $sideBanner
         ]); ?>
     </div>
 </div>
