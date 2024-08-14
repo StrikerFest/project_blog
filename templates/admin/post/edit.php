@@ -22,8 +22,8 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
 
 <body>
 <div class="edit-container">
-    <?php if (isset($post['id'])): ?>
-        <h1 class="edit-title">Update Post ID: <?= $post['id'] ?></h1>
+    <?php if (isset($post['post_id'])): ?>
+        <h1 class="edit-title">Update Post ID: <?= $post['post_id'] ?></h1>
     <?php else: ?>
         <h1 class="edit-title">Create New Post</h1>
     <?php endif; ?>
@@ -163,13 +163,32 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
         </div>
 
         <div class="edit-field">
+            <label for="post-edit-editor">Assign Editor:</label>
+            <select id="post-edit-editor" name="editor_id" <?= $post['status'] === 'draft' ? 'disabled' : '' ?>>
+                <?php foreach ($args['editors'] as $editor): ?>
+                    <option value="<?= $editor['user_id'] ?>" <?= $post['editor_id'] == $editor['user_id'] ? 'selected' : '' ?>>
+                        <?= $editor['username'] ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        
+        <div class="edit-field">
             <button type="submit" class="edit-btn">Save Post</button>
         </div>
     </form>
 </div>
-<script src="https://cdn.ckeditor.com/4.24.0-lts/standard/ckeditor.js"></script>
+
+<!-- Include CKEditor 5 from CDN -->
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
 <script>
-    CKEDITOR.replace('post-edit-content');
+    // Initialize CKEditor 5 on the textarea
+    ClassicEditor
+        .create(document.querySelector('#post-edit-content'))
+        .catch(error => {
+            console.error(error);
+        });
 </script>
+
 <script src="<?= Common::getAssetPath('js/script.js') ?>"></script>
 </body>

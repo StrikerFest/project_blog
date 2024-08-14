@@ -11,6 +11,10 @@ if (isset($_SESSION['user_frontend'])) {
     exit();
 }
 
+use inc\models\Banner;
+$headerBanner = Banner::getBannerByType('Header');
+$sideBanner = Banner::getBannerByType('Sidebar');
+$footerBanner = Banner::getBannerByType('Footer');
 Common::requireTemplate('user/layouts/headers.php', [
     'title' => 'Sign Up'
 ]);

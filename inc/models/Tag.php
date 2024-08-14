@@ -10,23 +10,57 @@ class Tag
     public static function save_tag(): void
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
             $id = $_POST['id'] ?? '';
             $name = $_POST['name'] ?? '';
-            $slug = $_POST['slug'] ?? '';
-            $slug = self::generateSlug($slug); // Generate slug from name
             $status = $_POST['status'] ?? '';
+            $slug = $_POST['slug'] ?? '';
             $position = $_POST['position'] ?? '';
+
+            $slug = self::generateSlug($slug);
             $conn = DB::db_connect();
 
+            // Validate unique name and slug
+            $errors = [];
+
+            // Check for unique name
+            $sql = "SELECT COUNT(*) as count FROM tags WHERE name = ? AND tag_id != ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("si", $name, $id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+            if ($row['count'] > 0) {
+                $errors[] = "The tag name '$name' is already taken.";
+            }
+
+            // Check for unique slug
+            $sql = "SELECT COUNT(*) as count FROM tags WHERE slug = ? AND tag_id != ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("si", $slug, $id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+            if ($row['count'] > 0) {
+                $errors[] = "The slug '$slug' is already taken.";
+            }
+
+            // If there are validation errors, store them in session and redirect back
+            if (!empty($errors)) {
+                $_SESSION['tag_errors'] = $errors;
+                $_SESSION['tag_data'] = $_POST;
+                header("Location: " . ($_POST['id'] ? "/admin/tag/edit?id=" . $_POST['id'] : "/admin/tag/create"));
+                exit();
+            }
+
+            // If no errors, proceed with saving
             if ($id == '') {
-                $sql = "INSERT INTO tags (name, slug, status, position) VALUES (?,?,?,?)";
+                $sql = "INSERT INTO tags (name, status, slug, position) VALUES (?,?,?,?)";
                 $statement = $conn->prepare($sql);
-                $statement->bind_param("sssi", $name, $slug, $status, $position);
+                $statement->bind_param("ssss", $name, $status, $slug, $position);
             } else {
-                $sql = "UPDATE tags SET name = ?, slug = ?, status = ?, position = ? WHERE tag_id = ?";
+                $sql = "UPDATE tags SET name = ?, status = ?, slug = ?, position = ?, updated_at = CURRENT_TIMESTAMP WHERE tag_id = ?";
                 $statement = $conn->prepare($sql);
-                $statement->bind_param("sssii", $name, $slug, $status, $position, $id);
+                $statement->bind_param("ssssi", $name, $status, $slug, $position, $id);
             }
             $statement->execute();
 
@@ -53,10 +87,14 @@ class Tag
         return trim($slug, '-');
     }
 
-    public static function getTags(): array
+    public static function getTags($includeDeleted = false): array
     {
         $conn = DB::db_connect();
-        $sql = "SELECT * FROM tags ORDER BY tag_id asc";
+        $sql = "SELECT * FROM tags";
+        if (!$includeDeleted) {
+            $sql .= " WHERE deleted_at IS NULL";
+        }
+        $sql .= " ORDER BY tag_id ASC";
         $result = $conn->query($sql);
         $tags = [];
         if ($result->num_rows > 0) {
@@ -71,12 +109,16 @@ class Tag
     public static function getTagById($id): bool|array|null
     {
         $conn = DB::db_connect();
-        $sql = "SELECT * FROM tags WHERE tag_id=$id";
-        $result = $conn->query($sql);
+        $sql = "SELECT * FROM tags WHERE tag_id = ? AND deleted_at IS NULL";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
         $tag = null;
         if ($result->num_rows == 1) {
             $tag = $result->fetch_assoc();
         }
+        $stmt->close();
         $conn->close();
         return $tag;
     }
@@ -84,8 +126,22 @@ class Tag
     public static function deleteTag($id): void
     {
         $conn = DB::db_connect();
-        $sql = "DELETE FROM tags WHERE tag_id=$id";
-        $conn->query($sql);
+        $sql = "UPDATE tags SET deleted_at = CURRENT_TIMESTAMP WHERE tag_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $stmt->close();
+        $conn->close();
+    }
+
+    public static function recoverTag($id): void
+    {
+        $conn = DB::db_connect();
+        $sql = "UPDATE tags SET deleted_at = NULL WHERE tag_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $stmt->close();
         $conn->close();
     }
 

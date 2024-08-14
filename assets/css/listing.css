@@ -1,49 +1,49 @@
-.listing-container {
-    width: 80%;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    background-color: #f9f9f9;
-}
+/*.listing-container {*/
+/*    width: 80%;*/
+/*    margin: 0 auto;*/
+/*    padding: 20px;*/
+/*    border: 1px solid #ddd;*/
+/*    border-radius: 8px;*/
+/*    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+/*    background-color: #f9f9f9;*/
+/*}*/
 
-.listing-table {
-    width: 100%;
-    border-collapse: collapse;
-}
+/*.listing-table {*/
+/*    width: 100%;*/
+/*    border-collapse: collapse;*/
+/*}*/
 
-.listing-table th {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px;
-}
+/*.listing-table th {*/
+/*    background-color: #4CAF50;*/
+/*    color: white;*/
+/*    padding: 10px;*/
+/*}*/
 
-.listing-table td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-}
+/*.listing-table td {*/
+/*    padding: 10px;*/
+/*    border-bottom: 1px solid #ddd;*/
+/*}*/
 
-.listing-table tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
+/*.listing-table tr:nth-child(even) {*/
+/*    background-color: #f2f2f2;*/
+/*}*/
 
-.listing-table tr:nth-child(odd) {
-    background-color: #fff;
-}
+/*.listing-table tr:nth-child(odd) {*/
+/*    background-color: #fff;*/
+/*}*/
 
-.listing-table tr:hover {
-    background-color: #ddd;
-}
+/*.listing-table tr:hover {*/
+/*    background-color: #ddd;*/
+/*}*/
 
-.listing-table .btn {
-    padding: 5px 10px;
-    background-color: #4CAF50;
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
-}
+/*.listing-table .btn {*/
+/*    padding: 5px 10px;*/
+/*    background-color: #4CAF50;*/
+/*    color: white;*/
+/*    text-decoration: none;*/
+/*    border-radius: 4px;*/
+/*}*/
 
-.listing-table .btn:hover {
-    background-color: #45a049;
-}
+/*.listing-table .btn:hover {*/
+/*    background-color: #45a049;*/
+/*}*/

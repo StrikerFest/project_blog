@@ -12,7 +12,10 @@ use inc\helpers\Common;
 use inc\models\Tag;
 use inc\models\Post;
 
-// Header
+use inc\models\Banner;
+$headerBanner = Banner::getBannerByType('Header');
+$sideBanner = Banner::getBannerByType('Sidebar');
+$footerBanner = Banner::getBannerByType('Footer');
 Common::requireTemplate('user/layouts/headers.php', [
     'title' => 'Bờ Lốc'
 ]);
@@ -20,49 +23,77 @@ Common::requireTemplate('user/layouts/headers.php', [
 <link rel="stylesheet" href="<?= Common::getAssetPath('css/user/tag/index.css') ?>">
 <body>
 <?php Common::requireTemplate('user/layouts/menu.php', []); ?>
-<div class="tag-index-container">
-    <h1>Blog Tags</h1>
-    <section class="tag-index-important-tags">
-        <div class="tag-index-buttons">
-            <?php
-            $tag_ids = Tag::getTagsByPosition(9);
-            $tag_posts = [];
-            $tags = [];
 
-            foreach ($tag_ids as $tag_id) {
-                $tag_posts[$tag_id] = Post::getPostsByTagId($tag_id);
-                $tags[] = Tag::getTagById($tag_id);
-            }
-            ?>
-            <?php foreach ($tags as $tag) : ?>
-                <a href="/tag/<?= $tag['slug']; ?>">
-                    <button>
-                        <?= $tag['name']; ?>
-                    </button>
-                </a>
-            <?php endforeach; ?>
-            <a href="/tag-all" class="tag-index-all-tags">
-                <button>View all tags</button>
-            </a>
+<div class="page-container">
+    <!-- Left 3/4 Section -->
+    <div class="content-section">
+        <!-- Header Banner -->
+        <div class="header-banner">
+            <?php Common::requireTemplate('user/layouts/header_banner.php', [
+                'banner_image' => $headerBanner
+            ]); ?>
         </div>
-    </section>
-    <section class="tag-index-tags">
-        <?php foreach ($tags as $tag) : ?>
-            <?php if (!empty($tag_posts[$tag['tag_id']])) : ?>
-                <a href="/tag/<?= $tag['slug']; ?>"><h2 class="tag-index-tag-title"><?= $tag['name']; ?></h2></a>
-                <div class="tag-index-cards">
-                    <?php foreach ($tag_posts[$tag['tag_id']] as $post) : ?>
-                        <a href="/post/show?post_id=<?= $post['post_id'] ?>" class="tag-index-card">
-                                <img src="<?= empty($post['thumbnail_path']) ? PH_THUMBNAIL : $post['thumbnail_path'] ?>" alt="<?= $post['title']; ?>">
-                                <div class="tag-index-card-title"><?= $post['title']; ?></div>
+
+        <div class="tag-index-container">
+            <h1>Blog Tags</h1>
+            <section class="tag-index-important-tags">
+                <div class="tag-index-buttons">
+                    <?php
+                    $tag_ids = Tag::getTagsByPosition(9);
+                    $tag_posts = [];
+                    $tags = [];
+
+                    foreach ($tag_ids as $tag_id) {
+                        $tag_posts[$tag_id] = Post::getPostsByTagId($tag_id);
+                        $tags[] = Tag::getTagById($tag_id);
+                    }
+                    ?>
+                    <?php foreach ($tags as $tag) : ?>
+                        <a href="/tag/<?= $tag['slug']; ?>">
+                            <button><?= $tag['name']; ?></button>
                         </a>
                     <?php endforeach; ?>
-                    <a class="tag-index-card tag-index-see-more" href="/tag/<?= $tag['slug'] ?>">
-                        <div class="tag-index-card-title">See More</div>
+                    <a href="/tag-all" class="tag-index-all-tags">
+                        <button>View all tags</button>
                     </a>
                 </div>
-            <?php endif; ?>
-        <?php endforeach; ?>
-    </section>
+            </section>
+            <section class="tag-index-tags">
+                <?php foreach ($tags as $tag) : ?>
+                    <?php if (!empty($tag_posts[$tag['tag_id']])) : ?>
+                        <a href="/tag/<?= $tag['slug']; ?>">
+                            <h2 class="tag-index-tag-title"><?= $tag['name']; ?></h2>
+                        </a>
+                        <div class="tag-index-cards">
+                            <?php foreach ($tag_posts[$tag['tag_id']] as $post) : ?>
+                                <a href="/post/show?post_id=<?= $post['post_id'] ?>" class="tag-index-card">
+                                    <img src="<?= empty($post['thumbnail_path']) ? PH_THUMBNAIL : $post['thumbnail_path'] ?>" alt="<?= $post['title']; ?>">
+                                    <div class="tag-index-card-title"><?= $post['title']; ?></div>
+                                </a>
+                            <?php endforeach; ?>
+                            <a class="tag-index-card tag-index-see-more" href="/tag/<?= $tag['slug'] ?>">
+                                <div class="tag-index-card-title">See More</div>
+                            </a>
+                        </div>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </section>
+        </div>
+
+        <!-- Footer Banner -->
+        <div class="footer-banner">
+            <?php Common::requireTemplate('user/layouts/footer_banner.php', [
+                'banner_image' => $footerBanner
+            ]); ?>
+        </div>
+    </div>
+
+    <!-- Right 1/4 Section (Sidebar) -->
+    <div class="side-banner-section">
+        <?php Common::requireTemplate('user/layouts/side_banner_right.php', [
+            'banner_image' => $sideBanner
+        ]); ?>
+    </div>
 </div>
+
 </body>

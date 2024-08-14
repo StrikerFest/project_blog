@@ -36,9 +36,9 @@ $comments = $commentModel->getCommentsByPostId($post_id);
             <li class="comment-list-item">
                 <img src="<?php echo $comment['profile_image'] ?? ''; ?>" alt="Avatar" class="comment-avatar">
                 <div class="comment-content">
-                    <span class="comment-username"><?php echo $comment['username']; ?></span>
-                    <span class="comment-date"><?php echo $comment['created_at']; ?></span>
-                    <p><?php echo $comment['content']; ?></p>
+                    <span class="comment-username"><?php echo htmlspecialchars($comment['username']); ?></span>
+                    <span class="comment-date"><?php echo htmlspecialchars($comment['created_at']); ?></span>
+                    <p><?php echo htmlspecialchars($comment['content']); ?></p>
                     <?php if ($comment['user_id'] === $user_id): ?>
                         <form class="delete-comment-form" method="POST">
                             <input type="hidden" name="comment_id" value="<?= $comment['comment_id']; ?>">
@@ -51,5 +51,5 @@ $comments = $commentModel->getCommentsByPostId($post_id);
     </ul>
 </div>
 <?php if (!empty($user_id)) : ?>
-    <script src="<?= Common::getAssetPath('embedded_scripts/user/comment.js.php') ?>?post_id=<?= $post_id ?>&user_id=<?= $user_id ?>&user_avatar=<?= $user['profile_picture'] ?? '' ?>&user_name=<?= urlencode($user['user_name'] ?? 'anon') ?>"></script>
+    <script src="<?= Common::getAssetPath('embedded_scripts/user/comment.js.php') ?>?post_id=<?= $post_id ?>&user_id=<?= $user_id ?>&user_avatar=<?= $user['profile_picture'] ?? '' ?>&user_name=<?= urlencode($user['username'] ?? 'anon') ?>"></script>
 <?php endif; ?>

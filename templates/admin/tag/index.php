@@ -25,7 +25,6 @@ Common::requireTemplate('admin/layouts/headers.php', [
             </tr>
             </thead>
             <tbody>
-
             <?php foreach ($args['tags'] as $tag) : ?>
                 <tr class="table-row">
                     <td class="text-align-center"><?= $tag['tag_id']; ?></td>
@@ -33,8 +32,12 @@ Common::requireTemplate('admin/layouts/headers.php', [
                     <td class="text-align-center"><?= $tag['status']; ?></td>
                     <td class="text-align-center"><?= $tag['position']; ?></td>
                     <td class="text-align-center">
-                        <a href="tag/edit?id=<?= $tag['tag_id']; ?>" class="listing-btn_action">Edit</a>
-                        <a href="tag/delete?id=<?= $tag['tag_id']; ?>" class="listing-btn_action">Delete</a>
+                        <?php if ($tag['deleted_at']) : ?>
+                            <a href="tag/delete?action=recover&id=<?= $tag['tag_id']; ?>" class="listing-btn_action">Recover</a>
+                        <?php else : ?>
+                            <a href="tag/edit?id=<?= $tag['tag_id']; ?>" class="listing-btn_action">Edit</a>
+                            <a href="tag/delete?action=delete&id=<?= $tag['tag_id']; ?>" class="listing-btn_action">Delete</a>
+                        <?php endif; ?>
                     </td>
                 </tr>
             <?php endforeach; ?>

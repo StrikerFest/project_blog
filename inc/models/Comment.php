@@ -2,6 +2,7 @@
 
 namespace inc\models;
 
+use inc\helpers\Common;
 use inc\helpers\DB;
 
 class Comment
@@ -30,15 +31,24 @@ class Comment
 
     public function getCommentsByPostId($post_id)
     {
-        $stmt = $this->db->prepare("SELECT users.user_id, users.username, users.profile_image, comments.comment_id, comments.content, comments.created_at 
-                                    FROM comments 
-                                    JOIN users ON comments.user_id = users.user_id 
-                                    WHERE comments.post_id = ? 
-                                    ORDER BY comments.created_at DESC");
+        $stmt = $this->db->prepare("SELECT users.user_id, users.username, users.profile_image, users.deleted_at, comments.comment_id, comments.content, comments.created_at 
+                                FROM comments 
+                                JOIN users ON comments.user_id = users.user_id 
+                                WHERE comments.post_id = ? 
+                                ORDER BY comments.created_at DESC");
         $stmt->bind_param("i", $post_id);
         $stmt->execute();
         $result = $stmt->get_result();
-        $comments = $result->fetch_all(MYSQLI_ASSOC);
+        $comments = [];
+
+        while ($comment = $result->fetch_assoc()) {
+            // Check if the user is inactive (deleted_at is not NULL)
+            if (!is_null($comment['deleted_at'])) {
+                $comment['username'] .= ' (Inactive)';
+                $comment['profile_image'] = Common::getAssetPath('images/avatar.webp');
+            }
+            $comments[] = $comment;
+        }
 
         $stmt->close();
         return $comments;

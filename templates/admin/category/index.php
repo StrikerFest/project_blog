@@ -5,7 +5,6 @@
 
 use inc\helpers\Common;
 
-// Import dữ liệu header của Admin
 Common::requireTemplate('admin/layouts/headers.php', [
     'title' => 'Category'
 ]);
@@ -27,7 +26,7 @@ Common::requireTemplate('admin/layouts/headers.php', [
             </thead>
             <tbody>
             <?php foreach ($args['categories'] as $category) : ?>
-                <tr class="table-row">
+                <tr class="table-row <?= $category['deleted_at'] ? 'deleted-row' : ''; ?>">
                     <td class="text-align-center"><?= $category['category_id']; ?></td>
                     <td><?= $category['name']; ?></td>
                     <td class="text-align-center"><?= $category['slug']; ?></td>
@@ -35,8 +34,12 @@ Common::requireTemplate('admin/layouts/headers.php', [
                     <td class="text-align-center"><?= $category['status']; ?></td>
                     <td class="text-align-center"><?= $category['position']; ?></td>
                     <td class="text-align-center">
-                        <a href="category/edit?id=<?= $category['category_id']; ?>" class="listing-btn_action">Edit</a>
-                        <a href="category/delete?id=<?= $category['category_id']; ?>" class="listing-btn_action">Delete</a>
+                        <?php if ($category['deleted_at']) : ?>
+                            <a href="category/delete?action=recover&id=<?= $category['category_id']; ?>" class="listing-btn_action">Recover</a>
+                        <?php else : ?>
+                            <a href="category/edit?id=<?= $category['category_id']; ?>" class="listing-btn_action">Edit</a>
+                            <a href="category/delete?action=delete+&id=<?= $category['category_id']; ?>" class="listing-btn_action">Delete</a>
+                        <?php endif; ?>
                     </td>
                 </tr>
             <?php endforeach; ?>

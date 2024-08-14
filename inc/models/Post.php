@@ -8,20 +8,18 @@ class Post
 {
     public static function save_post(): void
     {
-        // Kiểm tra xem form có đang được gửi hay không
-        // Và phải gửi với method POST
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-            // Dữ liệu của form được gửi
             $id = $_POST['id'] ?? '';
             $title = $_POST['title'] ?? '';
+            $slug = self::generateSlug($title);
             $content = $_POST['content'] ?? '';
             $author_id = $_POST['author_id'] ?? '';
+            $editor_id = $_POST['editor_id'] ?? null;
             $categories = $_POST['categories'] ?? [];
             $tags = $_POST['tags'] ?? [];
             $status = $_POST['status'] ?? '';
 
-            // Kết nối DB
             $upload_dir = $_ENV['UPLOAD_DIR'];
             $relative_upload_dir = '/assets/uploads/';
             $thumbnail_path = '';
@@ -31,40 +29,36 @@ class Post
                 $thumbnail_filename = basename($_FILES['thumbnail']['name']);
                 $thumbnail_full_path = $upload_dir . $thumbnail_filename;
                 move_uploaded_file($_FILES['thumbnail']['tmp_name'], $thumbnail_full_path);
-                $thumbnail_path = $relative_upload_dir . $thumbnail_filename; // Store relative path
+                $thumbnail_path = $relative_upload_dir . $thumbnail_filename;
             }
 
             if (!empty($_FILES['banner']['name'])) {
                 $banner_filename = basename($_FILES['banner']['name']);
                 $banner_full_path = $upload_dir . $banner_filename;
                 move_uploaded_file($_FILES['banner']['tmp_name'], $banner_full_path);
-                $banner_path = $relative_upload_dir . $banner_filename; // Store relative path
+                $banner_path = $relative_upload_dir . $banner_filename;
             }
 
-            // Connect to DB
             $conn = DB::db_connect();
 
-            // Kiểm tra xem đang tạo mới blog hay cập nhật blog cũ
             if ($id == '') {
-                $sql = "INSERT INTO posts (title, content, author_id, status, thumbnail_path, banner_path) VALUES (?, ?, ?, ?, ?, ?)";
+                $sql = "INSERT INTO posts (title, slug, content, author_id, editor_id, status, thumbnail_path, banner_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                 $statement = $conn->prepare($sql);
-                $statement->bind_param("ssssss", $title, $content, $author_id, $status, $thumbnail_path, $banner_path);
+                $statement->bind_param("ssssssss", $title, $slug, $content, $author_id, $editor_id, $status, $thumbnail_path, $banner_path);
             } else {
-                $sql = "UPDATE posts SET title = ?, content = ?, author_id = ?, status = ?, thumbnail_path = ?, banner_path = ? WHERE post_id = ?";
+                $sql = "UPDATE posts SET title = ?, slug = ?, content = ?, author_id = ?, editor_id = ?, status = ?, thumbnail_path = ?, banner_path = ? WHERE post_id = ?";
                 $statement = $conn->prepare($sql);
-                $statement->bind_param("sssssss", $title, $content, $author_id, $status, $thumbnail_path, $banner_path, $id);
+                $statement->bind_param("ssssssssi", $title, $slug, $content, $author_id, $editor_id, $status, $thumbnail_path, $banner_path, $id);
             }
 
-            // Chạy lệnh SQL
             $statement->execute();
 
-            // Kiểm tra câu lệnh SQL có chạy thành công không
             if (!$statement->errno) {
                 if ($id == '') {
                     $id = $statement->insert_id;
                 }
 
-                // Xử lý category
+                // Handle categories
                 $sql = "DELETE FROM post_categories WHERE post_id = ?";
                 $statement = $conn->prepare($sql);
                 $statement->bind_param("s", $id);
@@ -77,7 +71,7 @@ class Post
                     $statement->execute();
                 }
 
-                // Xử lý tags
+                // Handle tags
                 $sql = "DELETE FROM post_tags WHERE post_id = ?";
                 $statement = $conn->prepare($sql);
                 $statement->bind_param("s", $id);
@@ -100,17 +94,34 @@ class Post
         }
     }
 
-    // Lấy tất cả bài post
-    public static function getPosts($sortOrder = 'asc', $published = true): array
+    private static function generateSlug($title)
+    {
+        return strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $title)));
+    }
+
+    public static function getPosts($sortOrder = 'asc', $published = true, $includeDeleted = false): array
     {
         $conn = DB::db_connect();
 
-        if ($published){
-            $sql = "SELECT * FROM posts WHERE status = 'published' ORDER BY post_id DESC";
+        // Base SQL query
+        $sql = "SELECT * FROM posts";
+
+        // Conditionally add the WHERE clause based on whether deleted posts should be included
+        if (!$includeDeleted) {
+            $sql .= " WHERE deleted_at IS NULL";
         } else {
-            $sql = "SELECT * FROM posts ORDER BY post_id $sortOrder";
+            $sql .= " WHERE 1=1"; // Dummy condition to make appending other conditions easier
         }
 
+        // Add the condition for published status if necessary
+        if ($published) {
+            $sql .= " AND status = 'published'";
+        }
+
+        // Append the ORDER BY clause
+        $sql .= " ORDER BY post_id $sortOrder";
+
+        // Execute the query
         $result = $conn->query($sql);
         $posts = [];
         if ($result->num_rows > 0) {
@@ -118,28 +129,57 @@ class Post
                 $posts[] = $row;
             }
         }
+
+        // Close the connection
         $conn->close();
+
         return $posts;
     }
 
-    // Lấy bài post theo mã post
+
     public static function getPostById($id): bool|array|null
     {
         if (!isset($id)) {
             return null;
         }
-        
+
         $conn = DB::db_connect();
-        $sql = "SELECT * FROM posts WHERE post_id=$id";
-        $result = $conn->query($sql);
+        $sql = "SELECT * FROM posts WHERE post_id = ? AND deleted_at IS NULL";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
         $post = null;
         if ($result->num_rows == 1) {
             $post = $result->fetch_assoc();
         }
+        $stmt->close();
         $conn->close();
         return $post;
     }
-    
+
+    public static function softDeletePost($id): void
+    {
+        $conn = DB::db_connect();
+        $sql = "UPDATE posts SET deleted_at = NOW() WHERE post_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $stmt->close();
+        $conn->close();
+    }
+
+    public static function restorePost($id): void
+    {
+        $conn = DB::db_connect();
+        $sql = "UPDATE posts SET deleted_at = NULL WHERE post_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $stmt->close();
+        $conn->close();
+    }
+
     public static function getPostsByCategoryId($categoryId, $limit = 3): array
     {
         $conn = DB::db_connect();
@@ -211,8 +251,6 @@ class Post
         return $total;
     }
 
-
-    // Xóa bài post theo mã post
     public static function deletePost($id): void
     {
         $conn = DB::db_connect();
@@ -297,7 +335,6 @@ class Post
         $conn = DB::db_connect();
         $searchQuery = '%' . $conn->real_escape_string($query) . '%';
 
-        // Search posts
         $sql = "SELECT * FROM posts WHERE (title LIKE ? OR content LIKE ?) AND status = 'published' ORDER BY post_id DESC";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ss", $searchQuery, $searchQuery);
@@ -311,7 +348,6 @@ class Post
         }
         $stmt->close();
 
-        // Search categories
         $sql = "SELECT * FROM categories WHERE name LIKE ? OR description LIKE ? ORDER BY category_id DESC";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ss", $searchQuery, $searchQuery);
@@ -325,7 +361,6 @@ class Post
         }
         $stmt->close();
 
-        // Search tags
         $sql = "SELECT * FROM tags WHERE name LIKE ? OR slug LIKE ? ORDER BY tag_id DESC";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ss", $searchQuery, $searchQuery);

@@ -24,7 +24,10 @@ $posts = Post::getPostsByTagIdWithPagination($tag_id, $offset, $limit);
 $totalPosts = Post::countPostsByTagId($tag_id);
 $totalPages = ceil($totalPosts / $limit);
 
-// Header
+use inc\models\Banner;
+$headerBanner = Banner::getBannerByType('Header');
+$sideBanner = Banner::getBannerByType('Sidebar');
+$footerBanner = Banner::getBannerByType('Footer');
 Common::requireTemplate('user/layouts/headers.php', [
     'title' => $tag['name']
 ]);
@@ -32,23 +35,51 @@ Common::requireTemplate('user/layouts/headers.php', [
 <link rel="stylesheet" href="<?= Common::getAssetPath('css/user/tag/detail.css') ?>">
 <body>
 <?php Common::requireTemplate('user/layouts/menu.php', []); ?>
-<div class="tag-detail-container">
-    <div class="tag-detail-header">
-        <h1><?= $tag['name']; ?></h1>
-    </div>
-    <section class="tag-detail-posts">
-        <?php foreach ($posts as $post) : ?>
-            <div class="tag-detail-post-card">
-                <img src="<?= $post['thumbnail_path']; ?>" alt="<?= $post['title']; ?>">
-                <div class="tag-detail-post-card-title"><?= $post['title']; ?></div>
+
+<div class="page-container">
+    <!-- Left 3/4 Section -->
+    <div class="content-section">
+        <!-- Header Banner -->
+        <div class="header-banner">
+            <?php Common::requireTemplate('user/layouts/header_banner.php', [
+                'banner_image' => $headerBanner
+            ]); ?>
+        </div>
+
+        <div class="tag-detail-container">
+            <div class="tag-detail-header">
+                <h1><?= $tag['name']; ?></h1>
             </div>
-        <?php endforeach; ?>
-    </section>
-    <div class="pagination">
-        <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
-            <a href="?id=<?= $tag_id; ?>&page=<?= $i; ?>" class="<?= $i == $page ? 'active' : ''; ?>"><?= $i; ?></a>
-        <?php endfor; ?>
+            <section class="tag-detail-posts">
+                <?php foreach ($posts as $post) : ?>
+                    <div class="tag-detail-post-card">
+                        <img src="<?= $post['thumbnail_path']; ?>" alt="<?= $post['title']; ?>">
+                        <div class="tag-detail-post-card-title"><?= $post['title']; ?></div>
+                    </div>
+                <?php endforeach; ?>
+            </section>
+            <div class="pagination">
+                <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
+                    <a href="?id=<?= $tag_id; ?>&page=<?= $i; ?>" class="<?= $i == $page ? 'active' : ''; ?>"><?= $i; ?></a>
+                <?php endfor; ?>
+            </div>
+            <a href="/tag" class="back-button">Back to Tags</a>
+        </div>
+
+        <!-- Footer Banner -->
+        <div class="footer-banner">
+            <?php Common::requireTemplate('user/layouts/footer_banner.php', [
+                'banner_image' => $footerBanner
+            ]); ?>
+        </div>
     </div>
-    <a href="/tag" class="back-button">Back to Tags</a>
+
+    <!-- Right 1/4 Section (Sidebar) -->
+    <div class="side-banner-section">
+        <?php Common::requireTemplate('user/layouts/side_banner_right.php', [
+            'banner_image' => $sideBanner
+        ]); ?>
+    </div>
 </div>
+
 </body>

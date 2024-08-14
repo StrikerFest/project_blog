@@ -11,6 +11,10 @@ if (session_status() == PHP_SESSION_NONE) {
 
 $user_information = $args['user_information'];
 
+use inc\models\Banner;
+$headerBanner = Banner::getBannerByType('Header');
+$sideBanner = Banner::getBannerByType('Sidebar');
+$footerBanner = Banner::getBannerByType('Footer');
 Common::requireTemplate('user/layouts/headers.php', [
     'title' => 'User Profile'
 ]);
