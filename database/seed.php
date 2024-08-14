@@ -28,18 +28,23 @@ if ($result) {
 
 // Seed posts
 $authors = [1, 2];
+$editors = [3];
 $statuses = ['draft', 'pending_approval', 'approved', 'published'];
 
 for ($i = 1; $i <= 10; $i++) {
     $title = "Sample Post Title " . $i;
+    $slug = strtolower(str_replace(' ', '-', $title));
     $content = "This is the content for Sample Post Title " . $i . ". It contains detailed information on various topics.";
     $banner_path = "/assets/uploads/sample_banner_$i.jpg";
     $thumbnail_path = "/assets/uploads/sample_thumbnail_$i.jpg";
     $likes = rand(0, 100);
     $status = $statuses[array_rand($statuses)];
     $author = $authors[array_rand($authors)];
-    $sql = "INSERT INTO posts (author_id, title, content, banner_path, thumbnail_path, likes, status) 
-            VALUES ('$author', '$title', '$content', '$banner_path', '$thumbnail_path', $likes, '$status')";
+    $editor_id = ($status !== 'draft') ? $editors[array_rand($editors)] : null;
+    $published_at = ($status === 'published') ? date('Y-m-d H:i:s') : null;
+
+    $sql = "INSERT INTO posts (author_id, editor_id, title, slug, content, banner_path, thumbnail_path, likes, status, published_at) 
+            VALUES ('$author', " . ($editor_id ? "'$editor_id'" : "NULL") . ", '$title', '$slug', '$content', '$banner_path', '$thumbnail_path', $likes, '$status', " . ($published_at ? "'$published_at'" : "NULL") . ")";
 
     if ($conn->query($sql) === TRUE) {
         echo "Post $i inserted successfully!<br>";

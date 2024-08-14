@@ -163,6 +163,17 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
         </div>
 
         <div class="edit-field">
+            <label for="post-edit-editor">Assign Editor:</label>
+            <select id="post-edit-editor" name="editor_id" <?= $post['status'] === 'draft' ? 'disabled' : '' ?>>
+                <?php foreach ($args['editors'] as $editor): ?>
+                    <option value="<?= $editor['user_id'] ?>" <?= $post['editor_id'] == $editor['user_id'] ? 'selected' : '' ?>>
+                        <?= $editor['username'] ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        
+        <div class="edit-field">
             <button type="submit" class="edit-btn">Save Post</button>
         </div>
     </form>

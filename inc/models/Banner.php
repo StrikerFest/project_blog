@@ -17,12 +17,13 @@ class Banner
         $banners = [];
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
+                $row['type_name'] = self::getBannerTypeById($row['type_id']); // Get banner type name
                 $banners[] = $row;
             }
         }
         $conn->close();
         return $banners;
-    }   
+    }
 
     public static function getBannerTypes()
     {
@@ -67,7 +68,7 @@ class Banner
             // Create new banner
             $sql = "INSERT INTO banners (title, image_path, text, link, start_date, end_date, is_active, type_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param('sssssiii', $data['title'], $imagePath, $data['text'], $data['link'], $start_date, $end_date, $data['is_active'], $data['type_id']);
+            $stmt->bind_param('ssssssii', $data['title'], $imagePath, $data['text'], $data['link'], $start_date, $end_date, $data['is_active'], $data['type_id']);
         }
 
         $stmt->execute();
@@ -85,7 +86,6 @@ class Banner
             return null;
         }
     }
-
 
     public static function handleImageUpload($imageFile, $existingImagePath)
     {
@@ -117,6 +117,10 @@ class Banner
         $stmt->execute();
         $result = $stmt->get_result();
         $banner = $result->fetch_assoc();
+
+        if ($banner) {
+            $banner['type_name'] = self::getBannerTypeById($banner['type_id']); // Get banner type name
+        }
 
         $stmt->close();
         $conn->close();

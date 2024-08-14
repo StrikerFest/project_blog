@@ -493,4 +493,26 @@ class User
 
         return $result;
     }
+
+    public static function getUsersByRole(string $role): array
+    {
+        $conn = DB::db_connect();
+        $sql = "SELECT user_id, username, email, role, bio, profile_image FROM users WHERE role = ? AND deleted_at IS NULL";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $role);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $users = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $users[] = $row;
+            }
+        }
+
+        $stmt->close();
+        $conn->close();
+
+        return $users;
+    }
 }
