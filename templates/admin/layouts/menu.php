@@ -67,6 +67,15 @@ $role = $current_user['role'];
                 <a href="<?= Common::get_url('admin/user/create') ?>">Create user</a>
             </div>
         </div>
+        <div class="menu-dropdown">
+            <button class="menu-dropbtn">Banners
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="menu-dropdown-content">
+                <a href="<?= Common::get_url('admin/banner') ?>">View banners</a>
+                <a href="<?= Common::get_url('admin/banner/create') ?>">Create banner</a>
+            </div>
+        </div>
     <?php endif; ?>
     <div class="menu-dropdown">
         <button class="menu-dropbtn">Profile: <?= htmlspecialchars($current_user['username']) ?>

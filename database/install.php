@@ -100,7 +100,7 @@ $sql = "
         UNIQUE (`user_id`, `post_id`)
     );
 
-    -- Create the banner_types table with deleted_at column
+-- Create the banner_types table with deleted_at column
 CREATE TABLE IF NOT EXISTS `banner_types` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `name` VARCHAR(100) NOT NULL,
