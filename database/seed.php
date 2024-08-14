@@ -67,16 +67,24 @@ $result = $conn->query($sql);
 if ($result) {
     $row = $result->fetch_assoc();
     if ($row['count'] == 0) {
-        $sql = "INSERT INTO categories (name, slug, status, description) VALUES
-            ('Technology', 'technology', 'enabled', 'Latest updates on technology.'),
-            ('Sports', 'sports', 'enabled', 'All about sports events and news.'),
-            ('Travel', 'travel', 'enabled', 'Travel tips and destination guides.'),
-            ('Health', 'health', 'enabled', 'Health advice and wellness tips.'),
-            ('Food', 'food', 'enabled', 'Delicious recipes and food reviews.')";
-        if ($conn->query($sql) === TRUE) {
-            echo "Categories inserted successfully.<br>";
-        } else {
-            echo "Error inserting categories: " . $conn->error . "<br>";
+        for ($i = 1; $i <= 5; $i++) {
+            $name = "Category $i";
+            $slug = strtolower(str_replace(' ', '-', $name));
+            $status = 'enabled';
+            $description = "Description for $name";
+            $position = $i;
+
+            // Randomly assign some categories as soft-deleted
+            $deleted_at = rand(0, 1) ? date('Y-m-d H:i:s', strtotime("-" . rand(1, 10) . " days")) : null;
+
+            $sql = "INSERT INTO categories (name, slug, status, description, position, deleted_at) 
+                    VALUES ('$name', '$slug', '$status', '$description', '$position', " . ($deleted_at ? "'$deleted_at'" : "NULL") . ")";
+
+            if ($conn->query($sql) === TRUE) {
+                echo "Category $i inserted successfully!<br>";
+            } else {
+                echo "Error inserting category $i: " . $conn->error . "<br>";
+            }
         }
     }
 }
@@ -104,16 +112,23 @@ $result = $conn->query($sql);
 if ($result) {
     $row = $result->fetch_assoc();
     if ($row['count'] == 0) {
-        $sql = "INSERT INTO tags (name, slug, status) VALUES
-            ('AI', 'ai', 'enabled'),
-            ('Machine Learning', 'machine-learning', 'enabled'),
-            ('Blockchain', 'blockchain', 'enabled'),
-            ('Nutrition', 'nutrition', 'enabled'),
-            ('Fitness', 'fitness', 'enabled')";
-        if ($conn->query($sql) === TRUE) {
-            echo "Tags inserted successfully.<br>";
-        } else {
-            echo "Error inserting tags: " . $conn->error . "<br>";
+        $tags = [
+            ['name' => 'AI', 'slug' => 'ai', 'status' => 'enabled'],
+            ['name' => 'Machine Learning', 'slug' => 'machine-learning', 'status' => 'enabled'],
+            ['name' => 'Blockchain', 'slug' => 'blockchain', 'status' => 'enabled'],
+            ['name' => 'Nutrition', 'slug' => 'nutrition', 'status' => 'enabled'],
+            ['name' => 'Fitness', 'slug' => 'fitness', 'status' => 'enabled']
+        ];
+
+        foreach ($tags as $tag) {
+            $deleted_at = (rand(0, 1)) ? date('Y-m-d H:i:s', strtotime("-" . rand(1, 10) . " days")) : null;
+            $sql = "INSERT INTO tags (name, slug, status, position, deleted_at) VALUES 
+                    ('{$tag['name']}', '{$tag['slug']}', '{$tag['status']}', 0, " . ($deleted_at ? "'$deleted_at'" : "NULL") . ")";
+            if ($conn->query($sql) === TRUE) {
+                echo "Tag '{$tag['name']}' inserted successfully!<br>";
+            } else {
+                echo "Error inserting tag '{$tag['name']}': " . $conn->error . "<br>";
+            }
         }
     }
 }

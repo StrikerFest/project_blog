@@ -60,7 +60,7 @@ class Category
                 $statement = $conn->prepare($sql);
                 $statement->bind_param("sssss", $name, $status, $description, $position, $slug);
             } else {
-                $sql = "UPDATE categories SET name = ?, status = ?, description = ?, position = ?, slug = ? WHERE category_id = ?";
+                $sql = "UPDATE categories SET name = ?, status = ?, description = ?, position = ?, slug = ?, updated_at = NOW() WHERE category_id = ?";
                 $statement = $conn->prepare($sql);
                 $statement->bind_param("sssssi", $name, $status, $description, $position, $slug, $id);
             }
@@ -76,6 +76,7 @@ class Category
             }
         }
     }
+    
     private static function generateSlug($name): string
     {
         // Convert to lowercase
@@ -88,10 +89,16 @@ class Category
         return trim($slug, '-');
     }
 
-    public static function getCategories(): array
+    public static function getCategories($includeDeleted = false): array
     {
         $conn = DB::db_connect();
-        $sql = "SELECT * FROM categories ORDER BY category_id asc";
+        $sql = "SELECT * FROM categories";
+
+        if (!$includeDeleted) {
+            $sql .= " WHERE deleted_at IS NULL";
+        }
+
+        $sql .= " ORDER BY category_id asc";
         $result = $conn->query($sql);
         $categories = [];
         if ($result->num_rows > 0) {
@@ -119,8 +126,29 @@ class Category
     public static function deleteCategory($id): void
     {
         $conn = DB::db_connect();
-        $sql = "DELETE FROM categories WHERE category_id=$id";
-        $conn->query($sql);
+        $sql = "UPDATE categories SET deleted_at = NOW() WHERE category_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $stmt->close();
+        $conn->close();
+    }
+
+    public static function recoverCategory($id): void
+    {
+        $conn = DB::db_connect();
+        $sql = "UPDATE categories SET deleted_at = NULL WHERE category_id = ? AND deleted_at IS NOT NULL";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+
+        if ($stmt->affected_rows > 0) {
+            echo "Category recovered successfully.<br>";
+        } else {
+            echo "Category not found or already active.<br>";
+        }
+
+        $stmt->close();
         $conn->close();
     }
 
@@ -172,4 +200,6 @@ class Category
 
         return $category_id ?: null;
     }
+    
+    
 }

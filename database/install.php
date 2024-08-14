@@ -56,7 +56,10 @@ $sql = "
         slug VARCHAR(150) NOT NULL,
         status ENUM('enabled', 'disabled') NOT NULL,
         description TEXT,
-        position INT NOT NULL DEFAULT 0
+        position INT NOT NULL DEFAULT 0,
+        `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        `deleted_at` TIMESTAMP NULL DEFAULT NULL
     );
     
     CREATE TABLE IF NOT EXISTS `post_categories` (
@@ -72,7 +75,10 @@ $sql = "
         name VARCHAR(100) NOT NULL,
         slug VARCHAR(150) NOT NULL,
         status ENUM('enabled', 'disabled') NOT NULL,
-        position INT NOT NULL DEFAULT 0
+        position INT NOT NULL DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        deleted_at TIMESTAMP NULL DEFAULT NULL
     );
     
     CREATE TABLE IF NOT EXISTS post_tags (

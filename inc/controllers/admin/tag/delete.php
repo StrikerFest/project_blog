@@ -3,8 +3,15 @@ require $_ENV['AUTOLOAD'];
 
 use inc\models\Tag;
 
-if(isset($_GET['id'])){
-    Tag::deleteTag($_GET['id']);
+if (isset($_GET['id']) && isset($_GET['action'])) {
+    $id = $_GET['id'];
+    $action = $_GET['action'];
+
+    if ($action === 'delete') {
+        Tag::deleteTag($id);
+    } elseif ($action === 'recover') {
+        Tag::recoverTag($id);
+    }
 }
 
 header("Location: /admin/tag");
