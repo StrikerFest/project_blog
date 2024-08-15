@@ -19,6 +19,7 @@ class Post
             $categories = $_POST['categories'] ?? [];
             $tags = $_POST['tags'] ?? [];
             $status = $_POST['status'] ?? '';
+            $reason = $_POST['reason'] ?? ''; // Capture the reason for status change
 
             $upload_dir = $_ENV['UPLOAD_DIR'];
             $relative_upload_dir = '/assets/uploads/';
@@ -40,12 +41,17 @@ class Post
             }
 
             $conn = DB::db_connect();
+            $oldStatus = null;
 
             if ($id == '') {
                 $sql = "INSERT INTO posts (title, slug, content, author_id, editor_id, status, thumbnail_path, banner_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                 $statement = $conn->prepare($sql);
                 $statement->bind_param("ssssssss", $title, $slug, $content, $author_id, $editor_id, $status, $thumbnail_path, $banner_path);
             } else {
+                // Get the old status before updating
+                $post = self::getPostById($id);
+                $oldStatus = $post['status'] ?? null;
+
                 $sql = "UPDATE posts SET title = ?, slug = ?, content = ?, author_id = ?, editor_id = ?, status = ?, thumbnail_path = ?, banner_path = ? WHERE post_id = ?";
                 $statement = $conn->prepare($sql);
                 $statement->bind_param("ssssssssi", $title, $slug, $content, $author_id, $editor_id, $status, $thumbnail_path, $banner_path, $id);
@@ -56,6 +62,11 @@ class Post
             if (!$statement->errno) {
                 if ($id == '') {
                     $id = $statement->insert_id;
+                }
+
+                // Log status change if status is updated and reason is provided
+                if ($oldStatus !== $status && !empty($reason)) {
+                    self::logStatusChange($id, $author_id, $oldStatus, $status, $reason);
                 }
 
                 // Handle categories
@@ -93,6 +104,13 @@ class Post
             }
         }
     }
+
+    private static function logStatusChange($post_id, $user_id, $status_from, $status_to, $reason): void
+    {
+        $approvalLog = new ApprovalLog();
+        $approvalLog->createLog($post_id, $user_id, $status_from, $status_to, $reason);
+    }
+
 
     private static function generateSlug($title)
     {

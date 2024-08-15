@@ -161,7 +161,10 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
                 ?>
             </select>
         </div>
-
+        <div class="edit-field" id="reason-field" style="display: none;">
+            <label for="post-edit-reason">Reason for Status Change:</label>
+            <textarea id="post-edit-reason" name="reason" placeholder="Provide a reason for the status change"></textarea>
+        </div>
         <div class="edit-field">
             <label for="post-edit-editor">Assign Editor:</label>
             <select id="post-edit-editor" name="editor_id" <?= $post['status'] === 'draft' ? 'disabled' : '' ?>>
@@ -178,6 +181,31 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
         </div>
     </form>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const statusSelect = document.getElementById("post-edit-status");
+        const reasonField = document.getElementById("reason-field");
+        const initialStatus = statusSelect.value;
+
+        statusSelect.addEventListener("change", function() {
+            const currentStatus = statusSelect.value;
+
+            if (currentStatus !== "draft" && currentStatus !== initialStatus) {
+                reasonField.style.display = "block";
+            } else {
+                reasonField.style.display = "none";
+            }
+        });
+
+        // Check the initial state in case the status was changed via some other means
+        const currentStatus = statusSelect.value;
+        if (currentStatus !== "draft" && currentStatus !== initialStatus) {
+            reasonField.style.display = "block";
+        }
+    });
+
+</script>
 
 <!-- Include CKEditor 5 -->
 <script type="importmap">
