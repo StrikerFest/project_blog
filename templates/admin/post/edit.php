@@ -172,23 +172,22 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
                 <?php endforeach; ?>
             </select>
         </div>
-        
+
         <div class="edit-field">
             <button type="submit" class="edit-btn">Save Post</button>
         </div>
     </form>
 </div>
 
-<!-- Include CKEditor 5 from CDN -->
-<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
-<script>
-    // Initialize CKEditor 5 on the textarea
-    ClassicEditor
-        .create(document.querySelector('#post-edit-content'))
-        .catch(error => {
-            console.error(error);
-        });
+<!-- Include CKEditor 5 -->
+<script type="importmap">
+    {
+        "imports": {
+            "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/43.0.0/ckeditor5.js",
+            "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/43.0.0/"
+        }
+    }
 </script>
-
+<script type="module" src="<?= Common::getAssetPath('js/admin/post/editor.js') ?>"></script>
 <script src="<?= Common::getAssetPath('js/script.js') ?>"></script>
 </body>

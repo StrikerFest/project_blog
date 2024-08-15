@@ -40,8 +40,10 @@ if (isset($args['permission'])) {
     <link rel="stylesheet" href="<?= Common::getAssetPath('css/style.css') ?>">
     <link rel="stylesheet" href="<?= Common::getAssetPath('css/listing.css') ?>">
     <link rel="stylesheet" href="<?= Common::getAssetPath('css/form-table.css') ?>">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.0.0/ckeditor5.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 </head>
 
