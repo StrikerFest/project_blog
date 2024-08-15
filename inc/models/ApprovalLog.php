@@ -21,4 +21,27 @@ class ApprovalLog
         $stmt->execute();
         $stmt->close();
     }
+
+    public static function getAllApprovalLogs(): array
+    {
+        $conn = DB::db_connect();
+        $sql = "
+            SELECT al.*, p.post_id, p.title AS post_title, u.username AS user_name
+            FROM approval_logs al
+            INNER JOIN posts p ON al.post_id = p.post_id
+            INNER JOIN users u ON al.user_id = u.user_id
+            ORDER BY al.created_at DESC
+        ";
+        $result = $conn->query($sql);
+        $approvalLogs = [];
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $approvalLogs[] = $row;
+            }
+        }
+
+        $conn->close();
+        return $approvalLogs;
+    }
 }

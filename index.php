@@ -49,6 +49,8 @@ $routes = [
     '/admin/banner/create' => Common::getControllerPath('admin/banner/edit.php'),
     '/admin/banner/edit'   => Common::getControllerPath('admin/banner/edit.php'),
     '/admin/banner/delete' => Common::getControllerPath('admin/banner/delete.php'),
+
+    '/admin/approval-log'  => Common::getControllerPath('admin/approval-log/index.php'),
     
     // Blog - Người dùng
     '/login'    => Common::getControllerPath('user/auth/login.php'),
