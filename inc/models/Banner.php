@@ -9,9 +9,9 @@ class Banner
     public static function getBanners($includeDeleted = false)
     {
         $conn = DB::db_connect();
-        $sql = "SELECT * FROM banners";
+        $sql = "SELECT * FROM banners WHERE is_active = 1";
         if (!$includeDeleted) {
-            $sql .= " WHERE deleted_at IS NULL";
+            $sql .= " AND deleted_at IS NULL";
         }
         $result = $conn->query($sql);
         $banners = [];
@@ -111,7 +111,7 @@ class Banner
     public static function getBannerById($id)
     {
         $conn = DB::db_connect();
-        $sql = "SELECT * FROM banners WHERE id = ?";
+        $sql = "SELECT * FROM banners WHERE id = ? AND is_active = 1 AND deleted_at IS NULL";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param('i', $id);
         $stmt->execute();
@@ -191,4 +191,5 @@ class Banner
 
         return $banner['image_path'] ?? null;
     }
+
 }
