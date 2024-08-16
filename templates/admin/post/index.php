@@ -32,8 +32,12 @@ Common::requireTemplate('admin/layouts/headers.php', [
         <tbody>
         <?php foreach ($posts as $post): ?>
             <?php
-                $post_category_ids = Post::getPostCategories($post['post_id'] ?? null);
-                $post_tag_ids = Post::getPostTags($post['post_id'] ?? null);
+            $post_category_ids = Post::getPostCategories($post['post_id'] ?? null);
+            $post_tag_ids = Post::getPostTags($post['post_id'] ?? null);
+
+            // Extract only the 'name' from the category and tag arrays
+            $category_names = array_column($post_category_ids, 'name');
+            $tag_names = array_column($post_tag_ids, 'name');
             ?>
             <tr>
                 <td><?php echo htmlspecialchars($post['post_id']); ?></td>
@@ -41,8 +45,8 @@ Common::requireTemplate('admin/layouts/headers.php', [
 
                 <td>
                     <?php
-                    if (isset($post_category_ids) && count($post_category_ids) > 0) {
-                        echo implode(', ', $post_category_ids);
+                    if (!empty($category_names)) {
+                        echo implode(', ', $category_names);
                     } else {
                         echo 'No Categories';
                     }
@@ -51,8 +55,8 @@ Common::requireTemplate('admin/layouts/headers.php', [
 
                 <td>
                     <?php
-                    if (isset($post_tag_ids)) {
-                        echo implode(', ', $post_tag_ids);
+                    if (!empty($tag_names)) {
+                        echo implode(', ', $tag_names);
                     } else {
                         echo 'No Tags';
                     }

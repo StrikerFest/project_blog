@@ -43,23 +43,19 @@ class Post
         }
 
         $result = [];
-        if ($display == 'name') {
-            foreach ($data as $category) {
-                $result[] = $category['name'];
-            }
-        } else {
-            foreach ($data as $category) {
-                $result[] = $category['category_id'];
-            }
+        foreach ($data as $category) {
+            $result[] = [
+                'name' => $category['name'],
+                'slug' => $category['slug']
+            ];
         }
 
-        if ($limit === 0){
+        if ($limit === 0) {
             return $result;
         }
-        
+
         return array_slice($result, 0, $limit);
     }
-
 
     public static function getPostTags($post_id, $display = 'name', $limit = 3): array
     {
@@ -74,22 +70,18 @@ class Post
         }
 
         $result = [];
-        if ($display == 'name') {
-            foreach ($data as $tag) {
-                $result[] = $tag['name'];
-            }
-        } else {
-            foreach ($data as $tag) {
-                $result[] = $tag['tag_id'];
-            }
+        foreach ($data as $tag) {
+            $result[] = [
+                'name' => $tag['name'],
+                'slug' => $tag['slug']
+            ];
         }
 
-        if ($limit === 0){
+        if ($limit === 0) {
             return $result;
         }
 
         return array_slice($result, 0, $limit);
-
     }
 
 }

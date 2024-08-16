@@ -24,6 +24,7 @@ $endIndex = min($startIndex + $postsPerPage, $totalPosts);
 $currentPosts = array_slice($posts, $startIndex, $postsPerPage);
 
 use inc\models\Banner;
+
 $headerBanner = Banner::getBannerByType('Header');
 $sideBanner = Banner::getBannerByType('Sidebar');
 $footerBanner = Banner::getBannerByType('Footer');
@@ -48,17 +49,17 @@ Common::requireTemplate('user/layouts/headers.php', [
         <!-- Main Content -->
         <div class="main-content">
             <div class="post-container">
-                <?php foreach ($currentPosts as $post): ?>
-                    <?php
+                <?php
+                foreach ($currentPosts as $post) {
                     $categories = CommonPost::getPostCategories($post['post_id'] ?? null);
                     $tags = CommonPost::getPostTags($post['post_id'] ?? null);
-                    ?>
-                    <?php Common::requireTemplate('user/post/components/post-card.php', [
-                            'post' => $post,
-                            'categories' => $categories,
-                            'tags' => $tags
-                    ]); ?>
-                <?php endforeach; ?>
+                    Common::requireTemplate('user/post/components/post-card.php', [
+                        'post' => $post,
+                        'categories' => $categories,
+                        'tags' => $tags
+                    ]);
+                }
+                ?>
             </div>
 
             <div class="paginate-bar">

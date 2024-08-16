@@ -20,6 +20,12 @@ $limit = 5;
 $offset = ($page - 1) * $limit;
 
 $category = Category::getCategoryById($category_id);
+
+if ($category === null) {
+    header("Location: /post");
+    exit();
+}
+
 $posts = Post::getPostsByCategoryIdWithPagination($category_id, $offset, $limit);
 $totalPosts = Post::countPostsByCategoryId($category_id);
 $totalPages = ceil($totalPosts / $limit);

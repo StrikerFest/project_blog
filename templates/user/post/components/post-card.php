@@ -26,17 +26,17 @@ $tags = $args['tags'];
         <a href="/post/show?post_id=<?= $post['post_id'] ?>" class="post-title"><?php echo $post['title']; ?></a>
         <div class="post-category">Category:
             <span>
-                                    <?php foreach ($categories as $category): ?>
-                                        <button class="post-detail-tag-button"><?= $category ?></button>
-                                    <?php endforeach; ?>
-                                </span>
+        <?php foreach ($categories as $category): ?>
+            <a href="/category/<?= $category['slug']; ?>" class="post-detail-tag-button"><?= $category['name'] ?></a>
+        <?php endforeach; ?>
+    </span>
         </div>
         <div class="post-tags">Tags:
             <span>
-                                    <?php foreach ($tags as $tag): ?>
-                                        <button class="post-detail-tag-button"><?= $tag ?></button>
-                                    <?php endforeach; ?>
-                                </span>
+        <?php foreach ($tags as $tag): ?>
+            <a href="/tag/<?= $tag['slug']; ?>" class="post-detail-tag-button"><?= $tag['name'] ?></a>
+        <?php endforeach; ?>
+    </span>
         </div>
         <a href="/post/show?post_id=<?= $post['post_id'] ?>" class="post-see-more">See More</a>
     </div>
