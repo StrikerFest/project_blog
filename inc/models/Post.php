@@ -2,6 +2,7 @@
 
 namespace inc\models;
 
+use inc\helpers\Common;
 use inc\helpers\DB;
 
 class Post
@@ -67,6 +68,28 @@ class Post
                 // Log status change if status is updated and reason is provided
                 if ($oldStatus !== $status && !empty($reason)) {
                     self::logStatusChange($id, $author_id, $oldStatus, $status, $reason);
+
+                    // Send email notification to the author
+                    $author = self::getUserById($author_id); // Assuming a function that fetches user data
+                    $authorEmail = $author['email'] ?? 'default@example.com'; // Replace with appropriate email handling
+
+                    Common::sendEmail(
+                        $authorEmail,
+                        'Post Status Changed',
+                        "The status of your post titled '$title' (ID: $id) has changed from '$oldStatus' to '$status'.\n\nReason: $reason"
+                    );
+
+                    // Send email notification to the editor
+                    if ($editor_id) {
+                        $editor = self::getUserById($editor_id); // Assuming a function that fetches user data
+                        $editorEmail = $editor['email'] ?? 'default@example.com'; // Replace with appropriate email handling
+
+                        Common::sendEmail(
+                            $editorEmail,
+                            'Post Status Changed',
+                            "The status of the post titled '$title' (ID: $id) that you are editing has changed from '$oldStatus' to '$status'.\n\nReason: $reason"
+                        );
+                    }
                 }
 
                 // Handle categories
@@ -103,6 +126,20 @@ class Post
                 $conn->close();
             }
         }
+    }
+
+    private static function getUserById($user_id)
+    {
+        $conn = DB::db_connect();
+        $sql = "SELECT * FROM users WHERE user_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+        $stmt->close();
+        $conn->close();
+        return $user;
     }
 
     private static function logStatusChange($post_id, $user_id, $status_from, $status_to, $reason): void
