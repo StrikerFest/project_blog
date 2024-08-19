@@ -20,7 +20,7 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
     exit;
 }
 
-$banners = Banner::getBanners(true);
+$banners = Banner::getBanners(false);
 
 Common::requireTemplate('admin/banner/index.php', [
     'banners' => $banners

@@ -25,6 +25,7 @@ Common::requireTemplate('admin/layouts/headers.php', [
             <th>End Date</th>
             <th>Status</th>
             <th>Action</th>
+            <th style="display:none;">Updated At</th> <!-- Hidden Updated At column -->
         </tr>
         </thead>
         <tbody>
@@ -32,7 +33,7 @@ Common::requireTemplate('admin/layouts/headers.php', [
             <tr>
                 <td><?php echo htmlspecialchars($banner['id']); ?></td>
                 <td><?php echo htmlspecialchars($banner['title']); ?></td>
-                <td><?php echo htmlspecialchars(Banner::getBannerTypeById($banner['type_id'])); ?></td>
+                <td><?php echo htmlspecialchars(Banner::getBannerTypeById($banner['type_id'], false)); ?></td>
                 <td><?php echo htmlspecialchars($banner['start_date']); ?></td>
                 <td><?php echo htmlspecialchars($banner['end_date']); ?></td>
                 <td><?php echo $banner['deleted_at'] ? 'Deleted' : ($banner['is_active'] ? 'Active' : 'Inactive'); ?></td>
@@ -44,6 +45,7 @@ Common::requireTemplate('admin/layouts/headers.php', [
                         <a href="banner/delete?action=delete&id=<?= $banner['id']; ?>" class="btn btn-delete">Delete</a>
                     <?php endif; ?>
                 </td>
+                <td style="display:none;"><?php echo htmlspecialchars($banner['updated_at']); ?></td> <!-- Hidden Updated At column data -->
             </tr>
         <?php endforeach; ?>
         </tbody>
@@ -56,11 +58,14 @@ Common::requireTemplate('admin/layouts/footer.php');
 <script>
     $(document).ready(function() {
         $('#listing-table').DataTable({
-            "searching": true
+            "searching": true,
+            "order": [[7, "desc"]], // Sort by the 8th column (updated_at) in descending order
+            "columnDefs": [
+                { "targets": 7, "visible": false } // Hide the updated_at column
+            ]
         });
     });
-</script>
-<script>
+
     document.addEventListener('DOMContentLoaded', function () {
         const deleteButtons = document.querySelectorAll('.btn-delete');
         const recoverButtons = document.querySelectorAll('.btn-recover');
@@ -79,7 +84,7 @@ Common::requireTemplate('admin/layouts/footer.php');
             button.addEventListener('click', function (e) {
                 e.preventDefault();
                 const confirmRecover = confirm('Are you sure you want to recover this banner?');
-                if confirmRecover {
+                if (confirmRecover) {
                     window.location.href = this.href;
                 }
             });

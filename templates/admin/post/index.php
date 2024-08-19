@@ -26,14 +26,20 @@ Common::requireTemplate('admin/layouts/headers.php', [
             <th>Categories</th>
             <th>Tags</th>
             <th>Status</th>
+            <th>Publish Date</th>
+            <th style="display:none;">Updated At</th> 
             <th>Action</th>
         </tr>
         </thead>
         <tbody>
         <?php foreach ($posts as $post): ?>
             <?php
-                $post_category_ids = Post::getPostCategories($post['post_id'] ?? null);
-                $post_tag_ids = Post::getPostTags($post['post_id'] ?? null);
+            $post_category_ids = Post::getPostCategories($post['post_id'] ?? null);
+            $post_tag_ids = Post::getPostTags($post['post_id'] ?? null);
+
+            // Extract only the 'name' from the category and tag arrays
+            $category_names = array_column($post_category_ids, 'name');
+            $tag_names = array_column($post_tag_ids, 'name');
             ?>
             <tr>
                 <td><?php echo htmlspecialchars($post['post_id']); ?></td>
@@ -41,8 +47,8 @@ Common::requireTemplate('admin/layouts/headers.php', [
 
                 <td>
                     <?php
-                    if (isset($post_category_ids) && count($post_category_ids) > 0) {
-                        echo implode(', ', $post_category_ids);
+                    if (!empty($category_names)) {
+                        echo implode(', ', $category_names);
                     } else {
                         echo 'No Categories';
                     }
@@ -51,8 +57,8 @@ Common::requireTemplate('admin/layouts/headers.php', [
 
                 <td>
                     <?php
-                    if (isset($post_tag_ids)) {
-                        echo implode(', ', $post_tag_ids);
+                    if (!empty($tag_names)) {
+                        echo implode(', ', $tag_names);
                     } else {
                         echo 'No Tags';
                     }
@@ -60,6 +66,8 @@ Common::requireTemplate('admin/layouts/headers.php', [
                 </td>
 
                 <td><?php echo htmlspecialchars($post['status']); ?></td>
+                <td><?php echo htmlspecialchars($post['published_at'] ?? 'N/A'); ?></td>
+                <td style="display:none;"><?php echo htmlspecialchars($post['updated_at']); ?></td>
                 <td>
                     <?php if ($post['deleted_at']): ?>
                         <a href="post/delete?action=recover&id=<?= $post['post_id']; ?>" class="btn btn-recover">Recover</a>
@@ -80,7 +88,11 @@ Common::requireTemplate('admin/layouts/footer.php');
 <script>
     $(document).ready(function() {
         $('#listing-table').DataTable({
-            "searching": true
+            "searching": true,
+            "order": [[6, "desc"]], // Sort by hidden "updated_at" column
+            "columnDefs": [
+                { "targets": [6], "visible": false } // Hide the "updated_at" column
+            ]
         });
     });
 

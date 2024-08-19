@@ -22,6 +22,7 @@ Common::requireTemplate('admin/layouts/headers.php', [
                 <th>Status</th>
                 <th>Position</th>
                 <th>Action</th>
+                <th style="display:none;">Updated At</th> <!-- Hidden Updated At column -->
             </tr>
             </thead>
             <tbody>
@@ -39,6 +40,7 @@ Common::requireTemplate('admin/layouts/headers.php', [
                             <a href="tag/delete?action=delete&id=<?= $tag['tag_id']; ?>" class="listing-btn_action">Delete</a>
                         <?php endif; ?>
                     </td>
+                    <td style="display:none;"><?= $tag['updated_at']; ?></td> <!-- Hidden Updated At column data -->
                 </tr>
             <?php endforeach; ?>
             </tbody>
@@ -46,9 +48,13 @@ Common::requireTemplate('admin/layouts/headers.php', [
     </div>
 </div>
 
-<!-- Initialize DataTables -->
 <script>
     $(document).ready(function() {
-        $('#tagTable').DataTable();
+        $('#tagTable').DataTable({
+            "order": [[5, "desc"]], // Sort by the 6th column (updated_at) in descending order
+            "columnDefs": [
+                { "targets": 5, "visible": false } // Hide the updated_at column
+            ]
+        });
     });
 </script>

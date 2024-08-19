@@ -50,15 +50,6 @@ $role = $current_user['role'];
     </div>
     <?php if ($role === 'admin'): ?>
         <div class="menu-dropdown">
-            <button class="menu-dropbtn">Logs
-                <i class="fa fa-caret-down"></i>
-            </button>
-            <div class="menu-dropdown-content">
-                <a href="<?= Common::get_url('admin/approval-log') ?>">Approval logs</a>
-                <a href="<?= Common::get_url('admin/activity-log') ?>">Activity logs</a>
-            </div>
-        </div>
-        <div class="menu-dropdown">
             <button class="menu-dropbtn">Users
                 <i class="fa fa-caret-down"></i>
             </button>
@@ -77,6 +68,15 @@ $role = $current_user['role'];
             </div>
         </div>
     <?php endif; ?>
+    <div class="menu-dropdown">
+        <button class="menu-dropbtn">Logs
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="menu-dropdown-content">
+            <a href="<?= Common::get_url('admin/approval-log') ?>">Approval logs</a>
+<!--            <a href="--><?php //= Common::get_url('admin/activity-log') ?><!--">Activity logs</a>-->
+        </div>
+    </div>
     <div class="menu-dropdown">
         <button class="menu-dropbtn">Profile: <?= htmlspecialchars($current_user['username']) ?>
             <i class="fa fa-caret-down"></i>

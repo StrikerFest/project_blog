@@ -155,15 +155,15 @@ class Category
     public static function getPostCategoryIds($postId): array
     {
         $conn = DB::db_connect();
-        $sql = "SELECT c.category_id, c.name, c.status, c.description 
-            FROM categories c
-            INNER JOIN post_categories pc ON c.category_id = pc.category_id
-            WHERE pc.post_id = ?";
+        $sql = "SELECT c.category_id, c.name, c.slug, c.status, c.description 
+        FROM categories c
+        INNER JOIN post_categories pc ON c.category_id = pc.category_id
+        WHERE pc.post_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $postId);
-        $result = Common::getArrayBySQL($sql,$stmt);
+        $result = Common::getArrayBySQL($sql, $stmt);
         $conn->close();
-        
+
         return $result;
     }
 

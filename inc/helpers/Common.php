@@ -2,6 +2,9 @@
 
 namespace inc\helpers;
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 /**
  * Lớp này được dùng để chứa các hàm được sử dụng nhiều lần trong dự án
  * Hàm chứa code có thể được dùng lại nhiều lần
@@ -148,6 +151,41 @@ class Common
             default:
                 // If no specific permission is provided, do nothing
                 break;
+        }
+    }
+
+    public static function sendEmail($to, $subject, $body, $from = null): bool
+    {
+
+        // Create a new PHPMailer instance
+        $mail = new PHPMailer(true);
+
+        try {
+            // Server settings
+            $mail->isSMTP();
+            $mail->Host       = $_ENV['SMTP_HOST'];
+            $mail->SMTPAuth   = true;
+            $mail->Username   = $_ENV['SMTP_USERNAME'];
+            $mail->Password   = $_ENV['SMTP_PASSWORD'];
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port       = $_ENV['SMTP_PORT'];
+
+            // Sender and recipient settings
+            $mail->setFrom($from ?? $_ENV['DEFAULT_FROM_EMAIL'], $_ENV['DEFAULT_FROM_NAME']);
+            $mail->addAddress($to);
+
+            // Content
+            $mail->isHTML(true);
+            $mail->Subject = $subject;
+            $mail->Body    = $body;
+
+            // Send the email
+            $mail->send();
+            return true;
+        } catch (Exception $e) {
+            // Log the error if needed or handle it appropriately
+            error_log("Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
+            return false;
         }
     }
 }

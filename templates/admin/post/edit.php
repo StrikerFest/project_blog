@@ -12,7 +12,7 @@ Common::requireTemplate('admin/layouts/headers.php', ['title' => 'burogu', 'perm
 $current_user = Common::getCurrentBackendUser();
 $post = $args['post'];
 
-$post_category_ids = Post::getPostCategories($post['post_id'] ?? null, 'id');
+$post_category_ids = Post::getPostCategories($post['post_id'] ?? null, 'id', 0);
 $post_tag_ids = Post::getPostTags($post['post_id'] ?? null, 'id');
 
 $allowed = Post::canChangeStatus($post['status'] ?? null, $current_user['role']);
@@ -39,17 +39,33 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
 
         <div class="edit-field">
             <label for="post-edit-content">Content:</label>
-            <textarea id="post-edit-content" name="content" placeholder="Content" required><?= $post['content'] ?? '' ?></textarea>
+            <textarea id="post-edit-content" name="content" placeholder="Content"><?= htmlspecialchars($post['content'] ?? '') ?></textarea>
         </div>
 
+        <!-- Thumbnail Upload Field -->
         <div class="edit-field">
             <label for="post-edit-thumbnail">Thumbnail:</label>
+            <?php if (!empty($post['thumbnail_path'])): ?>
+                <div class="image-preview">
+                    <p>Current Thumbnail:</p>
+                    <img src="<?= $post['thumbnail_path']; ?>" alt="Current Thumbnail" class="existing-image">
+                </div>
+            <?php endif; ?>
             <input type="file" id="post-edit-thumbnail" name="thumbnail" accept="image/*">
+            <div id="thumbnail-preview" class="image-preview"></div>
         </div>
 
+        <!-- Banner Upload Field -->
         <div class="edit-field">
             <label for="post-edit-banner">Banner:</label>
+            <?php if (!empty($post['banner_path'])): ?>
+                <div class="image-preview">
+                    <p>Current Banner:</p>
+                    <img src="<?= $post['banner_path']; ?>" alt="Current Banner" class="existing-image">
+                </div>
+            <?php endif; ?>
             <input type="file" id="post-edit-banner" name="banner" accept="image/*">
+            <div id="banner-preview" class="image-preview"></div>
         </div>
 
         <div class="edit-field">
@@ -161,34 +177,36 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
                 ?>
             </select>
         </div>
-
-        <div class="edit-field">
+        <div class="edit-field" id="reason-field" style="display: none;">
+            <label for="post-edit-reason">Reason for Status Change:</label>
+            <textarea id="post-edit-reason" name="reason" placeholder="Provide a reason for the status change"></textarea>
+        </div>
+        <div class="edit-field" id="editor-field" style="display: none;">
             <label for="post-edit-editor">Assign Editor:</label>
-            <select id="post-edit-editor" name="editor_id" <?= $post['status'] === 'draft' ? 'disabled' : '' ?>>
+            <select id="post-edit-editor" name="editor_id">
                 <?php foreach ($args['editors'] as $editor): ?>
-                    <option value="<?= $editor['user_id'] ?>" <?= $post['editor_id'] == $editor['user_id'] ? 'selected' : '' ?>>
+                    <option value="<?= $editor['user_id'] ?>" <?= ($post['editor_id'] ?? null) == $editor['user_id'] ? 'selected' : '' ?>>
                         <?= $editor['username'] ?>
                     </option>
                 <?php endforeach; ?>
             </select>
         </div>
-        
+
         <div class="edit-field">
             <button type="submit" class="edit-btn">Save Post</button>
         </div>
     </form>
 </div>
 
-<!-- Include CKEditor 5 from CDN -->
-<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
-<script>
-    // Initialize CKEditor 5 on the textarea
-    ClassicEditor
-        .create(document.querySelector('#post-edit-content'))
-        .catch(error => {
-            console.error(error);
-        });
+<script src="<?= Common::getAssetPath('js/admin/post/form-display.js') ?>"></script>
+<script type="importmap">
+    {
+        "imports": {
+            "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/43.0.0/ckeditor5.js",
+            "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/43.0.0/"
+        }
+    }
 </script>
-
+<script type="module" src="<?= Common::getAssetPath('js/admin/post/editor.js') ?>"></script>
 <script src="<?= Common::getAssetPath('js/script.js') ?>"></script>
 </body>

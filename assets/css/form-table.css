@@ -93,3 +93,25 @@
 .edit-btn:hover {
   background-color: #45a049;
 }
+
+.image-preview img {
+  max-width: 200px;
+  max-height: 200px;
+  margin: 10px 0;
+  display: block;
+}
+
+.image-preview p {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.existing-image {
+  border: 2px solid #007bff;
+  padding: 2px;
+}
+
+.new-image {
+  border: 2px dashed #28a745;
+  padding: 2px;
+}

@@ -1,5 +1,5 @@
 <?php
-
+require 'vendor/autoload.php';
 /**
  * Hàm autoload
  * Hỗ trợ cho việc nhập lớp
@@ -26,6 +26,13 @@ class Autoloader {
         if (file_exists($file)) {
             require $file;
         } else {
+            $fileName = 'vendor\\' . $fileName;
+            $file = __DIR__ . '/' . $fileName;
+            if (file_exists($file)) {
+                require $file;
+            } else {
+                throw new Exception("Class file for $className not found.");
+            }
             throw new Exception("Class file for $className not found.");
         }
     }

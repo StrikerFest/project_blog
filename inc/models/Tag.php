@@ -148,7 +148,7 @@ class Tag
     public static function getPostTagIds($postId): array
     {
         $conn = DB::db_connect();
-        $sql = "SELECT t.tag_id, t.name, t.status
+        $sql = "SELECT t.tag_id, t.name, t.slug, t.status
             FROM tags t
             INNER JOIN post_tags pt ON t.tag_id = pt.tag_id
             WHERE pt.post_id = ?";
@@ -193,5 +193,4 @@ class Tag
 
         return $tag_id ?: null;
     }
-
 }

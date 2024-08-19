@@ -20,6 +20,12 @@ $limit = 5;
 $offset = ($page - 1) * $limit;
 
 $tag = Tag::getTagById($tag_id);
+
+if ($tag === null) {
+    header("Location: /post");
+    exit();
+}
+
 $posts = Post::getPostsByTagIdWithPagination($tag_id, $offset, $limit);
 $totalPosts = Post::countPostsByTagId($tag_id);
 $totalPages = ceil($totalPosts / $limit);
