@@ -32,7 +32,7 @@ Common::requireTemplate('admin/layouts/headers.php', [
             <tr>
                 <td><?php echo htmlspecialchars($banner['id']); ?></td>
                 <td><?php echo htmlspecialchars($banner['title']); ?></td>
-                <td><?php echo htmlspecialchars(Banner::getBannerTypeById($banner['type_id'])); ?></td>
+                <td><?php echo htmlspecialchars(Banner::getBannerTypeById($banner['type_id'],false)); ?></td>
                 <td><?php echo htmlspecialchars($banner['start_date']); ?></td>
                 <td><?php echo htmlspecialchars($banner['end_date']); ?></td>
                 <td><?php echo $banner['deleted_at'] ? 'Deleted' : ($banner['is_active'] ? 'Active' : 'Inactive'); ?></td>

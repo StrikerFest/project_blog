@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 if (isset($_GET['id'])) {
-    $banner = Banner::getBannerById($_GET['id']);
+    $banner = Banner::getBannerById($_GET['id'],false);
 }
 
 Common::requireTemplate('admin/banner/edit.php', [

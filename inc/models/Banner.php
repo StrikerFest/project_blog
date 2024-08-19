@@ -6,13 +6,18 @@ use inc\helpers\DB;
 
 class Banner
 {
-    public static function getBanners($includeDeleted = false)
+    public static function getBanners($checkActive = true, $checkDeleted = true)
     {
         $conn = DB::db_connect();
-        $sql = "SELECT * FROM banners WHERE is_active = 1";
-        if (!$includeDeleted) {
+        $sql = "SELECT * FROM banners WHERE 1";
+
+        if ($checkActive) {
+            $sql .= " AND is_active = 1";
+        }
+        if ($checkDeleted) {
             $sql .= " AND deleted_at IS NULL";
         }
+
         $result = $conn->query($sql);
         $banners = [];
         if ($result->num_rows > 0) {
@@ -25,10 +30,15 @@ class Banner
         return $banners;
     }
 
-    public static function getBannerTypes()
+    public static function getBannerTypes($checkDeleted = true)
     {
         $conn = DB::db_connect();
-        $sql = "SELECT * FROM banner_types WHERE deleted_at IS NULL";
+        $sql = "SELECT * FROM banner_types WHERE 1";
+
+        if ($checkDeleted) {
+            $sql .= " AND deleted_at IS NULL";
+        }
+
         $result = $conn->query($sql);
         $types = $result->fetch_all(MYSQLI_ASSOC);
 
@@ -108,10 +118,19 @@ class Banner
         return $existingImagePath;
     }
 
-    public static function getBannerById($id)
+    public static function getBannerById($id, $checkActive = true, $checkDeleted = true)
     {
         $conn = DB::db_connect();
-        $sql = "SELECT * FROM banners WHERE id = ? AND is_active = 1 AND deleted_at IS NULL";
+        $sql = "SELECT * FROM banners WHERE id = ?";
+
+        // Add conditions based on arguments
+        if ($checkActive) {
+            $sql .= " AND is_active = 1";
+        }
+        if ($checkDeleted) {
+            $sql .= " AND deleted_at IS NULL";
+        }
+
         $stmt = $conn->prepare($sql);
         $stmt->bind_param('i', $id);
         $stmt->execute();
@@ -154,10 +173,15 @@ class Banner
         return $result;
     }
 
-    public static function getBannerTypeById($id)
+    public static function getBannerTypeById($id, $checkDeleted = true)
     {
         $conn = DB::db_connect();
         $sql = "SELECT name FROM banner_types WHERE id = ?";
+
+        if ($checkDeleted) {
+            $sql .= " AND deleted_at IS NULL";
+        }
+
         $stmt = $conn->prepare($sql);
         $stmt->bind_param('i', $id);
         $stmt->execute();
@@ -170,18 +194,28 @@ class Banner
         return $type['name'] ?? 'Unknown Type';
     }
 
-    public static function getBannerByType($type)
+    public static function getBannerByType($type, $checkActive = true, $checkDeleted = true)
     {
         $conn = DB::db_connect();
+        $currentDateTime = date('Y-m-d H:i:s'); // Get the current date and time
+
         $sql = "
-        SELECT * FROM banners 
-        WHERE type_id = (SELECT id FROM banner_types WHERE name = ?) 
-          AND is_active = 1 
-          AND deleted_at IS NULL
-        ORDER BY position ASC, id DESC
-        LIMIT 1";
+            SELECT * FROM banners 
+            WHERE type_id = (SELECT id FROM banner_types WHERE name = ?) 
+              AND start_date <= ? 
+              AND end_date >= ?";
+
+        if ($checkActive) {
+            $sql .= " AND is_active = 1";
+        }
+        if ($checkDeleted) {
+            $sql .= " AND deleted_at IS NULL";
+        }
+
+        $sql .= " ORDER BY position ASC, id DESC LIMIT 1";
+
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param('s', $type);
+        $stmt->bind_param('sss', $type, $currentDateTime, $currentDateTime); // Bind the current date and time
         $stmt->execute();
         $result = $stmt->get_result();
         $banner = $result->fetch_assoc();
@@ -191,5 +225,4 @@ class Banner
 
         return $banner['image_path'] ?? null;
     }
-
 }
