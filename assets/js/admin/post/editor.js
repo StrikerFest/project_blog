@@ -188,7 +188,6 @@ const editorConfig = {
             'resizeImage'
         ]
     },
-    initialData: '<h2>Start editing your content here...</h2>',
     language: 'vi',
     link: {
         addTargetToExternalLinks: true,

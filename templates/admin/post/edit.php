@@ -12,7 +12,7 @@ Common::requireTemplate('admin/layouts/headers.php', ['title' => 'burogu', 'perm
 $current_user = Common::getCurrentBackendUser();
 $post = $args['post'];
 
-$post_category_ids = Post::getPostCategories($post['post_id'] ?? null, 'id');
+$post_category_ids = Post::getPostCategories($post['post_id'] ?? null, 'id', 0);
 $post_tag_ids = Post::getPostTags($post['post_id'] ?? null, 'id');
 
 $allowed = Post::canChangeStatus($post['status'] ?? null, $current_user['role']);
@@ -39,17 +39,33 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
 
         <div class="edit-field">
             <label for="post-edit-content">Content:</label>
-            <textarea id="post-edit-content" name="content" placeholder="Content" required><?= $post['content'] ?? '' ?></textarea>
+            <textarea id="post-edit-content" name="content" placeholder="Content"><?= htmlspecialchars($post['content'] ?? '') ?></textarea>
         </div>
 
+        <!-- Thumbnail Upload Field -->
         <div class="edit-field">
             <label for="post-edit-thumbnail">Thumbnail:</label>
+            <?php if (!empty($post['thumbnail_path'])): ?>
+                <div class="image-preview">
+                    <p>Current Thumbnail:</p>
+                    <img src="<?= $post['thumbnail_path']; ?>" alt="Current Thumbnail" class="existing-image">
+                </div>
+            <?php endif; ?>
             <input type="file" id="post-edit-thumbnail" name="thumbnail" accept="image/*">
+            <div id="thumbnail-preview" class="image-preview"></div>
         </div>
 
+        <!-- Banner Upload Field -->
         <div class="edit-field">
             <label for="post-edit-banner">Banner:</label>
+            <?php if (!empty($post['banner_path'])): ?>
+                <div class="image-preview">
+                    <p>Current Banner:</p>
+                    <img src="<?= $post['banner_path']; ?>" alt="Current Banner" class="existing-image">
+                </div>
+            <?php endif; ?>
             <input type="file" id="post-edit-banner" name="banner" accept="image/*">
+            <div id="banner-preview" class="image-preview"></div>
         </div>
 
         <div class="edit-field">
@@ -165,11 +181,11 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
             <label for="post-edit-reason">Reason for Status Change:</label>
             <textarea id="post-edit-reason" name="reason" placeholder="Provide a reason for the status change"></textarea>
         </div>
-        <div class="edit-field">
+        <div class="edit-field" id="editor-field" style="display: none;">
             <label for="post-edit-editor">Assign Editor:</label>
-            <select id="post-edit-editor" name="editor_id" <?= $post['status'] === 'draft' ? 'disabled' : '' ?>>
+            <select id="post-edit-editor" name="editor_id">
                 <?php foreach ($args['editors'] as $editor): ?>
-                    <option value="<?= $editor['user_id'] ?>" <?= $post['editor_id'] == $editor['user_id'] ? 'selected' : '' ?>>
+                    <option value="<?= $editor['user_id'] ?>" <?= ($post['editor_id'] ?? null) == $editor['user_id'] ? 'selected' : '' ?>>
                         <?= $editor['username'] ?>
                     </option>
                 <?php endforeach; ?>
@@ -182,32 +198,7 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
     </form>
 </div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const statusSelect = document.getElementById("post-edit-status");
-        const reasonField = document.getElementById("reason-field");
-        const initialStatus = statusSelect.value;
-
-        statusSelect.addEventListener("change", function() {
-            const currentStatus = statusSelect.value;
-
-            if (currentStatus !== "draft" && currentStatus !== initialStatus) {
-                reasonField.style.display = "block";
-            } else {
-                reasonField.style.display = "none";
-            }
-        });
-
-        // Check the initial state in case the status was changed via some other means
-        const currentStatus = statusSelect.value;
-        if (currentStatus !== "draft" && currentStatus !== initialStatus) {
-            reasonField.style.display = "block";
-        }
-    });
-
-</script>
-
-<!-- Include CKEditor 5 -->
+<script src="<?= Common::getAssetPath('js/admin/post/form-display.js') ?>"></script>
 <script type="importmap">
     {
         "imports": {

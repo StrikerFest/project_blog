@@ -71,7 +71,7 @@ class Post
 
                     // Send email notification to the author
                     $author = self::getUserById($author_id); // Assuming a function that fetches user data
-                    $authorEmail = $author['email'] ?? 'default@example.com'; // Replace with appropriate email handling
+                    $authorEmail = $author['email'] ?? $_ENV['DEFAULT_FROM_EMAIL']; // Replace with appropriate email handling
 
                     Common::sendEmail(
                         $authorEmail,
@@ -82,7 +82,7 @@ class Post
                     // Send email notification to the editor
                     if ($editor_id) {
                         $editor = self::getUserById($editor_id); // Assuming a function that fetches user data
-                        $editorEmail = $editor['email'] ?? 'default@example.com'; // Replace with appropriate email handling
+                        $editorEmail = $editor['email'] ?? $_ENV['DEFAULT_FROM_EMAIL']; // Replace with appropriate email handling
 
                         Common::sendEmail(
                             $editorEmail,

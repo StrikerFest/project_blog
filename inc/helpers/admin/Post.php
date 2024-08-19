@@ -43,11 +43,18 @@ class Post
         }
 
         $result = [];
-        foreach ($data as $category) {
-            $result[] = [
-                'name' => $category['name'],
-                'slug' => $category['slug']
-            ];
+
+        if ($display === 'name') {
+            foreach ($data as $category) {
+                $result[] = [
+                    'name' => $category['name'],
+                    'slug' => $category['slug']
+                ];
+            }
+        } else if ($display === 'id') {
+            foreach ($data as $category) {
+                $result[] = $category['category_id'];
+            }
         }
 
         if ($limit === 0) {
@@ -70,11 +77,17 @@ class Post
         }
 
         $result = [];
-        foreach ($data as $tag) {
-            $result[] = [
-                'name' => $tag['name'],
-                'slug' => $tag['slug']
-            ];
+        if ($display === 'name') {
+            foreach ($data as $tag) {
+                $result[] = [
+                    'name' => $tag['name'],
+                    'slug' => $tag['slug']
+                ];
+            }
+        } else if ($display === 'id') {
+            foreach ($data as $tag) {
+                $result[] = $tag['tag_id'];
+            }
         }
 
         if ($limit === 0) {
