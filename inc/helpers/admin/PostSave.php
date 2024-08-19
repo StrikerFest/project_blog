@@ -38,24 +38,45 @@ class PostSave
 
     /**
      * Save or update a post in the database.
+     * @throws \Exception
      */
     public static function saveOrUpdatePost($id, $title, $slug, $content, $author_id, $editor_id, $status, $thumbnail_path, $banner_path)
     {
-        $conn = DBHelper::fetchSingleRow("SELECT post_id FROM posts WHERE post_id = ?", [$id], "i");
+        $published_at = null;
 
-        if ($id == '') {
-            $sql = "INSERT INTO posts (title, slug, content, author_id, editor_id, status, thumbnail_path, banner_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            $types = "ssssssss";
-            $params = [$title, $slug, $content, $author_id, $editor_id, $status, $thumbnail_path, $banner_path];
-        } else {
-            $sql = "UPDATE posts SET title = ?, slug = ?, content = ?, author_id = ?, editor_id = ?, status = ?, thumbnail_path = ?, banner_path = ? WHERE post_id = ?";
-            $types = "ssssssssi";
-            $params = [$title, $slug, $content, $author_id, $editor_id, $status, $thumbnail_path, $banner_path, $id];
+        if ($status === 'published') {
+            $published_at = date('Y-m-d H:i:s'); // Set published_at to current time
         }
 
-        DBHelper::executeQuery($sql, $params, $types);
+        if ($id == '') {
+            // Insert new post
+            $sql = "INSERT INTO posts (title, slug, content, author_id, editor_id, status, thumbnail_path, banner_path, published_at) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $params = [$title, $slug, $content, $author_id, $editor_id, $status, $thumbnail_path, $banner_path, $published_at];
+            $types = "sssssssss"; // 9 parameters
+        } else {
+            // Update existing post
+            if ($status !== 'published') {
+                $published_at = null; // Clear published_at if status is not 'published'
+            }
+            $sql = "UPDATE posts 
+                SET title = ?, slug = ?, content = ?, author_id = ?, editor_id = ?, status = ?, thumbnail_path = ?, banner_path = ?, published_at = ? 
+                WHERE post_id = ?";
+            $params = [$title, $slug, $content, $author_id, $editor_id, $status, $thumbnail_path, $banner_path, $published_at, $id];
+            $types = "sssssssssi"; // 10 parameters
+        }
 
-        return $id ?: $conn['id'];
+        $success = DBHelper::executeQuery($sql, $params, $types);
+
+        if (!$success) {
+            throw new \Exception("Error: Unable to save or update post.");
+        }
+
+        if ($id == '') {
+            $id = DBHelper::fetchSingleValue("SELECT LAST_INSERT_ID()", [], "");
+        }
+
+        return $id;
     }
 
     /**

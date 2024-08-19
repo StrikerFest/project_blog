@@ -26,6 +26,8 @@ Common::requireTemplate('admin/layouts/headers.php', [
             <th>Categories</th>
             <th>Tags</th>
             <th>Status</th>
+            <th>Publish Date</th>
+            <th style="display:none;">Updated At</th> 
             <th>Action</th>
         </tr>
         </thead>
@@ -64,6 +66,8 @@ Common::requireTemplate('admin/layouts/headers.php', [
                 </td>
 
                 <td><?php echo htmlspecialchars($post['status']); ?></td>
+                <td><?php echo htmlspecialchars($post['published_at'] ?? 'N/A'); ?></td>
+                <td style="display:none;"><?php echo htmlspecialchars($post['updated_at']); ?></td>
                 <td>
                     <?php if ($post['deleted_at']): ?>
                         <a href="post/delete?action=recover&id=<?= $post['post_id']; ?>" class="btn btn-recover">Recover</a>
@@ -84,7 +88,11 @@ Common::requireTemplate('admin/layouts/footer.php');
 <script>
     $(document).ready(function() {
         $('#listing-table').DataTable({
-            "searching": true
+            "searching": true,
+            "order": [[6, "desc"]], // Sort by hidden "updated_at" column
+            "columnDefs": [
+                { "targets": [6], "visible": false } // Hide the "updated_at" column
+            ]
         });
     });
 

@@ -22,9 +22,19 @@ class Post
             $status = $_POST['status'] ?? '';
             $reason = $_POST['reason'] ?? '';
 
-            // Handle file uploads
-            $thumbnail_path = PostSaveHelper::handleFileUpload($_FILES['thumbnail'] ?? null, 'thumbnail');
-            $banner_path = PostSaveHelper::handleFileUpload($_FILES['banner'] ?? null, 'banner');
+            // Retrieve existing paths from the database if post ID is provided
+            if ($id) {
+                $existingPost = Post::getPostById($id);
+                $existingThumbnailPath = $existingPost['thumbnail_path'] ?? '';
+                $existingBannerPath = $existingPost['banner_path'] ?? '';
+            } else {
+                $existingThumbnailPath = '';
+                $existingBannerPath = '';
+            }
+
+            // Handle file uploads; use existing paths if no new files are uploaded
+            $thumbnail_path = PostSaveHelper::handleFileUpload($_FILES['thumbnail'] ?? null, 'thumbnail') ?? $existingThumbnailPath;
+            $banner_path = PostSaveHelper::handleFileUpload($_FILES['banner'] ?? null, 'banner') ?? $existingBannerPath;
 
             $oldStatus = $id ? PostSaveHelper::getPostOldStatus($id) : null;
 

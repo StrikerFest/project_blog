@@ -49,6 +49,7 @@ Common::requireTemplate('admin/layouts/footer.php');
 <script>
     $(document).ready(function() {
         $('#listing-table').DataTable({
+            "order": [[0, "desc"]], // Sort by the first column (approval_id) in descending order
             "searching": true
         });
     });
