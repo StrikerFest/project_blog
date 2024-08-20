@@ -222,4 +222,76 @@ class Post
             'tags' => $tags,
         ];
     }
+
+    public static function getFilteredPosts($filters = [], $includeDeleted = false): array
+    {
+        $sql = "
+            SELECT p.*, a.username as author_name, e.username as editor_name 
+            FROM posts p
+            LEFT JOIN users a ON p.author_id = a.user_id
+            LEFT JOIN users e ON p.editor_id = e.user_id
+            WHERE 1=1
+        ";
+
+        $params = [];
+        $types = '';
+
+        // Apply filters
+        if (!empty($filters['id'])) {
+            $sql .= " AND p.post_id = ?";
+            $params[] = $filters['id'];
+            $types .= 'i';
+        }
+
+        if (!empty($filters['title'])) {
+            $sql .= " AND p.title LIKE ?";
+            $params[] = '%' . $filters['title'] . '%';
+            $types .= 's';
+        }
+
+        if (!empty($filters['categories'])) {
+            $sql .= " AND EXISTS (SELECT 1 FROM post_categories pc WHERE pc.post_id = p.post_id AND pc.category_id IN (SELECT category_id FROM categories WHERE name LIKE ?))";
+            $params[] = '%' . $filters['categories'] . '%';
+            $types .= 's';
+        }
+
+        if (!empty($filters['tags'])) {
+            $sql .= " AND EXISTS (SELECT 1 FROM post_tags pt WHERE pt.post_id = p.post_id AND pt.tag_id IN (SELECT tag_id FROM tags WHERE name LIKE ?))";
+            $params[] = '%' . $filters['tags'] . '%';
+            $types .= 's';
+        }
+
+        if (!empty($filters['author_name'])) {
+            $sql .= " AND a.username LIKE ?";
+            $params[] = '%' . $filters['author_name'] . '%';
+            $types .= 's';
+        }
+
+        if (!empty($filters['editor_name'])) {
+            $sql .= " AND e.username LIKE ?";
+            $params[] = '%' . $filters['editor_name'] . '%';
+            $types .= 's';
+        }
+
+        if (!empty($filters['status'])) {
+            $sql .= " AND p.status = ?";
+            $params[] = $filters['status'];
+            $types .= 's';
+        }
+
+        if (!empty($filters['published_at'])) {
+            $sql .= " AND DATE(p.published_at) = ?";
+            $params[] = $filters['published_at'];
+            $types .= 's';
+        }
+
+        // Handle deleted posts
+        if (!$includeDeleted) {
+            $sql .= " AND p.deleted_at IS NULL";
+        }
+
+        $sql .= " ORDER BY p.updated_at DESC";
+
+        return DBHelper::fetchAllRows($sql, $params, $types);
+    }
 }

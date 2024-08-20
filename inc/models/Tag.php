@@ -193,4 +193,46 @@ class Tag
 
         return $tag_id ?: null;
     }
+
+    public static function getFilteredTags($filters = [], $includeDeleted = false): array
+    {
+        $sql = "SELECT * FROM tags WHERE 1=1";
+
+        $params = [];
+        $types = '';
+
+        // Apply filters
+        if (!empty($filters['id'])) {
+            $sql .= " AND tag_id = ?";
+            $params[] = $filters['id'];
+            $types .= 'i';
+        }
+
+        if (!empty($filters['name'])) {
+            $sql .= " AND name LIKE ?";
+            $params[] = '%' . $filters['name'] . '%';
+            $types .= 's';
+        }
+
+        if (!empty($filters['status'])) {
+            $sql .= " AND status = ?";
+            $params[] = $filters['status'];
+            $types .= 's';
+        }
+
+        if (!empty($filters['position'])) {
+            $sql .= " AND position = ?";
+            $params[] = $filters['position'];
+            $types .= 'i';
+        }
+
+        // Handle deleted tags
+        if (!$includeDeleted) {
+            $sql .= " AND deleted_at IS NULL";
+        }
+
+        $sql .= " ORDER BY updated_at DESC";
+
+        return DB::fetchAllRows($sql, $params, $types);
+    }
 }

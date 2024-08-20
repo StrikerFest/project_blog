@@ -9,6 +9,43 @@ Common::requireTemplate('admin/layouts/headers.php', [
     'title' => 'Category'
 ]);
 ?>
+
+<div class="filter-container">
+    <form method="GET" action="" class="filter-container">
+        <div class="filter-item">
+            <label for="id-filter">Id:</label>
+            <input type="text" id="id-filter" name="id" class="short-input" placeholder="ID" value="<?= htmlspecialchars($_GET['id'] ?? '') ?>">
+        </div>
+        <div class="filter-item">
+            <label for="name-filter">Name:</label>
+            <input type="text" id="name-filter" name="name" placeholder="Filter by name" value="<?= htmlspecialchars($_GET['name'] ?? '') ?>">
+        </div>
+        <div class="filter-item">
+            <label for="slug-filter">Slug:</label>
+            <input type="text" id="slug-filter" name="slug" placeholder="Filter by slug" value="<?= htmlspecialchars($_GET['slug'] ?? '') ?>">
+        </div>
+        <div class="filter-item">
+            <label for="status-filter">Status:</label>
+            <select id="status-filter" name="status">
+                <option value="" <?= !isset($_GET['status']) || $_GET['status'] === '' ? 'selected' : '' ?>>All</option>
+                <option value="enabled" <?= $_GET['status'] === 'enabled' ? 'selected' : '' ?>>Enabled</option>
+                <option value="disabled" <?= $_GET['status'] === 'disabled' ? 'selected' : '' ?>>Disabled</option>
+            </select>
+        </div>
+        <div class="filter-item">
+            <label for="position-filter">Position:</label>
+            <input type="text" id="position-filter" name="position" placeholder="Filter by position" value="<?= htmlspecialchars($_GET['position'] ?? '') ?>">
+        </div>
+        <div class="filter-item checkbox-container">
+            <input type="checkbox" id="include-deleted" name="include_deleted" <?= isset($_GET['include_deleted']) ? 'checked' : '' ?>>
+            <label for="include-deleted">Include Deleted?</label>
+        </div>
+        <div class="filter-btn">
+            <button type="submit">Filter</button>
+        </div>
+    </form>
+</div>
+
 <div class="listing-container">
     <h1>Categories</h1>
     <div>

@@ -200,6 +200,53 @@ class Category
 
         return $category_id ?: null;
     }
-    
-    
+
+    public static function getFilteredCategories($filters = [], $includeDeleted = false): array
+    {
+        $sql = "SELECT * FROM categories WHERE 1";
+
+        $params = [];
+        $types = '';
+
+        // Apply filters
+        if (!empty($filters['id'])) {
+            $sql .= " AND category_id = ?";
+            $params[] = $filters['id'];
+            $types .= 'i';
+        }
+
+        if (!empty($filters['name'])) {
+            $sql .= " AND name LIKE ?";
+            $params[] = '%' . $filters['name'] . '%';
+            $types .= 's';
+        }
+
+        if (!empty($filters['slug'])) {
+            $sql .= " AND slug LIKE ?";
+            $params[] = '%' . $filters['slug'] . '%';
+            $types .= 's';
+        }
+
+        if (!empty($filters['status'])) {
+            $sql .= " AND status = ?";
+            $params[] = $filters['status'];
+            $types .= 's';
+        }
+
+        if (!empty($filters['position'])) {
+            $sql .= " AND position = ?";
+            $params[] = $filters['position'];
+            $types .= 'i';
+        }
+
+        // Handle deleted categories
+        if (!$includeDeleted) {
+            $sql .= " AND deleted_at IS NULL";
+        }
+
+        $sql .= " ORDER BY updated_at DESC";
+
+        return DB::fetchAllRows($sql, $params, $types);
+    }
+
 }

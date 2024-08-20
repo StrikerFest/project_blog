@@ -162,3 +162,72 @@ textarea {
     width: 100%;
     height: auto;
 }
+
+/* Filter*/
+.filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.filter-item {
+    flex: 1 1 24%;
+    margin-bottom: 10px;
+}
+
+.filter-item label {
+    display: block;
+    margin-bottom: 3px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.filter-item input[type="text"],
+.filter-item input[type="date"],
+.filter-item select {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.filter-item input[type="text"].short-input {
+    width: 80px; /* Shorter input field for ID */
+}
+
+.filter-item select {
+    padding: 5px;
+}
+
+.filter-item .checkbox-container {
+    display: flex;
+    align-items: center;
+    flex: 1 1 100%;
+}
+
+.filter-item .checkbox-container input {
+    width: auto;
+    margin-right: 5px;
+}
+
+.filter-container .filter-btn {
+    flex-basis: 100%;
+    text-align: center;
+}
+
+.filter-container .filter-btn button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.filter-container .filter-btn button:hover {
+    background-color: #0056b3;
+}
