@@ -7,7 +7,7 @@ use inc\helpers\Common;
  */
 
 Common::requireTemplate('admin/layouts/headers.php', [
-    'title' => isset($args['category']['category_id']) ? 'Edit category' : 'Create category'
+    'title' => isset($args['category']['category_id']) ? 'Edit category' : 'Create category', 'permission' => 'NO_EDITOR_CREATE'
 ]);
 
 $category = $args['categoryData'] ?? $args['category'];
@@ -37,16 +37,16 @@ $errors = $args['errors'] ?? [];
         <input type="hidden" value="<?= htmlspecialchars($category['category_id'] ?? '') ?>" name="id"/>
 
         <div>Name</div>
-        <input type="text" placeholder="Name" value="<?= htmlspecialchars($category['name'] ?? '') ?>" class="form__input" id="name" name="name" required />
+        <input type="text" placeholder="Name" value="<?= htmlspecialchars($category['name'] ?? '') ?>" class="form__input" id="name" name="name" required/>
 
         <div>Slug</div>
-        <input type="text" placeholder="Slug" value="<?= htmlspecialchars($category['slug'] ?? '') ?>" class="form__input" id="slug" name="slug" required />
+        <input type="text" placeholder="Slug" value="<?= htmlspecialchars($category['slug'] ?? '') ?>" class="form__input" id="slug" name="slug" required/>
 
         <div>Status</div>
         <div class="select">
             <select name="status" id="status" required>
-                <option value="enabled" <?= (!empty($category) && $category['status'] == 'enabled') ? 'selected' : ''  ?>>Enable</option>
-                <option value="disabled" <?= (!empty($category) && $category['status'] == 'disabled') ? 'selected' : ''  ?>>Disabled</option>
+                <option value="enabled" <?= (!empty($category) && $category['status'] == 'enabled') ? 'selected' : '' ?>>Enable</option>
+                <option value="disabled" <?= (!empty($category) && $category['status'] == 'disabled') ? 'selected' : '' ?>>Disabled</option>
             </select>
         </div>
 
@@ -54,7 +54,7 @@ $errors = $args['errors'] ?? [];
         <textarea type="text" placeholder="Description" id="description" name="description" required><?= htmlspecialchars($category['description'] ?? '') ?></textarea>
 
         <div>Position</div>
-        <input type="number" placeholder="Position" value="<?= htmlspecialchars($category['position'] ?? '0') ?>" class="form__input" id="position" name="position" required />
+        <input type="number" placeholder="Position" value="<?= htmlspecialchars($category['position'] ?? '0') ?>" class="form__input" id="position" name="position" required/>
 
         <button type="submit" class="btn">Save Category</button>
     </form>

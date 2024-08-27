@@ -7,7 +7,7 @@ use inc\helpers\Common;
  */
 
 Common::requireTemplate('admin/layouts/headers.php', [
-    'title' => isset($args['tag']['tag_id']) ? 'Edit Tag' : 'Create Tag'
+    'title' => isset($args['tag']['tag_id']) ? 'Edit Tag' : 'Create Tag', 'permission' => 'NO_EDITOR_CREATE'
 ]);
 
 $tag = $args['tagData'] ?? $args['tag'];
