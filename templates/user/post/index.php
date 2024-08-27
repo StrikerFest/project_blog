@@ -81,6 +81,7 @@ Common::requireTemplate('user/layouts/headers.php', [
             'banner_image' => $sideBanner
         ]); ?>
     </div>
+    <?php Common::requireTemplate('user/layouts/footer.php'); ?>
 </div>
 
 </body>

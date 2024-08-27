@@ -2,6 +2,7 @@ body{
     font-family: "Helvetica Neue", sans-serif;
     width: 1270px;
     margin: 0 auto;
+    top: 0 !important;
 }
 
 .container {
@@ -231,3 +232,8 @@ textarea {
 .filter-container .filter-btn button:hover {
     background-color: #0056b3;
 }
+
+.skiptranslate {
+    display: none;
+}
+

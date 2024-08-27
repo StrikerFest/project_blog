@@ -198,7 +198,7 @@ $banners = [
     ],
     [
         'title' => 'Subscribe to Our Newsletter',
-        'image_path' => '/assets/uploads/banner_newsletter.jpg',
+        'image_path' => '/assets/images/1270x300_placeholder_banner.webp',
         'text' => 'Stay updated with the latest tech news. Subscribe to our newsletter!',
         'link' => 'https://techblog.com/newsletter',
         'start_date' => '2024-08-01 00:00:00',
@@ -220,7 +220,7 @@ $banners = [
     ],
     [
         'title' => 'Cybersecurity Tips',
-        'image_path' => '/assets/uploads/banner_cybersecurity.jpg',
+        'image_path' => '/assets/images/1270x300_placeholder_banner.webp',
         'text' => 'Protect yourself online with our top cybersecurity tips. Click here to read more!',
         'link' => 'https://techblog.com/cybersecurity-tips',
         'start_date' => '2024-08-01 00:00:00',
@@ -242,7 +242,7 @@ $banners = [
     ],
     [
         'title' => 'Latest Tech Reviews',
-        'image_path' => '/assets/uploads/banner_reviews.jpg',
+        'image_path' => '/assets/images/1270x300_placeholder_banner.webp',
         'text' => 'Read our latest reviews on the newest tech products. Click here to check them out!',
         'link' => 'https://techblog.com/reviews',
         'start_date' => '2024-08-01 00:00:00',
