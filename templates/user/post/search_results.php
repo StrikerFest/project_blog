@@ -181,14 +181,14 @@ Common::requireTemplate('user/layouts/headers.php', [
                                     <div class="post-category">Category:
                                         <span>
                                             <?php foreach ($categories as $category): ?>
-                                                <button class="post-detail-tag-button"><?= $category ?></button>
+                                                <button class="post-detail-tag-button"><?= $category['name'] ?></button>
                                             <?php endforeach; ?>
                                         </span>
                                     </div>
                                     <div class="post-tags">Tags:
                                         <span>
                                             <?php foreach ($tags as $tag): ?>
-                                                <button class="post-detail-tag-button"><?= $tag ?></button>
+                                                <button class="post-detail-tag-button"><?= $tag['name'] ?></button>
                                             <?php endforeach; ?>
                                         </span>
                                     </div>
