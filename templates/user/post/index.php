@@ -14,7 +14,7 @@ use inc\helpers\user\Post;
 
 $posts = $args['posts'];
 
-// Pagination
+// Phân trang
 list($currentPage, $postsPerPage, $validPostsPerPage) = Post::getPaginationParams();
 
 $totalPosts = count($posts);
@@ -29,7 +29,7 @@ $headerBanner = Banner::getBannerByType('Header');
 $sideBanner = Banner::getBannerByType('Sidebar');
 $footerBanner = Banner::getBannerByType('Footer');
 Common::requireTemplate('user/layouts/headers.php', [
-    'title' => 'Bờ Lốc'
+    'title' => 'Danh sách bài viết'
 ]);
 
 ?>
@@ -37,16 +37,16 @@ Common::requireTemplate('user/layouts/headers.php', [
 <?php Common::requireTemplate('user/layouts/menu.php', []); ?>
 
 <div class="page-container">
-    <!-- Left 3/4 Section -->
+    <!-- Phần trái 3/4 -->
     <div class="content-section">
-        <!-- Header Banner -->
+        <!-- Banner tiêu đề -->
         <div class="header-banner">
             <?php Common::requireTemplate('user/layouts/header_banner.php', [
                 'banner_image' => $headerBanner
             ]); ?>
         </div>
 
-        <!-- Main Content -->
+        <!-- Nội dung chính -->
         <div class="main-content">
             <div class="post-container">
                 <?php
@@ -67,7 +67,7 @@ Common::requireTemplate('user/layouts/headers.php', [
             </div>
         </div>
 
-        <!-- Footer Banner -->
+        <!-- Banner chân trang -->
         <div class="footer-banner">
             <?php Common::requireTemplate('user/layouts/footer_banner.php', [
                 'banner_image' => $footerBanner
@@ -75,7 +75,7 @@ Common::requireTemplate('user/layouts/headers.php', [
         </div>
     </div>
 
-    <!-- Right 1/4 Section (Sidebar) -->
+    <!-- Phần bên phải 1/4 (Thanh bên) -->
     <div class="side-banner-section">
         <?php Common::requireTemplate('user/layouts/side_banner_right.php', [
             'banner_image' => $sideBanner

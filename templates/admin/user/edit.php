@@ -6,7 +6,7 @@ use inc\helpers\Common;
  * @var mixed $args
  */
 
-Common::requireTemplate('admin/layouts/headers.php', ['title' => 'User Management']);
+Common::requireTemplate('admin/layouts/headers.php', ['title' => 'Quản lý người dùng']);
 
 $current_user = Common::getCurrentBackendUser();
 $user = $args['user'] ?? null;
@@ -16,16 +16,16 @@ $user = $args['user'] ?? null;
 <body>
 <div class="edit-container">
     <?php if (isset($user['user_id'])): ?>
-        <h1 class="edit-title">Update User ID: <?= $user['user_id'] ?></h1>
+        <h1 class="edit-title">Cập nhật người dùng ID: <?= $user['user_id'] ?></h1>
     <?php else: ?>
-        <h1 class="edit-title">Create New User</h1>
+        <h1 class="edit-title">Tạo người dùng mới</h1>
     <?php endif; ?>
     <form id="user-edit-createUserForm" method="POST" enctype="multipart/form-data">
         <input type="hidden" value="<?= $user['user_id'] ?? '' ?>" name="user_id"/>
 
         <div class="edit-field">
-            <label for="user-edit-username">Username:</label>
-            <input type="text" id="user-edit-username" name="username" value="<?= $user['username'] ?? '' ?>" placeholder="Username" maxlength="50" required>
+            <label for="user-edit-username">Tên đăng nhập:</label>
+            <input type="text" id="user-edit-username" name="username" value="<?= $user['username'] ?? '' ?>" placeholder="Tên đăng nhập" maxlength="50" required>
         </div>
 
         <div class="edit-field">
@@ -34,7 +34,7 @@ $user = $args['user'] ?? null;
         </div>
 
         <div class="edit-field">
-            <label for="user-edit-role">Role:</label>
+            <label for="user-edit-role">Vai trò:</label>
             <select id="user-edit-role" name="role" required>
                 <?php
                 $roles = ['admin', 'author', 'editor', 'reader'];
@@ -47,25 +47,25 @@ $user = $args['user'] ?? null;
         </div>
 
         <div class="edit-field">
-            <label for="user-edit-bio">Bio:</label>
-            <textarea id="user-edit-bio" name="bio" placeholder="Bio"><?= $user['bio'] ?? '' ?></textarea>
+            <label for="user-edit-bio">Giới thiệu:</label>
+            <textarea id="user-edit-bio" name="bio" placeholder="Giới thiệu"><?= $user['bio'] ?? '' ?></textarea>
         </div>
 
         <div class="edit-field">
-            <label for="user-edit-profile-image">Profile Image:</label>
+            <label for="user-edit-profile-image">Ảnh đại diện:</label>
             <input type="file" id="user-edit-profile-image" name="profile_image" accept="image/*">
-            <img id="profile-image-preview" src="<?= htmlspecialchars($user['profile_image'] ?? Common::getAssetPath('images/avatar.webp')) ?>" alt="Profile Image Preview" style="margin-top: 10px; max-width: 200px; display: block;">
+            <img id="profile-image-preview" src="<?= htmlspecialchars($user['profile_image'] ?? Common::getAssetPath('images/avatar.webp')) ?>" alt="Xem trước ảnh đại diện" style="margin-top: 10px; max-width: 200px; display: block;">
         </div>
 
         <div id="password-fields">
             <div class="edit-field">
-                <label for="user-edit-password">Password:</label>
-                <input type="password" id="user-edit-password" name="password" placeholder="Password" <?= isset($user['user_id']) ? '' : 'required' ?>>
+                <label for="user-edit-password">Mật khẩu:</label>
+                <input type="password" id="user-edit-password" name="password" placeholder="Mật khẩu" <?= isset($user['user_id']) ? '' : 'required' ?>>
             </div>
 
             <div class="edit-field">
-                <label for="user-edit-confirm-password">Confirm Password:</label>
-                <input type="password" id="user-edit-confirm-password" name="confirm_password" placeholder="Confirm Password">
+                <label for="user-edit-confirm-password">Xác nhận mật khẩu:</label>
+                <input type="password" id="user-edit-confirm-password" name="confirm_password" placeholder="Xác nhận mật khẩu">
             </div>
 
             <ul id="password-requirements" class="edit-error" style="display:none;"></ul>
@@ -73,7 +73,7 @@ $user = $args['user'] ?? null;
         </div>
 
         <div class="edit-field">
-            <button type="submit" class="edit-btn">Save User</button>
+            <button type="submit" class="edit-btn">Lưu người dùng</button>
         </div>
     </form>
 </div>
@@ -104,15 +104,15 @@ $user = $args['user'] ?? null;
             const requirements = [];
 
             if (password.length < 8) {
-                requirements.push('Require at least 8 characters');
+                requirements.push('Yêu cầu tối thiểu 8 ký tự');
             }
 
             if (!/[A-Z]/.test(password)) {
-                requirements.push('Require at least one uppercase letter');
+                requirements.push('Yêu cầu ít nhất một chữ cái viết hoa');
             }
 
             if (!/[0-9!@#$%^&*(),.?":{}|<>]/.test(password)) {
-                requirements.push('Require a number or a special character');
+                requirements.push('Yêu cầu một số hoặc ký tự đặc biệt');
             }
 
             if (requirements.length > 0) {
@@ -128,7 +128,7 @@ $user = $args['user'] ?? null;
 
             if (password && password !== confirmPassword) {
                 e.preventDefault();
-                passwordError.text('Passwords do not match.').show();
+                passwordError.text('Mật khẩu không khớp.').show();
             } else {
                 passwordError.hide();
             }

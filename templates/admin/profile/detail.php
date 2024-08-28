@@ -8,18 +8,18 @@ use inc\helpers\Common;
 
 $user = $args['user'];
 
-Common::requireTemplate('admin/layouts/headers.php', ['title' => 'Edit Profile']);
+Common::requireTemplate('admin/layouts/headers.php', ['title' => 'Chỉnh sửa Hồ sơ']);
 
 ?>
 
 <div class="edit-container">
-    <h1 class="edit-title">Edit Profile</h1>
+    <h1 class="edit-title">Chỉnh sửa Hồ sơ</h1>
     <form id="admin-profile-edit-form" method="POST" enctype="multipart/form-data">
         <input type="hidden" value="<?= $user['user_id'] ?>" name="user_id"/>
 
         <div class="edit-field">
-            <label for="admin-edit-username">Username:</label>
-            <input type="text" id="admin-edit-username" name="username" value="<?= htmlspecialchars($user['username']) ?>" placeholder="Username" maxlength="50" required>
+            <label for="admin-edit-username">Tên người dùng:</label>
+            <input type="text" id="admin-edit-username" name="username" value="<?= htmlspecialchars($user['username']) ?>" placeholder="Tên người dùng" maxlength="50" required>
         </div>
 
         <div class="edit-field">
@@ -28,30 +28,30 @@ Common::requireTemplate('admin/layouts/headers.php', ['title' => 'Edit Profile']
         </div>
 
         <div class="edit-field">
-            <label for="admin-edit-bio">Bio:</label>
-            <textarea id="admin-edit-bio" name="bio" placeholder="Bio"><?= htmlspecialchars($user['bio']) ?></textarea>
+            <label for="admin-edit-bio">Tiểu sử:</label>
+            <textarea id="admin-edit-bio" name="bio" placeholder="Tiểu sử"><?= htmlspecialchars($user['bio']) ?></textarea>
         </div>
 
         <div class="edit-field">
-            <label for="admin-edit-profile-image">Profile Image:</label>
+            <label for="admin-edit-profile-image">Hình ảnh hồ sơ:</label>
             <input type="file" id="admin-edit-profile-image" name="profile_image" accept="image/*">
-            <img id="profile-image-preview" src="<?= htmlspecialchars($user['profile_image'] ?? Common::getAssetPath('images/avatar.webp')) ?>" alt="Profile Image Preview" style="margin-top: 10px; max-width: 200px; display: block;">
+            <img id="profile-image-preview" src="<?= htmlspecialchars($user['profile_image'] ?? Common::getAssetPath('images/avatar.webp')) ?>" alt="Xem trước hình ảnh hồ sơ" style="margin-top: 10px; max-width: 200px; display: block;">
         </div>
 
         <div class="edit-field">
-            <label for="admin-edit-old-password">Old Password:</label>
-            <input type="password" id="admin-edit-old-password" name="old_password" placeholder="Old Password">
+            <label for="admin-edit-old-password">Mật khẩu cũ:</label>
+            <input type="password" id="admin-edit-old-password" name="old_password" placeholder="Mật khẩu cũ">
         </div>
 
         <div id="new-password-fields" style="display: none;">
             <div class="edit-field">
-                <label for="admin-edit-password">New Password:</label>
-                <input type="password" id="admin-edit-password" name="password" placeholder="New Password">
+                <label for="admin-edit-password">Mật khẩu mới:</label>
+                <input type="password" id="admin-edit-password" name="password" placeholder="Mật khẩu mới">
             </div>
 
             <div class="edit-field">
-                <label for="admin-edit-confirm-password">Confirm Password:</label>
-                <input type="password" id="admin-edit-confirm-password" name="confirm_password" placeholder="Confirm Password">
+                <label for="admin-edit-confirm-password">Xác nhận mật khẩu:</label>
+                <input type="password" id="admin-edit-confirm-password" name="confirm_password" placeholder="Xác nhận mật khẩu">
             </div>
 
             <ul id="password-requirements" class="edit-error" style="display:none;"></ul>
@@ -59,7 +59,7 @@ Common::requireTemplate('admin/layouts/headers.php', ['title' => 'Edit Profile']
         </div>
 
         <div class="edit-field">
-            <button type="submit" class="edit-btn">Save Profile</button>
+            <button type="submit" class="edit-btn">Lưu Hồ sơ</button>
         </div>
     </form>
 </div>
@@ -87,15 +87,15 @@ Common::requireTemplate('admin/layouts/headers.php', ['title' => 'Edit Profile']
             const requirements = [];
 
             if (password.length < 8) {
-                requirements.push('Require at least 8 characters');
+                requirements.push('Yêu cầu ít nhất 8 ký tự');
             }
 
             if (!/[A-Z]/.test(password)) {
-                requirements.push('Require at least one uppercase letter');
+                requirements.push('Yêu cầu ít nhất một ký tự viết hoa');
             }
 
             if (!/[0-9!@#$%^&*(),.?":{}|<>]/.test(password)) {
-                requirements.push('Require a number or a special character');
+                requirements.push('Yêu cầu có số hoặc ký tự đặc biệt');
             }
 
             if (requirements.length > 0) {
@@ -111,7 +111,7 @@ Common::requireTemplate('admin/layouts/headers.php', ['title' => 'Edit Profile']
 
             if (password && password !== confirmPassword) {
                 e.preventDefault();
-                passwordError.text('Passwords do not match.').show();
+                passwordError.text('Mật khẩu không khớp.').show();
             } else {
                 passwordError.hide();
             }

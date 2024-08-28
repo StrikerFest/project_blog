@@ -33,7 +33,7 @@ $headerBanner = Banner::getBannerByType('Header');
 $sideBanner = Banner::getBannerByType('Sidebar');
 $footerBanner = Banner::getBannerByType('Footer');
 Common::requireTemplate('user/layouts/headers.php', [
-    'title' => 'Post Detail'
+    'title' => 'Chi tiết bài viết'
 ]);
 ?>
 
@@ -41,31 +41,31 @@ Common::requireTemplate('user/layouts/headers.php', [
 <?php Common::requireTemplate('user/layouts/menu.php', []); ?>
 
 <div class="page-container">
-    <!-- Left 3/4 Section -->
+    <!-- Phần trái 3/4 -->
     <div class="content-section">
-        <!-- Header Banner -->
+        <!-- Banner tiêu đề -->
         <div class="header-banner">
             <?php Common::requireTemplate('user/layouts/header_banner.php', [
                 'banner_image' => $headerBanner
             ]); ?>
         </div>
 
-        <!-- Post Detail Main Content -->
+        <!-- Nội dung chính chi tiết bài viết -->
         <div class="post-detail-container">
             <div class="post-detail-breadcrumb">
-                <a href="index.php">Home</a> > <a href="posts.php">Posts</a> > <?= $post['title'] ?>
+                <a href="index.php">Trang chủ</a> > <a href="posts.php">Bài viết</a> > <?= $post['title'] ?>
             </div>
 
             <h1 class="post-detail-title"><?= $post['title'] ?></h1>
 
-            <h3 class="post-detail-categories">Categories: 
+            <h3 class="post-detail-categories">Danh mục:
                 <?php foreach ($categories as $key => $category): ?>
                     <span><?= $category['name'] ?></span>
-                <?php
+                    <?php
                     if($key != (count($categories) - 1)) {
                         echo ", ";
                     }
-                    endforeach; 
+                endforeach;
                 ?>
             </h3>
 
@@ -79,7 +79,7 @@ Common::requireTemplate('user/layouts/headers.php', [
                 <?php if (!empty($post['banner_path'])): ?>
                     <img src="<?= $post['banner_path'] ?>" alt="banner">
                 <?php else: ?>
-                    <img src="<?= Common::getAssetPath('images/placeholder-banner.webp') ?>" alt="post-banner">
+                    <img src="<?= Common::getAssetPath('images/placeholder-banner.webp') ?>" alt="banner-bài-viết">
                 <?php endif; ?>
             </div>
 
@@ -89,9 +89,9 @@ Common::requireTemplate('user/layouts/headers.php', [
 
             <div class="post-detail-author-card">
                 <?php if (!empty($author['image'])): ?>
-                    <img src="<?= 'image' ?>" alt="Author Profile" class="post-detail-author-profile-image">
+                    <img src="<?= $author['image'] ?>" alt="Hồ sơ tác giả" class="post-detail-author-profile-image">
                 <?php else: ?>
-                    <img src="<?= Common::getAssetPath('images/avatar.webp') ?>" alt="Author Profile" class="post-detail-author-profile-image">
+                    <img src="<?= Common::getAssetPath('images/avatar.webp') ?>" alt="Hồ sơ tác giả" class="post-detail-author-profile-image">
                 <?php endif; ?>
                 <div class="post-detail-author-details">
                     <h4><?= $author['username'] ?></h4>
@@ -101,14 +101,14 @@ Common::requireTemplate('user/layouts/headers.php', [
 
             <div class="post-detail-footer">
                 <button class="post-detail-like-button" data-liked="<?= $liked ? 'true' : 'false' ?>" onclick="likePost(<?= $post_id ?>)">
-                    <?= $liked ? 'Liked' : 'Like' ?>
+                    <?= $liked ? 'Đã thích' : 'Thích' ?>
                 </button>
-                <span class="post-detail-like-count" id="like-count"><?= $post['likes'] ?? 0 ?> Likes</span>
+                <span class="post-detail-like-count" id="like-count"><?= $post['likes'] ?? 0 ?> Lượt thích</span>
             </div>
             <?php Common::requireTemplate('user/comment/post_block.php', ['post_id' => $post['post_id'] ?? null, 'user' => Common::getFrontendUser() ? Common::getFrontendUser() : null]); ?>
         </div>
 
-        <!-- Footer Banner -->
+        <!-- Banner chân trang -->
         <div class="footer-banner">
             <?php Common::requireTemplate('user/layouts/footer_banner.php', [
                 'banner_image' => $footerBanner
@@ -116,7 +116,7 @@ Common::requireTemplate('user/layouts/headers.php', [
         </div>
     </div>
 
-    <!-- Right 1/4 Section (Sidebar) -->
+    <!-- Phần bên phải 1/4 (Thanh bên) -->
     <div class="side-banner-section">
         <?php Common::requireTemplate('user/layouts/side_banner_right.php', [
             'banner_image' => $sideBanner

@@ -9,50 +9,50 @@ use inc\helpers\Common;
 $banner = $args['banner'];
 $bannerTypes = $args['banner_types'];
 
-Common::requireTemplate('admin/layouts/headers.php', ['title' => isset($banner['id']) ? 'Edit Banner' : 'Create Banner']);
+Common::requireTemplate('admin/layouts/headers.php', ['title' => isset($banner['id']) ? 'Chỉnh sửa Banner' : 'Tạo Banner']);
 ?>
 
 <body>
 <link rel="stylesheet" href="<?= Common::getAssetPath('css/form-table.scss') ?>">
 <div class="container">
     <?php if (isset($banner['id'])) : ?>
-        <h1>Update Banner ID: <?= $banner['id'] ?></h1>
+        <h1>Cập nhật banner Id: <?= $banner['id'] ?></h1>
     <?php else : ?>
-        <h1>Create New Banner</h1>
+        <h1>Tạo banner mới</h1>
     <?php endif; ?>
     <form id="createBannerForm" method="POST" enctype="multipart/form-data" class="form">
         <input type="hidden" value="<?= $banner['id'] ?? '' ?>" name="id"/>
         <input type="hidden" value="<?= $banner['image_path'] ?? '' ?>" name="existing_image_path"/>
 
-        <div>Title</div>
-        <input type="text" placeholder="Title" value="<?= $banner['title'] ?? '' ?>" class="form__input" id="title" name="title" required />
+        <div>Tiêu đề</div>
+        <input type="text" placeholder="Tiêu đề" value="<?= $banner['title'] ?? '' ?>" class="form__input" id="title" name="title" required />
 
-        <div>Image</div>
+        <div>Hình ảnh</div>
         <input type="file" class="form__input" id="image" name="image">
         <?php if (!empty($banner['image_path'])): ?>
-            <img src="<?= htmlspecialchars($banner['image_path']) ?>" alt="Banner Image" style="margin-top: 10px; max-width: 200px;">
+            <img src="<?= htmlspecialchars($banner['image_path']) ?>" alt="Hình banner" style="margin-top: 10px; max-width: 200px;">
         <?php endif; ?>
 
-        <div>Text</div>
-        <textarea placeholder="Text" id="text" name="text" class="form__input"><?= $banner['text'] ?? '' ?></textarea>
+        <div>Văn bản</div>
+        <textarea placeholder="Văn bản" id="text" name="text" class="form__input"><?= $banner['text'] ?? '' ?></textarea>
 
-        <div>Link</div>
-        <input type="text" placeholder="Link" value="<?= $banner['link'] ?? '' ?>" class="form__input" id="link" name="link" />
+        <div>Liên kết</div>
+        <input type="text" placeholder="Liên kết" value="<?= $banner['link'] ?? '' ?>" class="form__input" id="link" name="link" />
 
-        <div>Start Date</div>
+        <div>Ngày bắt đầu</div>
         <input type="datetime-local" value="<?= $banner['start_date'] ?? '' ?>" class="form__input" id="start_date" name="start_date" required />
 
-        <div>End Date</div>
+        <div>Ngày kết thúc</div>
         <input type="datetime-local" value="<?= $banner['end_date'] ?? '' ?>" class="form__input" id="end_date" name="end_date" required />
 
-        <div>Status</div>
+        <div>Trạng thái</div>
         <div class="select">
             <label>
-                <input type="checkbox" name="is_active" <?= isset($banner['is_active']) && $banner['is_active'] ? 'checked' : '' ?>> Active
+                <input type="checkbox" name="is_active" <?= isset($banner['is_active']) && $banner['is_active'] ? 'checked' : '' ?>> Kích hoạt
             </label>
         </div>
 
-        <div>Banner Type</div>
+        <div>Loại banner</div>
         <div class="select">
             <select name="type_id" id="type_id" required>
                 <?php foreach ($bannerTypes as $type): ?>
@@ -63,7 +63,7 @@ Common::requireTemplate('admin/layouts/headers.php', ['title' => isset($banner['
             </select>
         </div>
 
-        <button type="submit" class="btn">Save Banner</button>
+        <button type="submit" class="btn">Lưu banner</button>
     </form>
 </div>
 </body>

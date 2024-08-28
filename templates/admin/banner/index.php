@@ -10,7 +10,7 @@ use inc\models\Banner;
 $banners = $args['banners'];
 
 Common::requireTemplate('admin/layouts/headers.php', [
-    'title' => 'Banner Management'
+    'title' => 'Quản lý Banner'
 ]);
 ?>
 
@@ -19,13 +19,13 @@ Common::requireTemplate('admin/layouts/headers.php', [
         <thead>
         <tr>
             <th>Id</th>
-            <th>Title</th>
-            <th>Type</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Status</th>
-            <th>Action</th>
-            <th style="display:none;">Updated At</th> <!-- Hidden Updated At column -->
+            <th>Tiêu đề</th>
+            <th>Loại</th>
+            <th>Ngày bắt đầu</th>
+            <th>Ngày kết thúc</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+            <th style="display:none;">Cập nhật vào</th>
         </tr>
         </thead>
         <tbody>
@@ -36,13 +36,13 @@ Common::requireTemplate('admin/layouts/headers.php', [
                 <td><?php echo htmlspecialchars(Banner::getBannerTypeById($banner['type_id'], false)); ?></td>
                 <td><?php echo htmlspecialchars($banner['start_date']); ?></td>
                 <td><?php echo htmlspecialchars($banner['end_date']); ?></td>
-                <td><?php echo $banner['deleted_at'] ? 'Deleted' : ($banner['is_active'] ? 'Active' : 'Inactive'); ?></td>
+                <td><?php echo $banner['deleted_at'] ? 'Đã xóa' : ($banner['is_active'] ? 'Kích hoạt' : 'Không kích hoạt'); ?></td>
                 <td>
                     <?php if ($banner['deleted_at']): ?>
-                        <a href="banner/delete?action=recover&id=<?= $banner['id']; ?>" class="btn btn-recover">Recover</a>
+                        <a href="banner/delete?action=recover&id=<?= $banner['id']; ?>" class="btn btn-recover">Khôi phục</a>
                     <?php else: ?>
-                        <a href="banner/edit?id=<?= $banner['id']; ?>" class="btn">Edit</a>
-                        <a href="banner/delete?action=delete&id=<?= $banner['id']; ?>" class="btn btn-delete">Delete</a>
+                        <a href="banner/edit?id=<?= $banner['id']; ?>" class="btn">Sửa</a>
+                        <a href="banner/delete?action=delete&id=<?= $banner['id']; ?>" class="btn btn-delete">Xóa</a>
                     <?php endif; ?>
                 </td>
                 <td style="display:none;"><?php echo htmlspecialchars($banner['updated_at']); ?></td> <!-- Hidden Updated At column data -->
@@ -59,9 +59,9 @@ Common::requireTemplate('admin/layouts/footer.php');
     $(document).ready(function() {
         $('#listing-table').DataTable({
             "searching": true,
-            "order": [[7, "desc"]], // Sort by the 8th column (updated_at) in descending order
+            "order": [[7, "desc"]],
             "columnDefs": [
-                { "targets": 7, "visible": false } // Hide the updated_at column
+                { "targets": 7, "visible": false }
             ]
         });
     });
@@ -73,7 +73,7 @@ Common::requireTemplate('admin/layouts/footer.php');
         deleteButtons.forEach(button => {
             button.addEventListener('click', function (e) {
                 e.preventDefault();
-                const confirmDelete = confirm('Are you sure you want to delete this banner?');
+                const confirmDelete = confirm('Bạn có chắc chắn muốn xóa banner này không?');
                 if (confirmDelete) {
                     window.location.href = this.href;
                 }
@@ -83,7 +83,7 @@ Common::requireTemplate('admin/layouts/footer.php');
         recoverButtons.forEach(button => {
             button.addEventListener('click', function (e) {
                 e.preventDefault();
-                const confirmRecover = confirm('Are you sure you want to recover this banner?');
+                const confirmRecover = confirm('Bạn có chắc chắn muốn khôi phục banner này không?');
                 if (confirmRecover) {
                     window.location.href = this.href;
                 }

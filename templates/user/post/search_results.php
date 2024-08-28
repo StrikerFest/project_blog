@@ -20,7 +20,7 @@ $posts = $args['posts'];
 $categories = $args['categories'];
 $tags = $args['tags'];
 
-// Pagination
+// Phân trang
 list($currentPage, $postsPerPage, $validPostsPerPage) = Post::getPaginationParams();
 
 $totalPosts = count($posts);
@@ -33,13 +33,13 @@ $startIndex = ($currentPage - 1) * $postsPerPage;
 $endIndex = min($startIndex + $postsPerPage, $totalPosts);
 $currentPosts = array_slice($posts, $startIndex, $postsPerPage);
 
-// Fetch banners
+// Lấy banner
 $headerBanner = Banner::getBannerByType('Header');
 $sideBanner = Banner::getBannerByType('Sidebar');
 $footerBanner = Banner::getBannerByType('Footer');
 
 Common::requireTemplate('user/layouts/headers.php', [
-    'title' => 'Content related to "' . htmlspecialchars($searchTerm) . '"'
+    'title' => 'Nội dung liên quan đến "' . htmlspecialchars($searchTerm) . '"'
 ]);
 ?>
 
@@ -96,27 +96,27 @@ Common::requireTemplate('user/layouts/headers.php', [
 <?php Common::requireTemplate('user/layouts/menu.php', []); ?>
 
 <div class="page-container">
-    <!-- Left 3/4 Section -->
+    <!-- Phần trái 3/4 -->
     <div class="content-section">
-        <!-- Header Banner -->
+        <!-- Banner tiêu đề -->
         <div class="header-banner">
             <?php Common::requireTemplate('user/layouts/header_banner.php', [
                 'banner_image' => $headerBanner
             ]); ?>
         </div>
 
-        <!-- Main Content -->
+        <!-- Nội dung chính -->
         <div class="main-content">
             <script>
                 function updatePerPage(value) {
                     const urlParams = new URLSearchParams(window.location.search);
                     urlParams.set('per_page', value);
-                    urlParams.set('page', 1); // Reset to page 1 when changing per_page
+                    urlParams.set('page', 1); // Đặt lại trang về 1 khi thay đổi per_page
                     window.location.search = urlParams.toString();
                 }
             </script>
             <div class="sort-per-page-container">
-                <label for="sort-per-page-select">Posts per page:</label>
+                <label for="sort-per-page-select">Bài viết mỗi trang:</label>
                 <select id="sort-per-page-select" class="sort-per-page-select" onchange="updatePerPage(this.value)">
                     <?php foreach ($validPostsPerPage as $value): ?>
                         <option value="<?php echo $value; ?>" <?php if ($value == $postsPerPage) echo 'selected'; ?>>
@@ -126,12 +126,12 @@ Common::requireTemplate('user/layouts/headers.php', [
                 </select>
             </div>
 
-            <h1>Content related to "<?= htmlspecialchars($searchTerm) ?>"</h1>
-            <p><?= $totalResults ?> result(s) found</p>
+            <h1>Nội dung liên quan đến "<?= htmlspecialchars($searchTerm) ?>"</h1>
+            <p><?= $totalResults ?> kết quả được tìm thấy</p>
 
             <?php if ($totalCategories > 0): ?>
                 <section class="category-index-important-categories">
-                    <h2>Categories (<?= $totalCategories ?>)</h2>
+                    <h2>Danh mục (<?= $totalCategories ?>)</h2>
                     <div class="category-index-buttons">
                         <?php foreach ($categories as $category): ?>
                             <a href="/category/<?= $category['slug']; ?>">
@@ -146,7 +146,7 @@ Common::requireTemplate('user/layouts/headers.php', [
 
             <?php if ($totalTags > 0): ?>
                 <section class="tag-index-important-tags">
-                    <h2>Tags (<?= $totalTags ?>)</h2>
+                    <h2>Thẻ (<?= $totalTags ?>)</h2>
                     <div class="tag-index-buttons">
                         <?php foreach ($tags as $tag): ?>
                             <a href="/tag/<?= $tag['slug']; ?>">
@@ -161,7 +161,7 @@ Common::requireTemplate('user/layouts/headers.php', [
 
             <?php if ($totalPosts > 0): ?>
                 <section class="post-index-important-posts">
-                    <h2>Posts (<?= $totalPosts ?>)</h2>
+                    <h2>Bài viết (<?= $totalPosts ?>)</h2>
                     <div class="post-container">
                         <?php foreach ($currentPosts as $post): ?>
                             <?php
@@ -178,21 +178,21 @@ Common::requireTemplate('user/layouts/headers.php', [
                                 </a>
                                 <div class="post-content">
                                     <a href="/post/show?post_id=<?= $post['post_id'] ?>" class="post-title"><?php echo $post['title']; ?></a>
-                                    <div class="post-category">Category:
+                                    <div class="post-category">Danh mục:
                                         <span>
                                             <?php foreach ($categories as $category): ?>
                                                 <button class="post-detail-tag-button"><?= $category['name'] ?></button>
                                             <?php endforeach; ?>
                                         </span>
                                     </div>
-                                    <div class="post-tags">Tags:
+                                    <div class="post-tags">Thẻ:
                                         <span>
                                             <?php foreach ($tags as $tag): ?>
                                                 <button class="post-detail-tag-button"><?= $tag['name'] ?></button>
                                             <?php endforeach; ?>
                                         </span>
                                     </div>
-                                    <a href="/post/show?post_id=<?= $post['post_id'] ?>" class="post-see-more">See More</a>
+                                    <a href="/post/show?post_id=<?= $post['post_id'] ?>" class="post-see-more">Xem thêm</a>
                                 </div>
                             </div>
                         <?php endforeach; ?>
@@ -203,12 +203,12 @@ Common::requireTemplate('user/layouts/headers.php', [
                     </div>
                 </section>
             <?php else: ?>
-                <p>No related posts found for "<?= htmlspecialchars($searchTerm) ?>".</p>
-                <a href="/" class="return-home-button">Return to Homepage</a>
+                <p>Không tìm thấy bài viết liên quan đến "<?= htmlspecialchars($searchTerm) ?>".</p>
+                <a href="/" class="return-home-button">Trở về trang chủ</a>
             <?php endif; ?>
         </div>
 
-        <!-- Footer Banner -->
+        <!-- Banner chân trang -->
         <div class="footer-banner">
             <?php Common::requireTemplate('user/layouts/footer_banner.php', [
                 'banner_image' => $footerBanner
@@ -216,7 +216,7 @@ Common::requireTemplate('user/layouts/headers.php', [
         </div>
     </div>
 
-    <!-- Right 1/4 Section (Sidebar) -->
+    <!-- Phần bên phải 1/4 (Thanh bên) -->
     <div class="side-banner-section">
         <?php Common::requireTemplate('user/layouts/side_banner_right.php', [
             'banner_image' => $sideBanner

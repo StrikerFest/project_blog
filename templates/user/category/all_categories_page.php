@@ -11,13 +11,14 @@ if (session_status() === PHP_SESSION_NONE) {
 use inc\helpers\Common;
 use inc\models\Category;
 use inc\models\Post;
-
 use inc\models\Banner;
+
 $headerBanner = Banner::getBannerByType('Header');
 $sideBanner = Banner::getBannerByType('Sidebar');
 $footerBanner = Banner::getBannerByType('Footer');
+
 Common::requireTemplate('user/layouts/headers.php', [
-    'title' => 'All Categories'
+    'title' => 'Tất cả các Danh mục'
 ]);
 
 // Fetch all categories
@@ -36,9 +37,9 @@ foreach ($categories as $category) {
 <?php Common::requireTemplate('user/layouts/menu.php', []); ?>
 
 <div class="page-container">
-    <!-- Left 3/4 Section -->
+    <!-- Phần 3/4 bên trái -->
     <div class="content-section">
-        <!-- Header Banner -->
+        <!-- Biểu ngữ trên cùng -->
         <div class="header-banner">
             <?php Common::requireTemplate('user/layouts/header_banner.php', [
                 'banner_image' => $headerBanner
@@ -46,7 +47,7 @@ foreach ($categories as $category) {
         </div>
 
         <div class="all-categories-container">
-            <h1>All Categories</h1>
+            <h1>Tất cả các Danh mục</h1>
             <div class="all-categories-list">
                 <?php foreach ($categories as $category) : ?>
                     <div class="all-categories-list-item">
@@ -58,7 +59,7 @@ foreach ($categories as $category) {
             </div>
         </div>
 
-        <!-- Footer Banner -->
+        <!-- Biểu ngữ dưới cùng -->
         <div class="footer-banner">
             <?php Common::requireTemplate('user/layouts/footer_banner.php', [
                 'banner_image' => $footerBanner
@@ -66,7 +67,7 @@ foreach ($categories as $category) {
         </div>
     </div>
 
-    <!-- Right 1/4 Section (Sidebar) -->
+    <!-- Phần 1/4 bên phải (Thanh bên) -->
     <div class="side-banner-section">
         <?php Common::requireTemplate('user/layouts/side_banner_right.php', [
             'banner_image' => $sideBanner

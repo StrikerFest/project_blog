@@ -16,7 +16,7 @@ $headerBanner = Banner::getBannerByType('Header');
 $sideBanner = Banner::getBannerByType('Sidebar');
 $footerBanner = Banner::getBannerByType('Footer');
 Common::requireTemplate('user/layouts/headers.php', [
-    'title' => 'Sign Up'
+    'title' => 'Đăng Ký'
 ]);
 ?>
 
@@ -27,11 +27,11 @@ Common::requireTemplate('user/layouts/headers.php', [
     <div class="user-signup-container">
         <form id="signup-form" class="user-signup-form" method="POST">
             <div class="user-signup-content">
-                <h2 class="user-signup-title">Sign Up</h2>
-                <input class="user-signup-input" type="text" name="username" placeholder="Username" required="required"/>
+                <h2 class="user-signup-title">Đăng Ký</h2>
+                <input class="user-signup-input" type="text" name="username" placeholder="Tên đăng nhập" required="required"/>
                 <input class="user-signup-input" type="email" name="email" placeholder="Email" required="required"/>
-                <input class="user-signup-input" type="password" id="password" name="password" placeholder="Password" required="required"/>
-                <input class="user-signup-input" type="password" id="confirm-password" name="confirm_password" placeholder="Confirm Password" required="required"/>
+                <input class="user-signup-input" type="password" id="password" name="password" placeholder="Mật khẩu" required="required"/>
+                <input class="user-signup-input" type="password" id="confirm-password" name="confirm_password" placeholder="Xác nhận mật khẩu" required="required"/>
                 <ul id="password-requirements" class="user-signup-error" style="display:none;"></ul>
                 <span id="password-error" class="user-signup-error" style="display:none;"></span>
             </div>
@@ -40,7 +40,7 @@ Common::requireTemplate('user/layouts/headers.php', [
                     unset($_SESSION['error_signup']); ?></div>
             <?php } ?>
             <div class="user-signup-buttons">
-                <button class="user-signup-btn" type="submit">Sign Up</button>
+                <button class="user-signup-btn" type="submit">Đăng Ký</button>
             </div>
         </form>
     </div>
@@ -58,15 +58,15 @@ Common::requireTemplate('user/layouts/headers.php', [
             const requirements = [];
 
             if (password.length < 8) {
-                requirements.push('Require at least 8 characters');
+                requirements.push('Yêu cầu tối thiểu 8 ký tự');
             }
 
             if (!/[A-Z]/.test(password)) {
-                requirements.push('Require at least one uppercase letter');
+                requirements.push('Yêu cầu ít nhất một chữ cái viết hoa');
             }
 
             if (!/[0-9!@#$%^&*(),.?":{}|<>]/.test(password)) {
-                requirements.push('Require a number or a special character');
+                requirements.push('Yêu cầu ít nhất một số hoặc ký tự đặc biệt');
             }
 
             if (requirements.length > 0) {
@@ -82,7 +82,7 @@ Common::requireTemplate('user/layouts/headers.php', [
 
             if (password !== confirmPassword) {
                 e.preventDefault();
-                passwordError.text('Passwords do not match.').show();
+                passwordError.text('Mật khẩu không khớp.').show();
             } else {
                 passwordError.hide();
             }

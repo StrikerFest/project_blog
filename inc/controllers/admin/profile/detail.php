@@ -20,10 +20,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $success = User::updateAdminProfile($currentUserId, $_POST, $_FILES);
     if ($success) {
-        $_SESSION['toast_message'] = "Profile updated successfully.";
+        $_SESSION['toast_message'] = "Profile cập nhật thành công.";
         $_SESSION['toast_type'] = "success";
     } else {
-        $_SESSION['toast_message'] = "Failed to update profile.";
+        $_SESSION['toast_message'] = "Đã có lỗi khi cập nhật profile.";
         $_SESSION['toast_type'] = "error";
     }
     header("Location: /admin/profile");

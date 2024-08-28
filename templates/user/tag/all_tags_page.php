@@ -11,20 +11,19 @@ if (session_status() === PHP_SESSION_NONE) {
 use inc\helpers\Common;
 use inc\models\Tag;
 use inc\models\Post;
-
-
 use inc\models\Banner;
+
 $headerBanner = Banner::getBannerByType('Header');
 $sideBanner = Banner::getBannerByType('Sidebar');
 $footerBanner = Banner::getBannerByType('Footer');
 Common::requireTemplate('user/layouts/headers.php', [
-    'title' => 'All Tags'
+    'title' => 'Tất cả các thẻ'
 ]);
 
-// Fetch all tags
+// Lấy tất cả các thẻ
 $tags = Tag::getTags();
 
-// Fetch number of posts for each tag
+// Lấy số lượng bài viết cho từng thẻ
 $tag_post_counts = [];
 foreach ($tags as $tag) {
     $tag_id = $tag['tag_id'];
@@ -37,9 +36,9 @@ foreach ($tags as $tag) {
 <?php Common::requireTemplate('user/layouts/menu.php', []); ?>
 
 <div class="page-container">
-    <!-- Left 3/4 Section -->
+    <!-- Phần trái 3/4 -->
     <div class="content-section">
-        <!-- Header Banner -->
+        <!-- Banner tiêu đề -->
         <div class="header-banner">
             <?php Common::requireTemplate('user/layouts/header_banner.php', [
                 'banner_image' => $headerBanner
@@ -47,7 +46,7 @@ foreach ($tags as $tag) {
         </div>
 
         <div class="all-tags-container">
-            <h1>All Tags</h1>
+            <h1>Tất cả các thẻ</h1>
             <div class="all-tags-list">
                 <?php foreach ($tags as $tag) : ?>
                     <div class="all-tags-list-item">
@@ -59,7 +58,7 @@ foreach ($tags as $tag) {
             </div>
         </div>
 
-        <!-- Footer Banner -->
+        <!-- Banner chân trang -->
         <div class="footer-banner">
             <?php Common::requireTemplate('user/layouts/footer_banner.php', [
                 'banner_image' => $footerBanner
@@ -67,7 +66,7 @@ foreach ($tags as $tag) {
         </div>
     </div>
 
-    <!-- Right 1/4 Section (Sidebar) -->
+    <!-- Phần bên phải 1/4 (Thanh bên) -->
     <div class="side-banner-section">
         <?php Common::requireTemplate('user/layouts/side_banner_right.php', [
             'banner_image' => $sideBanner

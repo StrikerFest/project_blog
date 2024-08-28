@@ -7,7 +7,7 @@ use inc\helpers\Common;
  */
 
 Common::requireTemplate('admin/layouts/headers.php', [
-    'title' => isset($args['category']['category_id']) ? 'Edit category' : 'Create category', 'permission' => 'NO_EDITOR_CREATE'
+    'title' => isset($args['category']['category_id']) ? 'Chỉnh sửa danh mục' : 'Tạo danh mục', 'permission' => 'NO_EDITOR_CREATE'
 ]);
 
 $category = $args['categoryData'] ?? $args['category'];
@@ -18,9 +18,9 @@ $errors = $args['errors'] ?? [];
 <link rel="stylesheet" href="<?= Common::getAssetPath('css/form-table.scss') ?>">
 <div class="container">
     <?php if (isset($category['category_id'])) : ?>
-        <h1>Update Category ID: <?= $category['category_id'] ?></h1>
+        <h1>Cập nhật danh mục ID: <?= $category['category_id'] ?></h1>
     <?php else : ?>
-        <h1>Create New Category</h1>
+        <h1>Tạo danh mục mới</h1>
     <?php endif; ?>
 
     <?php if (!empty($errors)): ?>
@@ -36,27 +36,27 @@ $errors = $args['errors'] ?? [];
     <form id="createCategoryForm" method="POST" class="form">
         <input type="hidden" value="<?= htmlspecialchars($category['category_id'] ?? '') ?>" name="id"/>
 
-        <div>Name</div>
-        <input type="text" placeholder="Name" value="<?= htmlspecialchars($category['name'] ?? '') ?>" class="form__input" id="name" name="name" required/>
+        <div>Tên</div>
+        <input type="text" placeholder="Tên" value="<?= htmlspecialchars($category['name'] ?? '') ?>" class="form__input" id="name" name="name" required/>
 
         <div>Slug</div>
         <input type="text" placeholder="Slug" value="<?= htmlspecialchars($category['slug'] ?? '') ?>" class="form__input" id="slug" name="slug" required/>
 
-        <div>Status</div>
+        <div>Trạng thái</div>
         <div class="select">
             <select name="status" id="status" required>
-                <option value="enabled" <?= (!empty($category) && $category['status'] == 'enabled') ? 'selected' : '' ?>>Enable</option>
-                <option value="disabled" <?= (!empty($category) && $category['status'] == 'disabled') ? 'selected' : '' ?>>Disabled</option>
+                <option value="enabled" <?= (!empty($category) && $category['status'] == 'enabled') ? 'selected' : '' ?>>Kích hoạt</option>
+                <option value="disabled" <?= (!empty($category) && $category['status'] == 'disabled') ? 'selected' : '' ?>>Không kích hoạt</option>
             </select>
         </div>
 
-        <div>Description</div>
-        <textarea type="text" placeholder="Description" id="description" name="description" required><?= htmlspecialchars($category['description'] ?? '') ?></textarea>
+        <div>Mô tả</div>
+        <textarea type="text" placeholder="Mô tả" id="description" name="description" required><?= htmlspecialchars($category['description'] ?? '') ?></textarea>
 
-        <div>Position</div>
-        <input type="number" placeholder="Position" value="<?= htmlspecialchars($category['position'] ?? '0') ?>" class="form__input" id="position" name="position" required/>
+        <div>Vị trí</div>
+        <input type="number" placeholder="Vị trí" value="<?= htmlspecialchars($category['position'] ?? '0') ?>" class="form__input" id="position" name="position" required/>
 
-        <button type="submit" class="btn">Save Category</button>
+        <button type="submit" class="btn">Lưu danh mục</button>
     </form>
 </div>
 </body>

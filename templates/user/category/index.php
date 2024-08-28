@@ -25,9 +25,9 @@ Common::requireTemplate('user/layouts/headers.php', [
 <?php Common::requireTemplate('user/layouts/menu.php', []); ?>
 
 <div class="page-container">
-    <!-- Left 3/4 Section -->
+    <!-- Phần 3/4 bên trái -->
     <div class="content-section">
-        <!-- Header Banner -->
+        <!-- Biểu ngữ trên cùng -->
         <div class="header-banner">
             <?php Common::requireTemplate('user/layouts/header_banner.php', [
                 'banner_image' => $headerBanner
@@ -35,7 +35,7 @@ Common::requireTemplate('user/layouts/headers.php', [
         </div>
 
         <div class="category-index-container">
-            <h1>Blog Categories</h1>
+            <h1>Danh mục Blog</h1>
             <section class="category-index-important-categories">
                 <div class="category-index-buttons">
                     <?php
@@ -56,7 +56,7 @@ Common::requireTemplate('user/layouts/headers.php', [
                         </a>
                     <?php endforeach; ?>
                     <a href="/category-all" class="category-index-all-categories">
-                        <button>View all categories</button>
+                        <button>Xem tất cả danh mục</button>
                     </a>
                 </div>
             </section>
@@ -72,7 +72,7 @@ Common::requireTemplate('user/layouts/headers.php', [
                                 </a>
                             <?php endforeach; ?>
                             <a class="category-index-card category-index-see-more" href="/category/<?= $category['slug'] ?>">
-                                <div class="category-index-card-title">See More</div>
+                                <div class="category-index-card-title">Xem thêm</div>
                             </a>
                         </div>
                     <?php endif; ?>
@@ -80,7 +80,7 @@ Common::requireTemplate('user/layouts/headers.php', [
             </section>
         </div>
 
-        <!-- Footer Banner -->
+        <!-- Biểu ngữ dưới cùng -->
         <div class="footer-banner">
             <?php Common::requireTemplate('user/layouts/footer_banner.php', [
                 'banner_image' => $footerBanner
@@ -88,7 +88,7 @@ Common::requireTemplate('user/layouts/headers.php', [
         </div>
     </div>
 
-    <!-- Right 1/4 Section (Sidebar) -->
+    <!-- Phần 1/4 bên phải (Thanh bên) -->
     <div class="side-banner-section">
         <?php Common::requireTemplate('user/layouts/side_banner_right.php', [
             'banner_image' => $sideBanner

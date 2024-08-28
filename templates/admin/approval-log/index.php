@@ -16,14 +16,14 @@ Common::requireTemplate('admin/layouts/headers.php', [
     <table id="listing-table" class="listing-table">
         <thead>
         <tr>
-            <th>Approval ID</th>
-            <th>Post ID</th>
-            <th>Post Title</th>
-            <th>User</th>
-            <th>Status From</th>
-            <th>Status To</th>
-            <th>Reason</th>
-            <th>Date</th>
+            <th>Id phê duyệt</th>
+            <th>Id bài viết</th>
+            <th>Tiêu đề bài viết</th>
+            <th>Người dùng</th>
+            <th>Trạng thái ban đầu</th>
+            <th>Trạng thái được chuyển</th>
+            <th>Lý do</th>
+            <th>Thời gian</th>
         </tr>
         </thead>
         <tbody>
@@ -49,7 +49,7 @@ Common::requireTemplate('admin/layouts/footer.php');
 <script>
     $(document).ready(function() {
         $('#listing-table').DataTable({
-            "order": [[0, "desc"]], // Sort by the first column (approval_id) in descending order
+            "order": [[0, "desc"]],
             "searching": true
         });
     });

@@ -4,10 +4,10 @@ require $_ENV['AUTOLOAD'];
 
 use inc\helpers\DB;
 
-// Connect to MySQL server
+// Kết nối đến máy chủ MySQL
 $conn = DB::db_connect();
 
-// Seed users
+// Cài đặt dữ liệu người dùng
 $sql = "SELECT count(*) as count FROM users";
 $result = $conn->query($sql);
 if ($result) {
@@ -19,23 +19,23 @@ if ($result) {
         ('editor', 'editor@gmail.com', '" . password_hash('editorpass', PASSWORD_BCRYPT) . "', 'editor'),
         ('user', 'user@gmail.com', '" . password_hash('userpass', PASSWORD_BCRYPT) . "', 'reader')";
         if ($conn->query($sql) === TRUE) {
-            echo "Users inserted successfully.<br>";
+            echo "Người dùng đã được thêm thành công.<br>";
         } else {
-            echo "Error inserting users: " . $conn->error . "<br>";
+            echo "Lỗi khi thêm người dùng: " . $conn->error . "<br>";
         }
     }
 }
 
-// Seed posts
+// Cài đặt dữ liệu bài viết
 $authors = [1, 2];
 $editors = [3];
 $statuses = ['draft', 'pending_approval', 'approved', 'published'];
 $deleted_at = null;
 
 for ($i = 1; $i <= 10; $i++) {
-    $title = "Sample Post Title " . $i;
+    $title = "Tiêu đề bài viết mẫu " . $i;
     $slug = strtolower(str_replace(' ', '-', $title));
-    $content = "This is the content for Sample Post Title " . $i . ". It contains detailed information on various topics.";
+    $content = "Đây là nội dung cho Tiêu đề bài viết mẫu " . $i . ". Nó chứa thông tin chi tiết về nhiều chủ đề khác nhau.";
     $banner_path = "/assets/images/placeholder-banner.webp";
     $thumbnail_path = "/assets/images/placeholder-thumbnail.webp";
     $likes = rand(0, 100);
@@ -49,41 +49,41 @@ for ($i = 1; $i <= 10; $i++) {
             VALUES ('$author', '$editor_id', '$title', '$slug', '$content', '$banner_path', '$thumbnail_path', $likes, '$status', '$published_at', NULL)";
 
     if ($conn->query($sql) === TRUE) {
-        echo "Post $i inserted successfully!<br>";
+        echo "Bài viết $i đã được thêm thành công!<br>";
     } else {
-        echo "Error inserting post $i: " . $conn->error . "<br>";
+        echo "Lỗi khi thêm bài viết $i: " . $conn->error . "<br>";
     }
 }
 
-// Seed categories
+// Cài đặt dữ liệu danh mục
 $sql = "SELECT count(*) as count FROM categories";
 $result = $conn->query($sql);
 if ($result) {
     $row = $result->fetch_assoc();
     if ($row['count'] == 0) {
         for ($i = 1; $i <= 5; $i++) {
-            $name = "Category $i";
+            $name = "Danh mục $i";
             $slug = strtolower(str_replace(' ', '-', $name));
             $status = 'enabled';
-            $description = "Description for $name";
+            $description = "Mô tả cho $name";
             $position = $i;
 
-            // Randomly assign some categories as soft-deleted
-            $deleted_at = rand(0, 1) ? date('Y-m-d H:i:s', strtotime("-" . rand(1, 10) . " days")) : null;
+            // Gán ngẫu nhiên một số danh mục là đã bị xóa mềm
+            $deleted_at = rand(0, 1) ? date('Y-m-d H:i:s', strtotime("-" . rand(1, 10) . " ngày")) : null;
 
             $sql = "INSERT INTO categories (name, slug, status, description, position, deleted_at) 
                     VALUES ('$name', '$slug', '$status', '$description', '$position', " . ($deleted_at ? "'$deleted_at'" : "NULL") . ")";
 
             if ($conn->query($sql) === TRUE) {
-                echo "Category $i inserted successfully!<br>";
+                echo "Danh mục $i đã được thêm thành công!<br>";
             } else {
-                echo "Error inserting category $i: " . $conn->error . "<br>";
+                echo "Lỗi khi thêm danh mục $i: " . $conn->error . "<br>";
             }
         }
     }
 }
 
-// Seed post_categories
+// Cài đặt dữ liệu bài viết-danh mục
 $sql = "REPLACE INTO post_categories (post_id, category_id) VALUES ";
 
 for ($i = 1; $i <= 10; $i++) {
@@ -95,12 +95,12 @@ for ($i = 1; $i <= 10; $i++) {
 $sql = rtrim($sql, ",");
 
 if ($conn->query($sql) === TRUE) {
-    echo "Post-Category associations inserted/updated successfully.<br>";
+    echo "Các mối quan hệ bài viết-danh mục đã được thêm/cập nhật thành công.<br>";
 } else {
-    echo "Error inserting/updating post-category associations: " . $conn->error . "<br>";
+    echo "Lỗi khi thêm/cập nhật mối quan hệ bài viết-danh mục: " . $conn->error . "<br>";
 }
 
-// Seed tags
+// Cài đặt dữ liệu thẻ
 $sql = "SELECT count(*) as count FROM tags";
 $result = $conn->query($sql);
 if ($result) {
@@ -115,19 +115,19 @@ if ($result) {
         ];
 
         foreach ($tags as $tag) {
-            $deleted_at = (rand(0, 1)) ? date('Y-m-d H:i:s', strtotime("-" . rand(1, 10) . " days")) : null;
+            $deleted_at = (rand(0, 1)) ? date('Y-m-d H:i:s', strtotime("-" . rand(1, 10) . " ngày")) : null;
             $sql = "INSERT INTO tags (name, slug, status, position, deleted_at) VALUES 
                     ('{$tag['name']}', '{$tag['slug']}', '{$tag['status']}', 0, " . ($deleted_at ? "'$deleted_at'" : "NULL") . ")";
             if ($conn->query($sql) === TRUE) {
-                echo "Tag '{$tag['name']}' inserted successfully!<br>";
+                echo "Thẻ '{$tag['name']}' đã được thêm thành công!<br>";
             } else {
-                echo "Error inserting tag '{$tag['name']}': " . $conn->error . "<br>";
+                echo "Lỗi khi thêm thẻ '{$tag['name']}': " . $conn->error . "<br>";
             }
         }
     }
 }
 
-// Seed post_tags
+// Cài đặt dữ liệu bài viết-thẻ
 $sql = "REPLACE INTO post_tags (post_id, tag_id) VALUES ";
 
 for ($i = 1; $i <= 10; $i++) {
@@ -143,124 +143,88 @@ for ($i = 1; $i <= 10; $i++) {
 $sql = rtrim($sql, ",");
 
 if ($conn->query($sql) === TRUE) {
-    echo "Post-Tag associations inserted/updated successfully.<br>";
+    echo "Các mối quan hệ bài viết-thẻ đã được thêm/cập nhật thành công.<br>";
 } else {
-    echo "Error inserting/updating post-tag associations: " . $conn->error . "<br>";
+    echo "Lỗi khi thêm/cập nhật mối quan hệ bài viết-thẻ: " . $conn->error . "<br>";
 }
 
-// Seed comments
+// Cài đặt dữ liệu bình luận
 for ($i = 1; $i <= 20; $i++) {
     $post_id = rand(1, 10);
     $user_id = rand(1, 4);
-    $content = "This is a comment on post $post_id by user $user_id.";
+    $content = "Đây là một bình luận trên bài viết $post_id bởi người dùng $user_id.";
 
     $sql = "INSERT INTO comments (post_id, user_id, content) VALUES ($post_id, $user_id, '$content')";
 
     if ($conn->query($sql) === TRUE) {
-        echo "Comment $i inserted successfully!<br>";
+        echo "Bình luận $i đã được thêm thành công!<br>";
     } else {
-        echo "Error inserting comment $i: " . $conn->error . "<br>";
+        echo "Lỗi khi thêm bình luận $i: " . $conn->error . "<br>";
     }
 }
 
-// Seed banner types
+// Cài đặt dữ liệu loại banner
 $sql = "SELECT count(*) as count FROM banner_types";
 $result = $conn->query($sql);
 if ($result) {
     $row = $result->fetch_assoc();
     if ($row['count'] == 0) {
         $sql = "INSERT INTO `banner_types` (`name`, `description`) VALUES
-           ('Header', 'Banners displayed at the top of the page'),
-           ('Sidebar', 'Banners displayed on the sidebar of the page'),
-           ('Footer', 'Banners displayed at the bottom of the page'),
-           ('Inline', 'Banners displayed within the content of the page')";
+           ('Header', 'Banner hiển thị ở đầu trang'),
+           ('Sidebar', 'Banner hiển thị trên thanh bên của trang'),
+           ('Footer', 'Banner hiển thị ở cuối trang'),
+           ('Inline', 'Banner hiển thị trong nội dung của trang')";
 
         if ($conn->query($sql) === TRUE) {
-            echo "Banner types inserted successfully!<br>";
+            echo "Các loại banner đã được thêm thành công!<br>";
         } else {
-            echo "Error inserting banner types: " . $conn->error . "<br>";
+            echo "Lỗi khi thêm các loại banner: " . $conn->error . "<br>";
         }
     }
 }
 
-// Seed banners
+// Cài đặt dữ liệu banner
 $banners = [
     [
-        'title' => 'Header Banner 1',
+        'title' => 'Banner Header 1',
         'image_path' => '/assets/images/line.jpg',
-        'text' => 'Discover the newest gadgets and electronics on our blog. Click here to read more!',
-        'link' => 'https://techblog.com/gadgets',
-        'start_date' => '2024-08-01 00:00:00',
-        'end_date' => '2024-12-31 23:59:59',
-        'is_active' => 1,
-        'type_id' => 1, // Header
-        'position' => 0
+        'text' => 'Khám phá các thiết bị mới!',
+        'type_id' => 1
     ],
     [
-        'title' => 'Subscribe to Our Newsletter',
-        'image_path' => '/assets/images/1270x300_placeholder_banner.webp',
-        'text' => 'Stay updated with the latest tech news. Subscribe to our newsletter!',
-        'link' => 'https://techblog.com/newsletter',
-        'start_date' => '2024-08-01 00:00:00',
-        'end_date' => '2024-12-31 23:59:59',
-        'is_active' => 1,
-        'type_id' => 1, // Header
-        'position' => 1
+        'title' => 'Banner Sidebar 1',
+        'image_path' => '/assets/images/line.jpg',
+        'text' => 'Khám phá các thiết bị mới!',
+        'type_id' => 2
     ],
     [
-        'title' => 'Top 10 Coding Practices',
-        'image_path' => '/assets/images/300x1270_placeholder_banner.webp',
-        'text' => 'Enhance your coding skills with our top 10 coding practices. Click here to learn more!',
-        'link' => 'https://techblog.com/coding-practices',
-        'start_date' => '2024-08-01 00:00:00',
-        'end_date' => '2024-12-31 23:59:59',
-        'is_active' => 1,
-        'type_id' => 2, // Sidebar
-        'position' => 0
+        'title' => 'Banner Footer 1',
+        'image_path' => '/assets/images/line.jpg',
+        'text' => 'Khám phá các thiết bị mới!',
+        'type_id' => 3
     ],
     [
-        'title' => 'Cybersecurity Tips',
-        'image_path' => '/assets/images/1270x300_placeholder_banner.webp',
-        'text' => 'Protect yourself online with our top cybersecurity tips. Click here to read more!',
-        'link' => 'https://techblog.com/cybersecurity-tips',
-        'start_date' => '2024-08-01 00:00:00',
-        'end_date' => '2024-10-31 23:59:59',
-        'is_active' => 1,
-        'type_id' => 2, // Sidebar
-        'position' => 1
-    ],
-    [
-        'title' => 'Join Our Webinar',
-        'image_path' => '/assets/images/1270x300_placeholder_banner.webp',
-        'text' => 'Join our free webinar on the future of AI. Click here to register!',
-        'link' => 'https://techblog.com/webinar',
-        'start_date' => '2024-08-01 00:00:00',
-        'end_date' => '2024-08-31 23:59:59',
-        'is_active' => 1,
-        'type_id' => 3, // Footer
-        'position' => 0
-    ],
-    [
-        'title' => 'Latest Tech Reviews',
-        'image_path' => '/assets/images/1270x300_placeholder_banner.webp',
-        'text' => 'Read our latest reviews on the newest tech products. Click here to check them out!',
-        'link' => 'https://techblog.com/reviews',
-        'start_date' => '2024-08-01 00:00:00',
-        'end_date' => '2024-11-30 23:59:59',
-        'is_active' => 1,
-        'type_id' => 4, // Inline
-        'position' => 0
+        'title' => 'Banner Inline 1',
+        'image_path' => '/assets/images/line.jpg',
+        'text' => 'Khám phá các thiết bị mới!',
+        'type_id' => 4
     ],
 ];
 
 foreach ($banners as $banner) {
-    $sql = "INSERT INTO banners (title, image_path, text, link, start_date, end_date, is_active, type_id, position) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param('ssssssiis', $banner['title'], $banner['image_path'], $banner['text'], $banner['link'], $banner['start_date'], $banner['end_date'], $banner['is_active'], $banner['type_id'], $banner['position']);
-    $stmt->execute();
-    $stmt->close();
+    $title = $banner['title'];
+    $image_path = $banner['image_path'];
+    $text = $banner['text'];
+    $type_id = $banner['type_id'];
+
+    $sql = "INSERT INTO banners (title, image_path, text, type_id, position) VALUES ('$title', '$image_path', '$text', $type_id, 0)";
+    if ($conn->query($sql) === TRUE) {
+        echo "Banner '{$banner['title']}' đã được thêm thành công!<br>";
+    } else {
+        echo "Lỗi khi thêm banner '{$banner['title']}': " . $conn->error . "<br>";
+    }
 }
 
-// Close MySQL connection
+// Đóng kết nối
 $conn->close();
+?>

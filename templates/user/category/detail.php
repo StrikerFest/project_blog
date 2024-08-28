@@ -43,9 +43,9 @@ Common::requireTemplate('user/layouts/headers.php', [
 <?php Common::requireTemplate('user/layouts/menu.php', []); ?>
 
 <div class="page-container">
-    <!-- Left 3/4 Section -->
+    <!-- Phần 3/4 bên trái -->
     <div class="content-section">
-        <!-- Header Banner -->
+        <!-- Biểu ngữ trên cùng -->
         <div class="header-banner">
             <?php Common::requireTemplate('user/layouts/header_banner.php', [
                 'banner_image' => $headerBanner
@@ -70,10 +70,10 @@ Common::requireTemplate('user/layouts/headers.php', [
                     <a href="?id=<?= $category_id; ?>&page=<?= $i; ?>" class="<?= $i == $page ? 'active' : ''; ?>"><?= $i; ?></a>
                 <?php endfor; ?>
             </div>
-            <a href="/category" class="back-button">Back to Categories</a>
+            <a href="/category" class="back-button">Quay lại danh mục</a>
         </div>
 
-        <!-- Footer Banner -->
+        <!-- Biểu ngữ dưới cùng -->
         <div class="footer-banner">
             <?php Common::requireTemplate('user/layouts/footer_banner.php', [
                 'banner_image' => $footerBanner
@@ -81,7 +81,7 @@ Common::requireTemplate('user/layouts/headers.php', [
         </div>
     </div>
 
-    <!-- Right 1/4 Section (Sidebar) -->
+    <!-- Phần 1/4 bên phải (Thanh bên) -->
     <div class="side-banner-section">
         <?php Common::requireTemplate('user/layouts/side_banner_right.php', [
             'banner_image' => $sideBanner

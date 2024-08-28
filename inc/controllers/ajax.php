@@ -39,7 +39,7 @@ function store_redirection_session(): void
         $_SESSION['redirect_url'] = $_POST['redirect_url'];
         echo json_encode(['status' => 'success']);
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'No URL provided']);
+        echo json_encode(['status' => 'error', 'message' => 'Không có URL được cung cấp']);
     }
 }
 
@@ -60,7 +60,7 @@ function saveCommentAjax(): void
                 'comment_id' => $result
             ]);
         } else {
-            echo json_encode(['success' => false, 'error' => 'Failed to save comment']);
+            echo json_encode(['success' => false, 'error' => 'Lưu bình luận không thành công']);
         }
     } else {
         echo json_encode(['success' => false]);
@@ -80,7 +80,7 @@ function deleteCommentAjax(): void
         if ($result) {
             echo json_encode(['success' => true]);
         } else {
-            echo json_encode(['success' => false, 'error' => 'Failed to delete comment']);
+            echo json_encode(['success' => false, 'error' => 'Xóa bình luận không thành công']);
         }
     } else {
         echo json_encode(['success' => false]);
@@ -102,7 +102,7 @@ function handleLikePostAjax(): void
     $post_id = $_POST['post_id'] ?? null;
 
     if (!$post_id) {
-        echo json_encode(['status' => 'error', 'message' => 'Invalid post ID']);
+        echo json_encode(['status' => 'error', 'message' => 'ID bài viết không hợp lệ']);
         exit;
     }
 

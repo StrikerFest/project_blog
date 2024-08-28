@@ -6,7 +6,7 @@
 use inc\helpers\Common;
 
 Common::requireTemplate('admin/layouts/headers.php', [
-    'title' => 'Category'
+    'title' => 'Danh mục'
 ]);
 ?>
 
@@ -17,49 +17,49 @@ Common::requireTemplate('admin/layouts/headers.php', [
             <input type="text" id="id-filter" name="id" class="short-input" placeholder="ID" value="<?= htmlspecialchars($_GET['id'] ?? '') ?>">
         </div>
         <div class="filter-item">
-            <label for="name-filter">Name:</label>
-            <input type="text" id="name-filter" name="name" placeholder="Filter by name" value="<?= htmlspecialchars($_GET['name'] ?? '') ?>">
+            <label for="name-filter">Tên:</label>
+            <input type="text" id="name-filter" name="name" placeholder="Lọc theo tên" value="<?= htmlspecialchars($_GET['name'] ?? '') ?>">
         </div>
         <div class="filter-item">
             <label for="slug-filter">Slug:</label>
-            <input type="text" id="slug-filter" name="slug" placeholder="Filter by slug" value="<?= htmlspecialchars($_GET['slug'] ?? '') ?>">
+            <input type="text" id="slug-filter" name="slug" placeholder="Lọc theo slug" value="<?= htmlspecialchars($_GET['slug'] ?? '') ?>">
         </div>
         <div class="filter-item">
-            <label for="status-filter">Status:</label>
+            <label for="status-filter">Trạng thái:</label>
             <select id="status-filter" name="status">
-                <option value="" <?= !isset($_GET['status']) || $_GET['status'] === '' ? 'selected' : '' ?>>All</option>
-                <option value="enabled" <?= $_GET['status'] === 'enabled' ? 'selected' : '' ?>>Enabled</option>
-                <option value="disabled" <?= $_GET['status'] === 'disabled' ? 'selected' : '' ?>>Disabled</option>
+                <option value="" <?= !isset($_GET['status']) || $_GET['status'] === '' ? 'selected' : '' ?>>Tất cả</option>
+                <option value="enabled" <?= $_GET['status'] === 'enabled' ? 'selected' : '' ?>>Kích hoạt</option>
+                <option value="disabled" <?= $_GET['status'] === 'disabled' ? 'selected' : '' ?>>Không kích hoạt</option>
             </select>
         </div>
         <div class="filter-item">
-            <label for="position-filter">Position:</label>
-            <input type="text" id="position-filter" name="position" placeholder="Filter by position" value="<?= htmlspecialchars($_GET['position'] ?? '') ?>">
+            <label for="position-filter">Vị trí:</label>
+            <input type="text" id="position-filter" name="position" placeholder="Lọc theo vị trí" value="<?= htmlspecialchars($_GET['position'] ?? '') ?>">
         </div>
         <div class="filter-item checkbox-container">
             <input type="checkbox" id="include-deleted" name="include_deleted" <?= isset($_GET['include_deleted']) ? 'checked' : '' ?>>
-            <label for="include-deleted">Include Deleted?</label>
+            <label for="include-deleted">Bao gồm đã xóa?</label>
         </div>
         <div class="filter-btn">
-            <button type="submit">Filter</button>
+            <button type="submit">Lọc</button>
         </div>
     </form>
 </div>
 
 <div class="listing-container">
-    <h1>Categories</h1>
+    <h1>Danh mục</h1>
     <div>
         <table id="categoryTable" class="listing-styled-table">
             <thead>
             <tr>
                 <th>Id</th>
-                <th>Name</th>
+                <th>Tên</th>
                 <th>Slug</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th>Position</th>
-                <th>Action</th>
-                <th style="display:none;">Updated At</th> <!-- Hidden Updated At column -->
+                <th>Mô tả</th>
+                <th>Trạng thái</th>
+                <th>Vị trí</th>
+                <th>Hành động</th>
+                <th style="display:none;">Cập nhật lúc</th> <!-- Hidden Updated At column -->
             </tr>
             </thead>
             <tbody>
@@ -73,13 +73,13 @@ Common::requireTemplate('admin/layouts/headers.php', [
                     <td class="text-align-center"><?= $category['position']; ?></td>
                     <td class="text-align-center">
                         <?php if ($category['deleted_at']) : ?>
-                            <a href="category/delete?action=recover&id=<?= $category['category_id']; ?>" class="listing-btn_action">Recover</a>
+                            <a href="category/delete?action=recover&id=<?= $category['category_id']; ?>" class="listing-btn_action">Khôi phục</a>
                         <?php else : ?>
-                            <a href="category/edit?id=<?= $category['category_id']; ?>" class="listing-btn_action">Edit</a>
-                            <a href="category/delete?action=delete&id=<?= $category['category_id']; ?>" class="listing-btn_action">Delete</a>
+                            <a href="category/edit?id=<?= $category['category_id']; ?>" class="listing-btn_action">Chỉnh sửa</a>
+                            <a href="category/delete?action=delete&id=<?= $category['category_id']; ?>" class="listing-btn_action">Xóa</a>
                         <?php endif; ?>
                     </td>
-                    <td style="display:none;"><?= $category['updated_at']; ?></td> <!-- Hidden Updated At column data -->
+                    <td style="display:none;"><?= $category['updated_at']; ?></td>
                 </tr>
             <?php endforeach; ?>
             </tbody>

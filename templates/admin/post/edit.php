@@ -16,16 +16,16 @@ $post_category_ids = Post::getPostCategories($post['post_id'] ?? null, 'id', 0);
 $post_tag_ids = Post::getPostTags($post['post_id'] ?? null, 'id');
 
 $allowed = Post::canChangeStatus($post['status'] ?? null, $current_user['role']);
-$permissionMissing = !$allowed ? "You don't have permission to change post status." : '';
+$permissionMissing = !$allowed ? "Bạn không có quyền thay đổi trạng thái bài viết." : '';
 
 ?>
 
 <body>
 <div class="edit-container">
     <?php if (isset($post['post_id'])): ?>
-        <h1 class="edit-title">Update Post ID: <?= $post['post_id'] ?></h1>
+        <h1 class="edit-title">Cập nhật Bài viết ID: <?= $post['post_id'] ?></h1>
     <?php else: ?>
-        <h1 class="edit-title">Create New Post</h1>
+        <h1 class="edit-title">Tạo Bài viết Mới</h1>
     <?php endif; ?>
     <form id="post-edit-createPostForm" method="POST" enctype="multipart/form-data">
         <input type="hidden" value="<?= $post['post_id'] ?? '' ?>" name="id"/>
@@ -33,22 +33,22 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
         <input type="hidden" value="<?= $post['approved_by'] ?? '' ?>" name="approved_by"/>
 
         <div class="edit-field">
-            <label for="post-edit-title">Title:</label>
-            <input type="text" id="post-edit-title" name="title" value="<?= $post['title'] ?? '' ?>" placeholder="Title" maxlength="255" required>
+            <label for="post-edit-title">Tiêu đề:</label>
+            <input type="text" id="post-edit-title" name="title" value="<?= $post['title'] ?? '' ?>" placeholder="Tiêu đề" maxlength="255" required>
         </div>
 
         <div class="edit-field">
-            <label for="post-edit-content">Content:</label>
-            <textarea id="post-edit-content" name="content" placeholder="Content"><?= htmlspecialchars($post['content'] ?? '') ?></textarea>
+            <label for="post-edit-content">Nội dung:</label>
+            <textarea id="post-edit-content" name="content" placeholder="Nội dung"><?= htmlspecialchars($post['content'] ?? '') ?></textarea>
         </div>
 
         <!-- Thumbnail Upload Field -->
         <div class="edit-field">
-            <label for="post-edit-thumbnail">Thumbnail:</label>
+            <label for="post-edit-thumbnail">Hình thu nhỏ:</label>
             <?php if (!empty($post['thumbnail_path'])): ?>
                 <div class="image-preview">
-                    <p>Current Thumbnail:</p>
-                    <img src="<?= $post['thumbnail_path']; ?>" alt="Current Thumbnail" class="existing-image">
+                    <p>Hình thu nhỏ hiện tại:</p>
+                    <img src="<?= $post['thumbnail_path']; ?>" alt="Hình thu nhỏ hiện tại" class="existing-image">
                 </div>
             <?php endif; ?>
             <input type="file" id="post-edit-thumbnail" name="thumbnail" accept="image/*">
@@ -60,8 +60,8 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
             <label for="post-edit-banner">Banner:</label>
             <?php if (!empty($post['banner_path'])): ?>
                 <div class="image-preview">
-                    <p>Current Banner:</p>
-                    <img src="<?= $post['banner_path']; ?>" alt="Current Banner" class="existing-image">
+                    <p>Banner hiện tại:</p>
+                    <img src="<?= $post['banner_path']; ?>" alt="Banner hiện tại" class="existing-image">
                 </div>
             <?php endif; ?>
             <input type="file" id="post-edit-banner" name="banner" accept="image/*">
@@ -69,7 +69,7 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
         </div>
 
         <div class="edit-field">
-            <label>Categories:</label>
+            <label>Danh mục:</label>
             <select name="categories[]" id="post-edit-categories" multiple required>
                 <?php foreach ($args['categories'] as $category): ?>
                     <option value="<?= $category['category_id'] ?>"
@@ -81,7 +81,7 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
         </div>
 
         <div class="edit-field">
-            <label>Tags:</label>
+            <label>Thẻ:</label>
             <select name="tags[]" id="post-edit-tags" multiple required>
                 <?php foreach ($args['tags'] as $tag): ?>
                     <option value="<?= $tag['tag_id'] ?>"
@@ -93,7 +93,7 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
         </div>
 
         <div class="edit-field">
-            <label for="post-edit-status">Status: <?= $permissionMissing ?></label>
+            <label for="post-edit-status">Trạng thái: <?= $permissionMissing ?></label>
             <select id="post-edit-status" name="status" required <?= !$allowed ? 'disabled' : '' ?>>
                 <?php
                 $currentStatus = $post['status'] ?? null;
@@ -162,7 +162,7 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
                         }
                         break;
                     default:
-                        echo '<option value="">Invalid Role</option>';
+                        echo '<option value="">Vai trò không hợp lệ</option>';
                         break;
                 }
 
@@ -178,11 +178,11 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
             </select>
         </div>
         <div class="edit-field" id="reason-field" style="display: none;">
-            <label for="post-edit-reason">Reason for Status Change:</label>
-            <textarea id="post-edit-reason" name="reason" placeholder="Provide a reason for the status change"></textarea>
+            <label for="post-edit-reason">Lý do thay đổi trạng thái:</label>
+            <textarea id="post-edit-reason" name="reason" placeholder="Cung cấp lý do cho sự thay đổi trạng thái"></textarea>
         </div>
         <div class="edit-field" id="editor-field" style="display: none;">
-            <label for="post-edit-editor">Assign Editor:</label>
+            <label for="post-edit-editor">Chọn Biên tập viên:</label>
             <select id="post-edit-editor" name="editor_id">
                 <?php foreach ($args['editors'] as $editor): ?>
                     <option value="<?= $editor['user_id'] ?>" <?= ($post['editor_id'] ?? null) == $editor['user_id'] ? 'selected' : '' ?>>
@@ -193,7 +193,7 @@ $permissionMissing = !$allowed ? "You don't have permission to change post statu
         </div>
 
         <div class="edit-field">
-            <button type="submit" class="edit-btn">Save Post</button>
+            <button type="submit" class="edit-btn">Lưu Bài viết</button>
         </div>
     </form>
 </div>

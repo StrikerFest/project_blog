@@ -9,7 +9,7 @@ use inc\helpers\Common;
 $users = $args['users'];
 
 Common::requireTemplate('admin/layouts/headers.php', [
-    'title' => 'User Management',
+    'title' => 'Quản lý người dùng',
     'permission' => 'ADMIN_ONLY',
 ]);
 ?>
@@ -18,14 +18,14 @@ Common::requireTemplate('admin/layouts/headers.php', [
     <table id="listing-table" class="listing-table">
         <thead>
         <tr>
-            <th>Id</th>
-            <th>Username</th>
+            <th>ID</th>
+            <th>Tên đăng nhập</th>
             <th>Email</th>
-            <th>Role</th>
-            <th>Created At</th>
-            <th>Status</th>
-            <th>Action</th>
-            <th style="display:none;">Updated At</th> <!-- Hidden Updated At column -->
+            <th>Vai trò</th>
+            <th>Ngày tạo</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+            <th style="display:none;">Ngày cập nhật</th> <!-- Cột Ngày cập nhật ẩn -->
         </tr>
         </thead>
         <tbody>
@@ -36,16 +36,16 @@ Common::requireTemplate('admin/layouts/headers.php', [
                 <td><?php echo htmlspecialchars($user['email']); ?></td>
                 <td><?php echo htmlspecialchars($user['role']); ?></td>
                 <td><?php echo htmlspecialchars($user['created_at']); ?></td>
-                <td><?php echo $user['deleted_at'] ? 'Inactive' : 'Active'; ?></td>
+                <td><?php echo $user['deleted_at'] ? 'Không hoạt động' : 'Hoạt động'; ?></td>
                 <td>
                     <?php if ($user['deleted_at']): ?>
-                        <a href="#" class="btn recover-user" data-user-id="<?= $user['user_id']; ?>">Recover</a>
+                        <a href="#" class="btn recover-user" data-user-id="<?= $user['user_id']; ?>">Khôi phục</a>
                     <?php else: ?>
-                        <a href="user/edit?id=<?= $user['user_id']; ?>" class="btn">Edit</a>
-                        <a href="#" class="btn delete-user" data-user-id="<?= $user['user_id']; ?>">Delete</a>
+                        <a href="user/edit?id=<?= $user['user_id']; ?>" class="btn">Chỉnh sửa</a>
+                        <a href="#" class="btn delete-user" data-user-id="<?= $user['user_id']; ?>">Xóa</a>
                     <?php endif; ?>
                 </td>
-                <td style="display:none;"><?php echo htmlspecialchars($user['updated_at']); ?></td> <!-- Hidden Updated At column data -->
+                <td style="display:none;"><?php echo htmlspecialchars($user['updated_at']); ?></td> <!-- Dữ liệu Ngày cập nhật ẩn -->
             </tr>
         <?php endforeach; ?>
         </tbody>
@@ -59,9 +59,9 @@ Common::requireTemplate('admin/layouts/footer.php');
     $(document).ready(function () {
         $('#listing-table').DataTable({
             "searching": true,
-            "order": [[7, "desc"]], // Sort by the 8th column (updated_at) in descending order
+            "order": [[7, "desc"]], // Sắp xếp theo cột thứ 8 (ngày cập nhật) theo thứ tự giảm dần
             "columnDefs": [
-                { "targets": 7, "visible": false } // Hide the updated_at column
+                { "targets": 7, "visible": false } // Ẩn cột ngày cập nhật
             ]
         });
     });
@@ -74,7 +74,7 @@ Common::requireTemplate('admin/layouts/footer.php');
             button.addEventListener('click', function (e) {
                 e.preventDefault();
                 const userId = this.getAttribute('data-user-id');
-                const confirmDelete = confirm('Are you sure you want to delete this user?');
+                const confirmDelete = confirm('Bạn có chắc chắn muốn xóa người dùng này không?');
 
                 if (confirmDelete) {
                     window.location.href = `/admin/user/delete?id=${userId}&action=delete`;
@@ -86,7 +86,7 @@ Common::requireTemplate('admin/layouts/footer.php');
             button.addEventListener('click', function (e) {
                 e.preventDefault();
                 const userId = this.getAttribute('data-user-id');
-                const confirmRecover = confirm('Are you sure you want to recover this user?');
+                const confirmRecover = confirm('Bạn có chắc chắn muốn khôi phục người dùng này không?');
 
                 if (confirmRecover) {
                     window.location.href = `/admin/user/delete?id=${userId}&action=recover`;

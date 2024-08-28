@@ -11,9 +11,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $updateSuccess = User::updateUserProfile();
 
     if ($updateSuccess) {
-        $_SESSION['success_update'] = 'User information updated successfully.';
+        $_SESSION['success_update'] = 'Cập nhật thông tin người dùng thành công.';
     } else {
-        $_SESSION['error_update'] = $_SESSION['error_update'] ?? 'Failed to update user information. Please try again.';
+        $_SESSION['error_update'] = $_SESSION['error_update'] ?? 'Đã có lỗi khi cập nhật thông tin người dùng, vui lòng thử lại sau.';
     }
 
     // Redirect to the profile page to prevent form resubmission

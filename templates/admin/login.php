@@ -16,24 +16,24 @@ if (isset($_SESSION['user_backend'])) {
 <link rel="stylesheet" href="<?= Common::getAssetPath('css/login.css') ?>">
 <div class="container">
     <div class="form">
-        <h1 class="title">Login</h1>
+        <h1 class="title">Đăng nhập</h1>
         <div>
             <form method="POST">
                 <div class="field">
-                    <input placeholder="Username" type="text" name="username" required="required"/>
+                    <input placeholder="Tên đăng nhập" type="text" name="username" required="required"/>
                 </div>
                 <div class="field">
-                    <input placeholder="Password" type="password" name="password" required="required"/>
+                    <input placeholder="Mật khẩu" type="password" name="password" required="required"/>
                 </div>
                 <?php if (isset($_SESSION['error_login_admin'])) { ?>
-                    <div class="error">Username or password incorrect</div>
+                    <div class="error">Tên đăng nhập hoặc mật khẩu không chính xác</div>
                     <?php unset($_SESSION['error_login_admin']); ?>
                 <?php } ?>
                 <?php if (isset($_SESSION['inactive_user_admin'])) { ?>
-                    <div class="error">Your account is inactive. Please contact the administrator.</div>
+                    <div class="error">Tài khoản của bạn không hoạt động. Vui lòng liên hệ với quản trị viên.</div>
                     <?php unset($_SESSION['inactive_user_admin']); ?>
                 <?php } ?>
-                <button class="btn">Sign in</button>
+                <button class="btn">Đăng nhập</button>
             </form>
         </div>
     </div>

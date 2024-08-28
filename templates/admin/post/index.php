@@ -32,48 +32,48 @@ Common::requireTemplate('admin/layouts/headers.php', [
         <input type="text" id="id-filter" name="id" class="short-input" placeholder="ID" value="<?= htmlspecialchars($_GET['id'] ?? '') ?>">
     </div>
     <div class="filter-item">
-        <label for="title-filter">Title:</label>
-        <input type="text" id="title-filter" name="title" placeholder="Filter by title" value="<?= htmlspecialchars($_GET['title'] ?? '') ?>">
+        <label for="title-filter">Tiêu đề:</label>
+        <input type="text" id="title-filter" name="title" placeholder="Lọc theo tiêu đề" value="<?= htmlspecialchars($_GET['title'] ?? '') ?>">
     </div>
     <div class="filter-item">
-        <label for="categories-filter">Categories:</label>
-        <input type="text" id="categories-filter" name="categories" placeholder="Filter by categories" value="<?= htmlspecialchars($_GET['categories'] ?? '') ?>">
+        <label for="categories-filter">Danh mục:</label>
+        <input type="text" id="categories-filter" name="categories" placeholder="Lọc theo danh mục" value="<?= htmlspecialchars($_GET['categories'] ?? '') ?>">
     </div>
     <div class="filter-item">
-        <label for="tags-filter">Tags:</label>
-        <input type="text" id="tags-filter" name="tags" placeholder="Filter by tags" value="<?= htmlspecialchars($_GET['tags'] ?? '') ?>">
+        <label for="tags-filter">Thẻ:</label>
+        <input type="text" id="tags-filter" name="tags" placeholder="Lọc theo thẻ" value="<?= htmlspecialchars($_GET['tags'] ?? '') ?>">
     </div>
     <div class="filter-item">
-        <label for="author-filter">Author:</label>
-        <input type="text" id="author-filter" name="author" placeholder="Filter by author" value="<?= htmlspecialchars($_GET['author'] ?? '') ?>">
+        <label for="author-filter">Tác giả:</label>
+        <input type="text" id="author-filter" name="author" placeholder="Lọc theo tác giả" value="<?= htmlspecialchars($_GET['author'] ?? '') ?>">
     </div>
     <div class="filter-item">
-        <label for="editor-filter">Editor:</label>
-        <input type="text" id="editor-filter" name="editor" placeholder="Filter by editor" value="<?= htmlspecialchars($_GET['editor'] ?? '') ?>">
+        <label for="editor-filter">Biên tập viên:</label>
+        <input type="text" id="editor-filter" name="editor" placeholder="Lọc theo biên tập viên" value="<?= htmlspecialchars($_GET['editor'] ?? '') ?>">
     </div>
     <div class="filter-item">
-        <label for="status-filter">Status:</label>
+        <label for="status-filter">Trạng thái:</label>
         <select id="status-filter" name="status">
-            <option value="" <?= !isset($_GET['status']) || $_GET['status'] === '' ? 'selected' : '' ?>>All</option>
-            <option value="draft" <?= $_GET['status'] === 'draft' ? 'selected' : '' ?>>Draft</option>
-            <option value="pending_approval" <?= $_GET['status'] === 'pending_approval' ? 'selected' : '' ?>>Pending Approval</option>
-            <option value="approval_retracted" <?= $_GET['status'] === 'approval_retracted' ? 'selected' : '' ?>>Approval Retracted</option>
-            <option value="approval_denied" <?= $_GET['status'] === 'approval_denied' ? 'selected' : '' ?>>Approval Denied</option>
-            <option value="approved" <?= $_GET['status'] === 'approved' ? 'selected' : '' ?>>Approved</option>
-            <option value="published_retracted" <?= $_GET['status'] === 'published_retracted' ? 'selected' : '' ?>>Published Retracted</option>
-            <option value="published" <?= $_GET['status'] === 'published' ? 'selected' : '' ?>>Published</option>
+            <option value="" <?= !isset($_GET['status']) || $_GET['status'] === '' ? 'selected' : '' ?>>Tất cả</option>
+            <option value="draft" <?= $_GET['status'] === 'draft' ? 'selected' : '' ?>>Nháp</option>
+            <option value="pending_approval" <?= $_GET['status'] === 'pending_approval' ? 'selected' : '' ?>>Chờ phê duyệt</option>
+            <option value="approval_retracted" <?= $_GET['status'] === 'approval_retracted' ? 'selected' : '' ?>>Rút lại phê duyệt</option>
+            <option value="approval_denied" <?= $_GET['status'] === 'approval_denied' ? 'selected' : '' ?>>Từ chối phê duyệt</option>
+            <option value="approved" <?= $_GET['status'] === 'approved' ? 'selected' : '' ?>>Đã phê duyệt</option>
+            <option value="published_retracted" <?= $_GET['status'] === 'published_retracted' ? 'selected' : '' ?>>Rút lại xuất bản</option>
+            <option value="published" <?= $_GET['status'] === 'published' ? 'selected' : '' ?>>Đã xuất bản</option>
         </select>
     </div>
     <div class="filter-item">
-        <label for="publish-date-filter">Publish Date:</label>
+        <label for="publish-date-filter">Ngày xuất bản:</label>
         <input type="date" id="publish-date-filter" name="publish_date" value="<?= htmlspecialchars($_GET['publish_date'] ?? '') ?>">
     </div>
     <div class="filter-item checkbox-container">
         <input type="checkbox" id="include-deleted" name="include_deleted" <?= isset($_GET['include_deleted']) ? 'checked' : '' ?>>
-        <label for="include-deleted">Include Deleted?</label>
+        <label for="include-deleted">Bao gồm các mục đã xóa?</label>
     </div>
     <div class="filter-btn">
-        <button type="submit">Filter</button>
+        <button type="submit">Lọc</button>
     </div>
 </form>
 
@@ -81,26 +81,26 @@ Common::requireTemplate('admin/layouts/headers.php', [
     <table id="listing-table" class="listing-table">
         <thead>
         <tr>
-            <th>Id</th>
-            <th>Title</th>
-            <th>Categories</th>
-            <th>Tags</th>
-            <th>Author</th>
-            <th>Editor</th>
-            <th>Status</th>
-            <th>Publish Date</th>
-            <th style="display:none;">Updated At</th>
-            <th>Action</th>
+            <th>ID</th>
+            <th>Tiêu đề</th>
+            <th>Danh mục</th>
+            <th>Thẻ</th>
+            <th>Tác giả</th>
+            <th>Biên tập viên</th>
+            <th>Trạng thái</th>
+            <th>Ngày xuất bản</th>
+            <th style="display:none;">Cập nhật lúc</th>
+            <th>Hành động</th>
         </tr>
         </thead>
         <tbody>
         <?php foreach ($posts as $post): ?>
             <?php
-            // Retrieve categories and tags for each post
+            // Lấy danh mục và thẻ cho mỗi bài viết
             $post_category_ids = Post::getPostCategories($post['post_id'] ?? null);
             $post_tag_ids = Post::getPostTags($post['post_id'] ?? null);
 
-            // Extract only the 'name' from the category and tag arrays
+            // Chỉ lấy tên từ các mảng danh mục và thẻ
             $category_names = array_column($post_category_ids, 'name');
             $tag_names = array_column($post_tag_ids, 'name');
             ?>
@@ -113,7 +113,7 @@ Common::requireTemplate('admin/layouts/headers.php', [
                     if (!empty($category_names)) {
                         echo implode(', ', $category_names);
                     } else {
-                        echo 'No Categories';
+                        echo 'Không có danh mục';
                     }
                     ?>
                 </td>
@@ -123,7 +123,7 @@ Common::requireTemplate('admin/layouts/headers.php', [
                     if (!empty($tag_names)) {
                         echo implode(', ', $tag_names);
                     } else {
-                        echo 'No Tags';
+                        echo 'Không có thẻ';
                     }
                     ?>
                 </td>
@@ -135,10 +135,10 @@ Common::requireTemplate('admin/layouts/headers.php', [
                 <td style="display:none;"><?php echo htmlspecialchars($post['updated_at']); ?></td>
                 <td>
                     <?php if ($post['deleted_at']): ?>
-                        <a href="post/delete?action=recover&id=<?= $post['post_id']; ?>" class="btn btn-recover">Recover</a>
+                        <a href="post/delete?action=recover&id=<?= $post['post_id']; ?>" class="btn btn-recover">Khôi phục</a>
                     <?php else: ?>
-                        <a href="post/edit?id=<?= $post['post_id']; ?>" class="btn">Edit</a>
-                        <a href="post/delete?action=delete&id=<?= $post['post_id']; ?>" class="btn btn-delete">Delete</a>
+                        <a href="post/edit?id=<?= $post['post_id']; ?>" class="btn">Chỉnh sửa</a>
+                        <a href="post/delete?action=delete&id=<?= $post['post_id']; ?>" class="btn btn-delete">Xóa</a>
                     <?php endif; ?>
                 </td>
             </tr>
@@ -154,9 +154,9 @@ Common::requireTemplate('admin/layouts/footer.php');
     $(document).ready(function() {
         $('#listing-table').DataTable({
             "searching": true,
-            "order": [[8, "desc"]], 
+            "order": [[8, "desc"]],
             "columnDefs": [
-                { "targets": [8], "visible": false } 
+                { "targets": [8], "visible": false }
             ]
         });
     });
@@ -168,7 +168,7 @@ Common::requireTemplate('admin/layouts/footer.php');
         deleteButtons.forEach(button => {
             button.addEventListener('click', function (e) {
                 e.preventDefault();
-                const confirmDelete = confirm('Are you sure you want to delete this post?');
+                const confirmDelete = confirm('Bạn có chắc chắn muốn xóa bài viết này không?');
                 if (confirmDelete) {
                     window.location.href = this.href;
                 }
@@ -178,7 +178,7 @@ Common::requireTemplate('admin/layouts/footer.php');
         recoverButtons.forEach(button => {
             button.addEventListener('click', function (e) {
                 e.preventDefault();
-                const confirmRecover = confirm('Are you sure you want to recover this post?');
+                const confirmRecover = confirm('Bạn có chắc chắn muốn khôi phục bài viết này không?');
                 if (confirmRecover) {
                     window.location.href = this.href;
                 }

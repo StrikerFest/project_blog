@@ -9,14 +9,14 @@ $action = $_GET['action'] ?? null;
 if ($userId && $action) {
     if ($action === 'delete') {
         $result = User::softDeleteUser($userId);
-        $message = $result ? "User has been successfully deleted." : "Failed to delete the user.";
+        $message = $result ? "Người dùng đã được xóa thành công." : "Xóa người dùng không thành công.";
         $toastType = $result ? "success" : "error";
     } elseif ($action === 'recover') {
         $result = User::recoverUser($userId);
-        $message = $result ? "User has been successfully recovered." : "Failed to recover the user.";
+        $message = $result ? "Người dùng đã được phục hồi thành công." : "Phục hồi người dùng không thành công.";
         $toastType = $result ? "success" : "error";
     } else {
-        $message = "Invalid action.";
+        $message = "Hành động không hợp lệ.";
         $toastType = "error";
     }
 

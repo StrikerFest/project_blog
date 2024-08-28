@@ -9,11 +9,11 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
     $bannerId = $_GET['id'];
     if ($_GET['action'] === 'delete') {
         Banner::softDeleteBanner($bannerId);
-        $_SESSION['toast_message'] = "Banner deleted successfully.";
+        $_SESSION['toast_message'] = "Banner xóa thành công.";
         $_SESSION['toast_type'] = "success";
     } elseif ($_GET['action'] === 'recover') {
         Banner::recoverBanner($bannerId);
-        $_SESSION['toast_message'] = "Banner recovered successfully.";
+        $_SESSION['toast_message'] = "Banner khôi phục thành công.";
         $_SESSION['toast_type'] = "success";
     }
     header("Location: /admin/banner");

@@ -16,7 +16,7 @@ $headerBanner = Banner::getBannerByType('Header');
 $sideBanner = Banner::getBannerByType('Sidebar');
 $footerBanner = Banner::getBannerByType('Footer');
 Common::requireTemplate('user/layouts/headers.php', [
-    'title' => 'Login'
+    'title' => 'Đăng nhập'
 ]);
 ?>
 <link rel="stylesheet" href="<?= Common::getAssetPath('css/login-user.css') ?>">
@@ -26,16 +26,16 @@ Common::requireTemplate('user/layouts/headers.php', [
     <div class="user-login-container">
         <form class="user-login-form" method="POST">
             <div class="user-login-content">
-                <h2 class="user-login-title">Login</h2>
-                <input class="user-login-input" type="text" name="username" placeholder="Username" required="required"/>
-                <input class="user-login-input" type="password" name="password" placeholder="Password" required="required"/>
+                <h2 class="user-login-title">Đăng nhập</h2>
+                <input class="user-login-input" type="text" name="username" placeholder="Tên người dùng" required="required"/>
+                <input class="user-login-input" type="password" name="password" placeholder="Mật khẩu" required="required"/>
             </div>
             <?php if (isset($_SESSION['error_login_reader'])) : ?>
-                <div class="user-login-error">Username or password incorrect</div>
+                <div class="user-login-error">Tên người dùng hoặc mật khẩu không chính xác</div>
                 <?php unset($_SESSION['error_login_reader']); ?>
             <?php endif; ?>
             <?php if (isset($_SESSION['inactive_user_reader'])) : ?>
-                <div class="user-login-error">Your account is inactive. Please contact support.</div>
+                <div class="user-login-error">Tài khoản của bạn không hoạt động. Vui lòng liên hệ hỗ trợ.</div>
                 <?php unset($_SESSION['inactive_user_reader']); ?>
             <?php endif; ?>
             <?php if (isset($_SESSION['success_signup'])) : ?>
@@ -43,7 +43,7 @@ Common::requireTemplate('user/layouts/headers.php', [
                 <?php unset($_SESSION['success_signup']); ?>
             <?php endif; ?>
             <div class="user-login-buttons">
-                <button class="user-login-btn" type="submit">Sign in</button>
+                <button class="user-login-btn" type="submit">Đăng nhập</button>
             </div>
         </form>
     </div>
