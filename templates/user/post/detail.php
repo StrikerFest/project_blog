@@ -58,11 +58,20 @@ Common::requireTemplate('user/layouts/headers.php', [
 
             <h1 class="post-detail-title"><?= $post['title'] ?></h1>
 
-            <h3 class="post-detail-categories">Categories: <?= implode(', ', $categories) ?></h3>
+            <h3 class="post-detail-categories">Categories: 
+                <?php foreach ($categories as $key => $category): ?>
+                    <span><?= $category['name'] ?></span>
+                <?php
+                    if($key != (count($categories) - 1)) {
+                        echo ", ";
+                    }
+                    endforeach; 
+                ?>
+            </h3>
 
             <div class="post-detail-tags">
                 <?php foreach ($tags as $tag): ?>
-                    <button class="post-detail-tag-button"><?= $tag ?></button>
+                    <button class="post-detail-tag-button"><?= $tag['name'] ?></button>
                 <?php endforeach; ?>
             </div>
 
