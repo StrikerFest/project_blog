@@ -59,10 +59,16 @@ Common::requireTemplate('user/layouts/headers.php', [
             </div>
             <section class="category-detail-posts">
                 <?php foreach ($posts as $post) : ?>
+                <a href="/post/show?post_id=<?= $post['post_id'] ?>" class="category-index-card">
                     <div class="category-detail-post-card">
-                        <img src="<?= $post['thumbnail_path']; ?>" alt="<?= $post['title']; ?>">
+                        <?php if (!empty($post['thumbnail_path'])): ?>
+                            <img src="<?= $post['thumbnail_path']; ?>" alt="image">
+                        <?php else: ?>
+                            <img src="<?= Common::getAssetPath('images/placeholder-thumbnail.webp') ?>" alt="post-thumbnail">
+                        <?php endif; ?>
                         <div class="category-detail-post-card-title"><?= $post['title']; ?></div>
                     </div>
+                </a>
                 <?php endforeach; ?>
             </section>
             <div class="pagination">
