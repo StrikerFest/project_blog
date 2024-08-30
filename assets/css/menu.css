@@ -75,3 +75,27 @@
     font-size: 14px;
     color: black;
 }
+
+.menu-logo {
+    float: left;
+    padding: 10px 16px;
+}
+
+.menu-logo img {
+    height: 80px; 
+    width: auto;
+}
+
+.menu-navbar .menu-dropdown {
+    float: left;
+    overflow: hidden;
+    margin-left: 20px;
+}
+
+.menu-navbar a {
+    text-decoration: none;
+}
+
+.menu-navbar a:hover {
+    text-decoration: none;
+}

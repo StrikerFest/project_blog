@@ -15,6 +15,9 @@ $current_user = $_SESSION['user_frontend'] ?? null;
     <div id="google_translate_element"></div>
 </header>
 <div class="menu-navbar">
+    <div class="menu-logo">
+        <a href="<?= Common::get_url('/') ?>"><img src="<?= Common::getAssetPath('images/logo.webp') ?>" alt="Logo"></a>
+    </div>
     <div class="menu-dropdown">
         <button class="menu-dropbtn">Bài viết
             <i class="fa fa-caret-down"></i>
