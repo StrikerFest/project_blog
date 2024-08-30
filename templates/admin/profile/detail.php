@@ -29,7 +29,7 @@ Common::requireTemplate('admin/layouts/headers.php', ['title' => 'Chỉnh sửa 
 
         <div class="edit-field">
             <label for="admin-edit-bio">Tiểu sử:</label>
-            <textarea id="admin-edit-bio" name="bio" placeholder="Tiểu sử"><?= htmlspecialchars($user['bio']) ?></textarea>
+            <textarea id="admin-edit-bio" name="bio" placeholder="Tiểu sử"><?= htmlspecialchars($user['bio'] ?? '') ?></textarea>
         </div>
 
         <div class="edit-field">
