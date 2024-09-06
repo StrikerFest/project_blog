@@ -4,6 +4,11 @@ use inc\helpers\Common;
 
 ?>
 <div class="footer-banner">
-    <!-- This is where the footer banner will be displayed -->
-    <img src="<?= $args['banner_image'] ?? Common::getAssetPath('images/placeholder-banner.webp') ?>" alt="Footer Banner">
+    <?php if (!empty($args['banner_image']) && !empty($args['banner_link'])): ?>
+        <a target="_blank" href="<?= $args['banner_link'] ?>">
+            <img src="<?= $args['banner_image'] ?>" alt="Footer Banner">
+        </a>
+    <?php else: ?>
+        <img src="<?= Common::getAssetPath('images/placeholder-banner.webp') ?>" alt="Footer Banner">
+    <?php endif; ?>
 </div>

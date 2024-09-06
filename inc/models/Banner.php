@@ -2,6 +2,7 @@
 
 namespace inc\models;
 
+use inc\helpers\Common;
 use inc\helpers\DB;
 
 class Banner
@@ -22,7 +23,7 @@ class Banner
         $banners = [];
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                $row['type_name'] = self::getBannerTypeById($row['type_id']); // Get banner type name
+                $row['type_name'] = self::getBannerTypeById($row['type_id']);
                 $banners[] = $row;
             }
         }
@@ -61,21 +62,15 @@ class Banner
     public static function saveBanner($data, $files)
     {
         $conn = DB::db_connect();
-
-        // Handle image upload
         $imagePath = self::handleImageUpload($files['image'], $data['existing_image_path']);
-
-        // Format start_date and end_date to ensure proper formatting
         $start_date = self::formatDateTime($data['start_date']);
         $end_date = self::formatDateTime($data['end_date']);
 
         if (isset($data['id']) && !empty($data['id'])) {
-            // Update existing banner
             $sql = "UPDATE banners SET title = ?, image_path = ?, text = ?, link = ?, start_date = ?, end_date = ?, is_active = ?, type_id = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param('ssssssiii', $data['title'], $imagePath, $data['text'], $data['link'], $start_date, $end_date, $data['is_active'], $data['type_id'], $data['id']);
         } else {
-            // Create new banner
             $sql = "INSERT INTO banners (title, image_path, text, link, start_date, end_date, is_active, type_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param('ssssssii', $data['title'], $imagePath, $data['text'], $data['link'], $start_date, $end_date, $data['is_active'], $data['type_id']);
@@ -92,21 +87,18 @@ class Banner
             $date = new \DateTime($dateTime);
             return $date->format('Y-m-d H:i:s');
         } catch (\Exception $e) {
-            // If the date format is incorrect, return a null value or handle the exception as needed
             return null;
         }
     }
 
     public static function handleImageUpload($imageFile, $existingImagePath)
     {
-        // Check if an image file was uploaded
         if (isset($imageFile) && $imageFile['error'] == UPLOAD_ERR_OK) {
-            $uploadDir = $_ENV['UPLOAD_DIR']; // Directory to store uploaded files
-            $relativeUploadDir = '/assets/uploads/'; // Relative path to store in the database
+            $uploadDir = $_ENV['UPLOAD_DIR'];
+            $relativeUploadDir = '/assets/uploads/';
             $imageFileName = basename($imageFile['name']);
             $imageFullPath = $uploadDir . $imageFileName;
 
-            // Move the uploaded file to the target directory
             if (move_uploaded_file($imageFile['tmp_name'], $imageFullPath)) {
                 return $relativeUploadDir . $imageFileName;
             } else {
@@ -114,7 +106,6 @@ class Banner
             }
         }
 
-        // If no new image was uploaded, return the existing image path
         return $existingImagePath;
     }
 
@@ -123,7 +114,6 @@ class Banner
         $conn = DB::db_connect();
         $sql = "SELECT * FROM banners WHERE id = ?";
 
-        // Add conditions based on arguments
         if ($checkActive) {
             $sql .= " AND is_active = 1";
         }
@@ -138,7 +128,7 @@ class Banner
         $banner = $result->fetch_assoc();
 
         if ($banner) {
-            $banner['type_name'] = self::getBannerTypeById($banner['type_id']); // Get banner type name
+            $banner['type_name'] = self::getBannerTypeById($banner['type_id']);
         }
 
         $stmt->close();
@@ -197,13 +187,13 @@ class Banner
     public static function getBannerByType($type, $checkActive = true, $checkDeleted = true)
     {
         $conn = DB::db_connect();
-        $currentDateTime = date('Y-m-d H:i:s'); // Get the current date and time
+        $currentDateTime = date('Y-m-d H:i:s');
 
         $sql = "
-            SELECT * FROM banners 
-            WHERE type_id = (SELECT id FROM banner_types WHERE name = ?) 
-              AND start_date <= ? 
-              AND end_date >= ?";
+        SELECT * FROM banners 
+        WHERE type_id = (SELECT id FROM banner_types WHERE name = ?) 
+          AND start_date <= ? 
+          AND end_date >= ?";
 
         if ($checkActive) {
             $sql .= " AND is_active = 1";
@@ -215,7 +205,7 @@ class Banner
         $sql .= " ORDER BY position ASC, id DESC LIMIT 1";
 
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param('sss', $type, $currentDateTime, $currentDateTime); // Bind the current date and time
+        $stmt->bind_param('sss', $type, $currentDateTime, $currentDateTime);
         $stmt->execute();
         $result = $stmt->get_result();
         $banner = $result->fetch_assoc();
@@ -223,6 +213,16 @@ class Banner
         $stmt->close();
         $conn->close();
 
-        return $banner['image_path'] ?? null;
+        return $banner;
+    }
+
+    public static function getBannerTemplate(string $path, array|null $bannerContent)
+    {
+        if (isset($bannerContent)) {
+            Common::requireTemplate($path, [
+                'banner_image' => $bannerContent['image_path'],
+                'banner_link' => $bannerContent['link'] ?? '#'
+            ]);
+        }
     }
 }

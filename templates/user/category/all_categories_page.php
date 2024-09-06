@@ -41,9 +41,7 @@ foreach ($categories as $category) {
     <div class="content-section">
         <!-- Biểu ngữ trên cùng -->
         <div class="header-banner">
-            <?php Common::requireTemplate('user/layouts/header_banner.php', [
-                'banner_image' => $headerBanner
-            ]); ?>
+            <?php Banner::getBannerTemplate('user/layouts/header_banner.php', $headerBanner); ?>
         </div>
 
         <div class="all-categories-container">
@@ -61,17 +59,13 @@ foreach ($categories as $category) {
 
         <!-- Biểu ngữ dưới cùng -->
         <div class="footer-banner">
-            <?php Common::requireTemplate('user/layouts/footer_banner.php', [
-                'banner_image' => $footerBanner
-            ]); ?>
+            <?php Banner::getBannerTemplate('user/layouts/footer_banner.php', $footerBanner); ?>
         </div>
     </div>
 
     <!-- Phần 1/4 bên phải (Thanh bên) -->
     <div class="side-banner-section">
-        <?php Common::requireTemplate('user/layouts/side_banner_right.php', [
-            'banner_image' => $sideBanner
-        ]); ?>
+        <?php Banner::getBannerTemplate('user/layouts/side_banner_right.php', $sideBanner); ?>
     </div>
 </div>
 
