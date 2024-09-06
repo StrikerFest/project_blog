@@ -86,4 +86,14 @@ $role = $current_user['role'];
             <a href="<?= Common::get_url('admin/logout') ?>">Đăng xuất</a>
         </div>
     </div>
+    <?php if ($role === 'admin'): ?>
+    <div class="menu-dropdown">
+        <button class="menu-dropbtn">Cài đặt
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="menu-dropdown-content">
+            <a href="<?= Common::get_url('admin/custom-css') ?>">Chỉnh style trang web (CSS)</a>
+        </div>
+    </div>
+    <?php endif; ?>
 </div>

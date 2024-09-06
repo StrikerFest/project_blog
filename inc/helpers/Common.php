@@ -188,4 +188,17 @@ class Common
             return false;
         }
     }
+
+    public static function getCustomCss($fileName = 'custom.css'): string
+    {
+        $customCssPath = $_SERVER['DOCUMENT_ROOT'] .  self::getAssetPath('css/' . $fileName);
+
+        // Check if the file exists, if not, create it with default content
+        if (!file_exists($customCssPath)) {
+            file_put_contents($customCssPath, "/* Custom $fileName */");
+        }
+
+        // Fetch the content of the custom CSS file
+        return file_get_contents($customCssPath);
+    }
 }
