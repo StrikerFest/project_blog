@@ -181,45 +181,22 @@ $_ENV['DB_NAME'] = 'project_blog';
 - Thường thì các giá trị trên là mặc định rồi nên không cần thay đổi nếu mình chưa chỉnh sửa chúng
 
 Vào trang web `http://www.projectblog.com/admin/post`
-Nếu vào được thì sẽ là thành công, nhưng trước hết phải vào url sau để chạy câu lệnh SQL đi kèm với project và cài đặt các bảng của cơ sở dữ liệu
-```
-http://www.projectblog.com/database/install.php
-```
 
-- Sau đó tạo bảng user và chạy seed để tạo user
-```
-http://www.projectblog.com/database/installUser.php
-http://www.projectblog.com/database/seedUser.php
-```
+Nhập file cơ sở dữ liệu
 
 Đây là tài khoản admin:
 ```
 TK: admin
-MK: admin
+MK: adminpass
 ```
-
-Đây là tài khoản user:
-```
-TK: user
-MK: user
-```
-
-- Nếu muốn có dữ liệu linh tinh truyền vào cơ sở dữ liệu để có dữ liệu thì vào
-```
-http://www.projectblog.com/database/seed.php
-```
-
-- Xong vào lại `http://www.projectblog.com/admin/post` để xem kết quả
 
 # Người đóng góp
-- Trịnh Thế Anh
-- Phạm Quang Anh
-- Thành viên 2
-- Thành viên 3
+- Trịnh Thế Anh - Code chính - DB 
+- Phạm Quang Anh - Code hỗ trợ
+- Trần Tuấn Anh - Tài liệu - Quản lý chất lượng
+- Ngô Đức Chính - Tài liệu - Quản lý chất lượng
 - Thành viên 4
 
 # Người hướng dẫn
 - Thầy Nguyễn Quang Minh
 
-# Giấy phép
-- Không
