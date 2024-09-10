@@ -23,12 +23,12 @@ Common::requireTemplate('admin/layouts/headers.php', [
     <form method="POST" action="" id="cssForm">
         <div class="form-group">
             <label for="customCss">Custom CSS (User Side):</label>
-            <textarea id="customCss" name="customCss" rows="10" style="width: 100%;"><?= htmlspecialchars($customCss) ?></textarea>
+            <textarea id="customCss" name="customCss"><?= htmlspecialchars($customCss) ?></textarea>
         </div>
 
         <div class="form-group">
-            <label for="customAdminCss">Custom CSS (Admin Side):</label>
-            <textarea id="customAdminCss" name="customAdminCss" rows="10" style="width: 100%;"><?= htmlspecialchars($customAdminCss) ?></textarea>
+            <label for="customAdminCss">Custom Admin CSS:</label>
+            <textarea id="customAdminCss" name="customAdminCss"><?= htmlspecialchars($customAdminCss) ?></textarea>
         </div>
 
         <div class="form-group">
@@ -40,6 +40,45 @@ Common::requireTemplate('admin/layouts/headers.php', [
 <?php
 Common::requireTemplate('admin/layouts/footer.php');
 ?>
+
+<script>
+    // Initialize CodeMirror for the customCss field
+    var customCssEditor = CodeMirror.fromTextArea(document.getElementById("customCss"), {
+        lineNumbers: true,
+        mode: "css",
+        theme: "default",
+        matchBrackets: true,
+        extraKeys: {"Ctrl-Space": "autocomplete"}, // Enable autocomplete on Ctrl+Space
+        hintOptions: {
+            completeSingle: false // Ensure the user has to select suggestions
+        }
+    });
+
+    // Initialize CodeMirror for the customAdminCss field
+    var customAdminCssEditor = CodeMirror.fromTextArea(document.getElementById("customAdminCss"), {
+        lineNumbers: true,
+        mode: "css",
+        theme: "default",
+        matchBrackets: true,
+        extraKeys: {"Ctrl-Space": "autocomplete"}, // Enable autocomplete on Ctrl+Space
+        hintOptions: {
+            completeSingle: false // Ensure the user has to select suggestions
+        }
+    });
+
+    customCssEditor.on("inputRead", function(cm, change) {
+        if (!cm.state.completionActive && /* Enforce a minimum number of characters */
+            change.text[0] !== " ") { // Don't trigger on whitespace
+            cm.showHint({completeSingle: false});
+        }
+    });
+
+    customAdminCssEditor.on("inputRead", function(cm, change) {
+        if (!cm.state.completionActive && change.text[0] !== " ") {
+            cm.showHint({completeSingle: false});
+        }
+    });
+</script>
 <script>
     document.getElementById('cssForm').addEventListener('submit', function(event) {
         if (!confirm('Are you sure you want to save these changes?')) {
