@@ -42,6 +42,7 @@ $routes = [
     '/admin/user/create' => Common::getControllerPath('admin/user/edit.php'),
     '/admin/user/edit'   => Common::getControllerPath('admin/user/edit.php'),
     '/admin/user/delete' => Common::getControllerPath('admin/user/delete.php'),
+    '/admin/user/reader' => Common::getControllerPath('admin/user/reader/index.php'),
     '/admin/profile'     => Common::getControllerPath('admin/profile/detail.php'),
 
     '/admin/banner'        => Common::getControllerPath('admin/banner/index.php'),

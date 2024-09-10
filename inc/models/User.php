@@ -290,24 +290,53 @@ class User
         return false;
     }
 
-    public static function getUsers($activeOnly = true): array
+    public static function getUsers($activeOnly = true, array $roles = [], $sortOrder = 'ASC'): array
     {
         $conn = DB::db_connect();
 
+        // Base SQL query
+        $sql = "SELECT * FROM users WHERE 1";
+
+        // Add condition for active users if $activeOnly is true
         if ($activeOnly) {
-            $sql = "SELECT * FROM users WHERE deleted_at IS NULL ORDER BY user_id ASC";
-        } else {
-            $sql = "SELECT * FROM users ORDER BY user_id ASC";
+            $sql .= " AND deleted_at IS NULL";
         }
 
-        $result = $conn->query($sql);
+        // Add condition for roles if roles array is not empty
+        if (!empty($roles)) {
+            // Generate placeholders for the IN clause (e.g., ?, ?, ?)
+            $placeholders = implode(',', array_fill(0, count($roles), '?'));
+            $sql .= " AND role IN ($placeholders)";
+        }
+
+        $sql .= " ORDER BY user_id $sortOrder";
+
+        // Prepare the statement
+        $stmt = $conn->prepare($sql);
+
+        // Bind parameters if roles are provided
+        if (!empty($roles)) {
+            // Prepare the types string for bind_param, all roles are strings
+            $types = str_repeat('s', count($roles));
+            // Merge the roles array as arguments for bind_param
+            $stmt->bind_param($types, ...$roles);
+        }
+
+        // Execute the query
+        $stmt->execute();
+
+        $result = $stmt->get_result();
         $users = [];
+
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 $users[] = $row;
             }
         }
+
+        // Close the connection
         $conn->close();
+
         return $users;
     }
 

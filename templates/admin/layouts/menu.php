@@ -59,6 +59,14 @@ $role = $current_user['role'] ?? null;
             </div>
         </div>
         <div class="menu-dropdown">
+            <button class="menu-dropbtn">Độc giả
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="menu-dropdown-content">
+                <a href="<?= Common::get_url('admin/user/reader') ?>">Xem độc giả </a>
+            </div>
+        </div>
+        <div class="menu-dropdown">
             <button class="menu-dropbtn">Banner
                 <i class="fa fa-caret-down"></i>
             </button>
