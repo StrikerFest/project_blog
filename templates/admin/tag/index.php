@@ -6,6 +6,8 @@
 
 use inc\helpers\Common;
 
+$userRole = Common::getCurrentBackendUserRole();
+
 // Nhúng dữ liệu header của Admin
 Common::requireTemplate('admin/layouts/headers.php', [
     'title' => 'Tag'
@@ -65,15 +67,21 @@ Common::requireTemplate('admin/layouts/headers.php', [
                     <td><?= $tag['name']; ?></td>
                     <td class="text-align-center"><?= $tag['status']; ?></td>
                     <td class="text-align-center"><?= $tag['position']; ?></td>
-                    <td class="text-align-center">
-                        <?php if ($tag['deleted_at']) : ?>
-                            <a href="tag/delete?action=recover&id=<?= $tag['tag_id']; ?>" class="listing-btn_action">Khôi phục</a>
-                        <?php else : ?>
+                    <?php if ($userRole === 'author'): ?>
+                        <td class="text-align-center">
                             <a href="tag/edit?id=<?= $tag['tag_id']; ?>" class="listing-btn_action">Chỉnh sửa</a>
-                            <a href="tag/delete?action=delete&id=<?= $tag['tag_id']; ?>" class="listing-btn_action">Xóa</a>
-                        <?php endif; ?>
-                    </td>
-                    <td style="display:none;"><?= $tag['updated_at']; ?></td> <!-- Dữ liệu cột Cập nhật lúc bị ẩn -->
+                        </td>
+                    <?php else: ?>
+                        <td class="text-align-center">
+                            <?php if ($tag['deleted_at']) : ?>
+                                <a href="tag/delete?action=recover&id=<?= $tag['tag_id']; ?>" class="listing-btn_action">Khôi phục</a>
+                            <?php else : ?>
+                                <a href="tag/edit?id=<?= $tag['tag_id']; ?>" class="listing-btn_action">Chỉnh sửa</a>
+                                <a href="tag/delete?action=delete&id=<?= $tag['tag_id']; ?>" class="listing-btn_action">Xóa</a>
+                            <?php endif; ?>
+                        </td>
+                    <?php endif; ?>
+                    <td style="display:none;"><?= $tag['updated_at']; ?></td>
                 </tr>
             <?php endforeach; ?>
             </tbody>
@@ -82,11 +90,11 @@ Common::requireTemplate('admin/layouts/headers.php', [
 </div>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#tagTable').DataTable({
             "order": [[5, "desc"]], // Sắp xếp theo cột thứ 6 (cập nhật lúc) theo thứ tự giảm dần
             "columnDefs": [
-                { "targets": 5, "visible": false } // Ẩn cột cập nhật lúc
+                {"targets": 5, "visible": false} // Ẩn cột cập nhật lúc
             ]
         });
     });

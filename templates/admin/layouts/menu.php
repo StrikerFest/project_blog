@@ -11,7 +11,7 @@ if ($current_user === null) {
     exit('Không có phiên người dùng');
 }
 
-$role = $current_user['role'];
+$role = $current_user['role'] ?? null;
 ?>
 <link rel="stylesheet" href="<?= Common::getAssetPath('css/menu.css') ?>">
 <div class="menu-navbar">

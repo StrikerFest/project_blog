@@ -73,7 +73,7 @@ class PostSave
         }
 
         if ($id == '') {
-            $id = DBHelper::fetchSingleValue("SELECT LAST_INSERT_ID()", [], "");
+            $id = DBHelper::fetchSingleValue("SELECT post_id FROM posts ORDER BY created_at DESC LIMIT 1; ", [], "");
         }
 
         return $id;

@@ -5,6 +5,8 @@
 
 use inc\helpers\Common;
 
+$userRole = Common::getCurrentBackendUserRole();
+
 Common::requireTemplate('admin/layouts/headers.php', [
     'title' => 'Danh mục'
 ]);
@@ -71,14 +73,20 @@ Common::requireTemplate('admin/layouts/headers.php', [
                     <td class="text-align-center"><?= $category['description']; ?></td>
                     <td class="text-align-center"><?= $category['status']; ?></td>
                     <td class="text-align-center"><?= $category['position']; ?></td>
-                    <td class="text-align-center">
-                        <?php if ($category['deleted_at']) : ?>
-                            <a href="category/delete?action=recover&id=<?= $category['category_id']; ?>" class="listing-btn_action">Khôi phục</a>
-                        <?php else : ?>
+                    <?php if ($userRole === 'author'): ?>
+                        <td class="text-align-center">
                             <a href="category/edit?id=<?= $category['category_id']; ?>" class="listing-btn_action">Chỉnh sửa</a>
-                            <a href="category/delete?action=delete&id=<?= $category['category_id']; ?>" class="listing-btn_action">Xóa</a>
-                        <?php endif; ?>
-                    </td>
+                        </td>
+                    <?php else: ?>
+                        <td class="text-align-center">
+                            <?php if ($category['deleted_at']) : ?>
+                                <a href="category/delete?action=recover&id=<?= $category['category_id']; ?>" class="listing-btn_action">Khôi phục</a>
+                            <?php else : ?>
+                                <a href="category/edit?id=<?= $category['category_id']; ?>" class="listing-btn_action">Chỉnh sửa</a>
+                                <a href="category/delete?action=delete&id=<?= $category['category_id']; ?>" class="listing-btn_action">Xóa</a>
+                            <?php endif; ?>
+                        </td>
+                    <?php endif; ?>
                     <td style="display:none;"><?= $category['updated_at']; ?></td>
                 </tr>
             <?php endforeach; ?>
@@ -88,11 +96,11 @@ Common::requireTemplate('admin/layouts/headers.php', [
 </div>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#categoryTable').DataTable({
             "order": [[7, "desc"]], // Sort by the 8th column (updated_at) in descending order
             "columnDefs": [
-                { "targets": 7, "visible": false } // Hide the updated_at column
+                {"targets": 7, "visible": false} // Hide the updated_at column
             ]
         });
     });

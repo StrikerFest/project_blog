@@ -9,6 +9,7 @@ use inc\helpers\Common;
 use inc\models\Category;
 use inc\models\Tag;
 
+$userRole = Common::getCurrentBackendUserRole();
 $posts = $args['posts'];
 $categories = Category::getCategories();
 $tags = Tag::getTags();
@@ -133,14 +134,20 @@ Common::requireTemplate('admin/layouts/headers.php', [
                 <td><?php echo htmlspecialchars($post['status']); ?></td>
                 <td><?php echo htmlspecialchars($post['published_at'] ?? 'N/A'); ?></td>
                 <td style="display:none;"><?php echo htmlspecialchars($post['updated_at']); ?></td>
-                <td>
-                    <?php if ($post['deleted_at']): ?>
-                        <a href="post/delete?action=recover&id=<?= $post['post_id']; ?>" class="btn btn-recover">Khôi phục</a>
-                    <?php else: ?>
+                <?php if ($userRole === 'author'): ?>
+                    <td>
                         <a href="post/edit?id=<?= $post['post_id']; ?>" class="btn">Chỉnh sửa</a>
-                        <a href="post/delete?action=delete&id=<?= $post['post_id']; ?>" class="btn btn-delete">Xóa</a>
-                    <?php endif; ?>
-                </td>
+                    </td>
+                <?php else: ?>
+                    <td>
+                        <?php if ($post['deleted_at']): ?>
+                            <a href="post/delete?action=recover&id=<?= $post['post_id']; ?>" class="btn btn-recover">Khôi phục</a>
+                        <?php else: ?>
+                            <a href="post/edit?id=<?= $post['post_id']; ?>" class="btn">Chỉnh sửa</a>
+                            <a href="post/delete?action=delete&id=<?= $post['post_id']; ?>" class="btn btn-delete">Xóa</a>
+                        <?php endif; ?>
+                    </td>
+                <?php endif; ?>
             </tr>
         <?php endforeach; ?>
         </tbody>
@@ -151,12 +158,12 @@ Common::requireTemplate('admin/layouts/headers.php', [
 Common::requireTemplate('admin/layouts/footer.php');
 ?>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#listing-table').DataTable({
             "searching": true,
             "order": [[8, "desc"]],
             "columnDefs": [
-                { "targets": [8], "visible": false }
+                {"targets": [8], "visible": false}
             ]
         });
     });

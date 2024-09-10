@@ -56,6 +56,17 @@ class Common
         return $currentUser;
     }
 
+    public static function getCurrentBackendUserRole()
+    {
+        $currentUser = self::getCurrentBackendUser();
+
+        if ($currentUser['role'] === null) {
+            header("Location: /");
+            exit();
+        }
+        return $currentUser['role'];
+    }
+
     public static function getUploadPath($path): string
     {
         return $_ENV['UPLOAD_DIR'] . $path;
